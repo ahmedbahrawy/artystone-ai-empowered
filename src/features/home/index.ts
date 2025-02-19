@@ -1,0 +1,6 @@
+export { HeroSection } from './components/hero-section'
+export { ServicesSection } from './components/services-section'
+export { FeaturesSection } from './components/features-section'
+export { TestimonialsSection } from './components/testimonials-section'
+export { LogoCloud } from './components/logo-cloud'
+export { CTASection } from './components/cta-section' 
