@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
+import { ThemeSwitcher } from './theme-switcher'
 
 type Attribute = 'class' | 'data-theme' | 'data-mode'
 
@@ -18,12 +19,15 @@ interface ThemeProviderProps {
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return (
     <NextThemesProvider
-      attribute="class"
-      defaultTheme="system"
+      attribute="data-theme"
+      defaultTheme="semi-light"
+      themes={['light', 'semi-light', 'dark']}
       enableSystem
+      disableTransitionOnChange
       {...props}
     >
       {children}
+      <ThemeSwitcher />
     </NextThemesProvider>
   )
 } 
