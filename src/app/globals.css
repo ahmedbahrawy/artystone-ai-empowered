@@ -36,33 +36,38 @@
   }
 
   [data-theme="semi-light"] {
-    --background: 231 48% 97%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 231 48% 98%;
+    --foreground: 231 48% 12%;
 
     --card: 231 48% 99%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 231 48% 12%;
  
     --popover: 231 48% 99%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 231 48% 12%;
  
-    --primary: 231 48% 48%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 231 48% 45%;
+    --primary-foreground: 231 48% 98%;
  
-    --secondary: 270 59% 50%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 270 59% 45%;
+    --secondary-foreground: 270 59% 98%;
  
-    --accent: 326 73% 55%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 326 73% 45%;
+    --accent-foreground: 326 73% 98%;
  
-    --muted: 231 48% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 231 48% 94%;
+    --muted-foreground: 231 48% 40%;
  
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 84.2% 98%;
 
-    --border: 231 48% 90%;
-    --input: 231 48% 90%;
-    --ring: 231 48% 48%;
+    --border: 231 48% 85%;
+    --input: 231 48% 85%;
+    --ring: 231 48% 45%;
+
+    /* Brand gradients */
+    --brand-gradient-1: linear-gradient(to right, #2D3A8C, #5B21B6, #C026D3);
+    --brand-gradient-2: linear-gradient(to bottom right, #312E81, #6B21A8, #BE185D);
+    --brand-gradient-3: linear-gradient(to bottom, #1E3A8A, #5B21B6, #A21CAF);
   }
  
   .dark {
@@ -111,5 +116,31 @@
   }
   code, pre {
     @apply font-mono;
+  }
+}
+
+@layer components {
+  .section-spacing {
+    @apply py-12 md:py-16;
+  }
+  
+  .section-spacing-sm {
+    @apply py-8 md:py-12;
+  }
+
+  .brand-gradient-1 {
+    @apply bg-gradient-to-r from-indigo-900 via-purple-800 to-fuchsia-700;
+  }
+
+  .brand-gradient-2 {
+    @apply bg-gradient-to-br from-indigo-900 via-purple-900 to-fuchsia-800;
+  }
+
+  .brand-gradient-3 {
+    @apply bg-gradient-to-b from-indigo-900 via-purple-800 to-fuchsia-700;
+  }
+
+  .brand-text-gradient {
+    @apply bg-clip-text text-transparent brand-gradient-1;
   }
 }

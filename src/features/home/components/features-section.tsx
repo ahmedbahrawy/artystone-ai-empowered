@@ -1,8 +1,8 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Container, Grid, Section } from '@/design-system/layouts/Container'
-import { slideInFromBottom, stagger } from '@/design-system/animations/variants'
+import { Container, Grid, Section } from '@/components/ui/container'
+import { slideInFromBottom, stagger } from '@/lib/animations'
 
 const features = [
   {

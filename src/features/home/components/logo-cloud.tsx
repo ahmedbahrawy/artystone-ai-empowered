@@ -2,8 +2,8 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Container } from '@/design-system/layouts/Container'
-import { fadeIn, stagger } from '@/design-system/animations/variants'
+import { Container } from '@/components/ui/container'
+import { fadeIn, stagger } from '@/lib/animations'
 
 const logos = [
   '/logos/company1.svg',

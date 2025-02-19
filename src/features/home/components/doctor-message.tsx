@@ -12,7 +12,7 @@ const doctorInfo = {
 
 We believe in a holistic approach to healthcare, combining cutting-edge technology with compassionate care. Our team is dedicated to understanding your unique needs and creating personalized treatment plans that deliver the best possible outcomes.`,
   image: {
-    src: '/images/dr. farzaneh.svg',
+    src: '/images/dr.farzaneh.png',
     alt: 'Dr. Farzaneh - Clinic Owner',
   },
 }

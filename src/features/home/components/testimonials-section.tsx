@@ -2,8 +2,8 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Container, Section } from '@/design-system/layouts/Container'
-import { slideInFromBottom, stagger } from '@/design-system/animations/variants'
+import { Container, Section } from '@/components/ui/container'
+import { slideInFromBottom, stagger } from '@/lib/animations'
 
 const testimonials = [
   {

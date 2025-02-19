@@ -2,8 +2,8 @@
 
 import * as React from 'react'
 import { motion } from 'framer-motion'
-import { Container } from '@/design-system/layouts/Container'
-import { fadeIn } from '@/design-system/animations/variants'
+import { Container } from '@/components/ui/container'
+import { fadeIn } from '@/lib/animations'
 import { Logo } from '@/components/atoms/logo'
 import { BookButton } from '@/components/atoms/book-button'
 import { NavMenu } from '@/components/molecules/nav-menu'
@@ -15,15 +15,17 @@ export function Header() {
       initial="hidden"
       animate="visible"
       variants={fadeIn}
-      className="fixed top-0 z-50 w-full border-b border-neutral-200 bg-white/80 backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-900/80"
+      className="fixed top-0 z-50 w-full border-b border-indigo-900/10 bg-white/80 backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-900/80"
     >
       <Container>
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-20 items-center justify-between lg:h-24">
           <Logo />
-          <NavMenu />
-          <div className="flex items-center space-x-4">
-            <BookButton className="hidden md:block" />
-            <MobileMenu />
+          <div className="flex flex-1 items-center justify-end space-x-4 md:space-x-6 lg:space-x-8">
+            <NavMenu />
+            <div className="flex items-center space-x-3">
+              <BookButton className="hidden md:block" />
+              <MobileMenu />
+            </div>
           </div>
         </div>
       </Container>

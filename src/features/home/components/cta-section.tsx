@@ -1,8 +1,8 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Container, Section } from '@/design-system/layouts/Container'
-import { fadeIn, slideInFromBottom } from '@/design-system/animations/variants'
+import { Container, Section } from '@/components/ui/container'
+import { fadeIn, slideInFromBottom } from '@/lib/animations'
 
 export function CTASection() {
   return (

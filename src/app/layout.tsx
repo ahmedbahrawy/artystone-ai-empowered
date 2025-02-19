@@ -1,9 +1,16 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { inter, playfairDisplay, jetbrainsMono } from "@/lib/fonts";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import "./globals.css";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "#2E90FF",
+};
 
 export const metadata: Metadata = {
   title: "Arty Stone Clinic",
@@ -44,8 +51,6 @@ export const metadata: Metadata = {
     ],
   },
   manifest: "/favicon/site.webmanifest",
-  themeColor: "#2E90FF",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
 };
 
 export default function RootLayout({

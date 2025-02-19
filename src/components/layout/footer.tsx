@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import Link from 'next/link'
-import { Container } from '@/design-system/layouts/Container'
+import { Container } from '@/components/ui/container'
 
 const navigation = {
   main: [
