@@ -1,15 +1,26 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Container, Section } from '@/components/ui/container'
+import { Container } from '@/components/ui/container'
 import { slideInFromBottom, stagger } from '@/lib/animations'
 import { BookButton } from '@/components/atoms/book-button'
 import { VideoEmbed } from '@/components/atoms/video-embed'
 import { videos } from '@/lib/media-config'
+import { cn } from '@/lib/utils'
 
-export function ServicesHero() {
+interface ServicesHeroProps {
+  className?: string
+}
+
+export function ServicesHero({ className }: ServicesHeroProps) {
   return (
-    <Section className="relative overflow-hidden bg-white pt-32 dark:bg-neutral-900">
+    <section 
+      className={cn(
+        "relative min-h-[90vh] pt-32 lg:min-h-screen",
+        "overflow-hidden bg-white dark:bg-neutral-900",
+        className
+      )}
+    >
       {/* Background Video */}
       <div className="absolute inset-0 z-0">
         <VideoEmbed
@@ -20,7 +31,7 @@ export function ServicesHero() {
           muted
           playsInline
         />
-        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/50" />
       </div>
 
       <Container className="relative z-10">
@@ -41,10 +52,10 @@ export function ServicesHero() {
           </motion.div>
 
           <motion.div variants={slideInFromBottom}>
-            <BookButton />
+            <BookButton variant="secondary" className="shadow-lg" />
           </motion.div>
         </motion.div>
       </Container>
-    </Section>
+    </section>
   )
 } 

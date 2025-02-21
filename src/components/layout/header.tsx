@@ -8,14 +8,39 @@ import { Logo } from '@/components/atoms/logo'
 import { BookButton } from '@/components/atoms/book-button'
 import { NavMenu } from '@/components/molecules/nav-menu'
 import { MobileMenu } from '@/components/molecules/mobile-menu'
+import { cn } from '@/lib/utils'
 
-export function Header() {
+interface HeaderProps {
+  className?: string
+  variant?: 'default' | 'transparent'
+}
+
+export function Header({ className, variant = 'default' }: HeaderProps) {
+  const [isScrolled, setIsScrolled] = React.useState(false)
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
     <motion.header 
       initial="hidden"
       animate="visible"
       variants={fadeIn}
-      className="fixed top-0 z-50 w-full border-b border-indigo-900/10 bg-white/80 backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-900/80"
+      className={cn(
+        'fixed top-0 z-50 w-full transition-colors duration-300',
+        {
+          'border-b border-indigo-900/10 bg-white/80 backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-900/80': 
+            variant === 'default' || isScrolled,
+          'bg-transparent': variant === 'transparent' && !isScrolled
+        },
+        className
+      )}
     >
       <Container>
         <div className="flex h-20 items-center justify-between lg:h-24">
