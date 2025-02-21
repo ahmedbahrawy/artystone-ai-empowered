@@ -77,14 +77,6 @@ export function HeroSection() {
                     allow="autoplay; fullscreen"
                   />
                 </div>
-                <a 
-                  href="https://www.canva.com/design/DAGfdjqqaS0/LjhE9TDOmIIQrapuhmZXtw/watch?utm_content=DAGfdjqqaS0&utm_campaign=designshare&utm_medium=embeds&utm_source=link" 
-                  target="_blank" 
-                  rel="noopener"
-                  className="mt-2 block text-center text-sm text-neutral-600 hover:text-primary-500 dark:text-neutral-400 dark:hover:text-primary-400"
-                >
-                  Black Green White Modern Digital Youtube Intro by Ahmed Bahrawy
-                </a>
               </div>
             </div>
           </motion.div>
