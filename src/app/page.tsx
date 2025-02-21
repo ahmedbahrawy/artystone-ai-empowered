@@ -10,6 +10,7 @@ import {
   TestimonialsSection,
   CTASection,
   BookingSection,
+  ContactSection,
 } from '@/features/home'
 
 export default function HomePage() {
@@ -23,6 +24,7 @@ export default function HomePage() {
       <ServicesSection />
       <BookingSection />
       <TestimonialsSection />
+      <ContactSection />
       <CTASection />
     </main>
   )

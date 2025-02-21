@@ -1,10 +1,14 @@
 import { Variants } from "framer-motion"
 
-export const fadeIn: Variants = {
-  hidden: { opacity: 0 },
+export const fadeIn = {
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
-    transition: { duration: 0.5, ease: "easeOut" }
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: 'easeOut'
+    }
   }
 }
 
@@ -26,10 +30,10 @@ export const slideInFromRight: Variants = {
   }
 }
 
-export const stagger: Variants = {
+export const stagger = {
   visible: {
     transition: {
-      staggerChildren: 0.1
+      staggerChildren: 0.2
     }
   }
 } 
