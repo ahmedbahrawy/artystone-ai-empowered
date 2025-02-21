@@ -16,7 +16,7 @@ export function ServicesHero({ className }: ServicesHeroProps) {
   return (
     <section 
       className={cn(
-        "relative min-h-[90vh] pt-32 lg:min-h-screen",
+        "relative min-h-[90vh] pt-40 lg:min-h-screen",
         "overflow-hidden bg-white dark:bg-neutral-900",
         className
       )}
