@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Arty Stone Clinic Website
+
+Modern, SEO-optimized website for Arty Stone Medical Clinic built with Next.js 14.
+
+## Features
+
+- 🏥 Comprehensive medical services showcase
+- 📱 Fully responsive design
+- 🔍 SEO optimized with structured data
+- 📊 Google Analytics integration
+- 🌙 Dark mode support
+- 🚀 Performance optimized
+- ♿ Accessibility compliant
+
+## Tech Stack
+
+- Next.js 14
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+- Google Analytics 4
 
 ## Getting Started
 
-First, run the development server:
-
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/your-username/au-arty-stone-clinic-v-1-b.git
+cd au-arty-stone-clinic-v-1-b
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Copy environment variables:
+```bash
+cp .env.example .env
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Update the `.env` file with your values
 
-## Learn More
+5. Run the development server:
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Vercel Deployment (Recommended)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Install Vercel CLI:
+```bash
+npm i -g vercel
+```
 
-## Deploy on Vercel
+2. Login to Vercel:
+```bash
+vercel login
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. Deploy:
+```bash
+vercel --prod
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Environment Variables
+
+Make sure to set these environment variables in your Vercel project settings:
+
+- `NEXT_PUBLIC_GA_ID`: Google Analytics 4 Measurement ID
+- `NEXT_PUBLIC_SITE_URL`: Production site URL
+- `NEXT_PUBLIC_HOTDOC_URL`: HotDoc booking URL
+- `NODE_ENV`: Set to 'production' for production deployment
+
+### Manual Deployment
+
+1. Build the project:
+```bash
+npm run build
+```
+
+2. Start the production server:
+```bash
+npm start
+```
+
+## Analytics
+
+The site uses Google Analytics 4 for tracking key metrics:
+- Page views
+- Service views
+- Booking conversions
+- Contact form submissions
+
+## SEO
+
+The site is optimized for these high-volume keywords:
+- "health care" (673,000 searches)
+- "women's health" (165,000 searches)
+- "family doctors" (110,000 searches)
+
+## License
+
+Copyright © 2024 Arty Stone Clinic. All rights reserved.

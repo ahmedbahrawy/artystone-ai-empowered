@@ -3,6 +3,9 @@ import { inter, playfairDisplay, jetbrainsMono } from "@/lib/fonts";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { getAllServices } from "@/lib/content/services";
+import { generateMedicalPracticeSchema } from "@/lib/schema/medical-practice";
+import Script from "next/script";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -13,8 +16,38 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Arty Stone Clinic",
-  description: "Experience the perfect blend of modern healthcare and timeless elegance.",
+  metadataBase: new URL('https://artystoneclinic.com.au'),
+  title: {
+    default: "Arty Stone Clinic | Family Medicine & Healthcare Services",
+    template: "%s | Arty Stone Clinic"
+  },
+  description: "Experience comprehensive family healthcare services at Arty Stone Clinic. Specializing in women's health, preventive care, and general wellness. Book your appointment today.",
+  keywords: ["family medicine", "women's health", "healthcare services", "medical clinic", "family doctors", "health checkup", "preventive care", "medical appointments"],
+  openGraph: {
+    title: "Arty Stone Clinic | Family Medicine & Healthcare Services",
+    description: "Experience comprehensive family healthcare services at Arty Stone Clinic. Specializing in women's health, preventive care, and general wellness.",
+    url: "https://artystoneclinic.com.au",
+    siteName: "Arty Stone Clinic",
+    locale: "en_AU",
+    type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: 'https://artystoneclinic.com.au',
+  },
+  verification: {
+    google: 'your-google-verification-code',
+  },
   icons: {
     icon: [
       {
@@ -53,6 +86,9 @@ export const metadata: Metadata = {
   manifest: "/favicon/site.webmanifest",
 };
 
+const services = getAllServices();
+const schema = generateMedicalPracticeSchema(services);
+
 export default function RootLayout({
   children,
 }: {
@@ -64,6 +100,24 @@ export default function RootLayout({
       className={`${inter.variable} ${playfairDisplay.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+          `}
+        </Script>
+      </head>
       <body className="font-sans antialiased">
         <ThemeProvider
           attribute="class"
