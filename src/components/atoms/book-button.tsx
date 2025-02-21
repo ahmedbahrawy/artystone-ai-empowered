@@ -1,29 +1,28 @@
 'use client'
 
+import * as React from 'react'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-interface BookButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary'
+interface BookButtonProps {
+  className?: string
+  variant?: 'default' | 'secondary' | 'outline'
+  size?: 'default' | 'sm' | 'lg'
 }
 
-export function BookButton({ 
-  variant = 'primary', 
-  className, 
-  children = 'Book Appointment',
-  ...props 
-}: BookButtonProps) {
+export function BookButton({ className, variant = 'default', size = 'default' }: BookButtonProps) {
   return (
-    <button
+    <Button
+      onClick={() => window.location.href = '/booking'}
+      variant={variant}
+      size={size}
       className={cn(
-        "rounded-lg px-4 py-2 text-sm font-medium transition-all",
-        variant === 'primary' 
-          ? "bg-primary-500 text-white hover:bg-primary-600" 
-          : "border border-neutral-200 text-neutral-700 hover:bg-neutral-100 dark:border-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-800",
+        "font-semibold",
+        variant === 'default' && "bg-gradient-to-r from-indigo-600 via-primary-500 to-primary-600 hover:from-indigo-700 hover:via-primary-600 hover:to-primary-700",
         className
       )}
-      {...props}
     >
-      {children}
-    </button>
+      Book Appointment
+    </Button>
   )
 } 
