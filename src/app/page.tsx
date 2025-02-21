@@ -9,6 +9,7 @@ import {
   ServicesSection,
   TestimonialsSection,
   CTASection,
+  BookingSection,
 } from '@/features/home'
 
 export default function HomePage() {
@@ -20,6 +21,7 @@ export default function HomePage() {
       <FeaturesSection />
       <ClinicGallery />
       <ServicesSection />
+      <BookingSection />
       <TestimonialsSection />
       <CTASection />
     </main>
