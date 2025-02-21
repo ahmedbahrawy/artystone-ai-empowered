@@ -20,7 +20,7 @@ export function AboutMission() {
             className="relative aspect-square overflow-hidden rounded-3xl"
           >
             <Image
-              src={images.clinicWelcome}
+              src={images.aboutHero}
               alt="Arty Stone Clinic Welcome Area"
               fill
               className="object-cover"

@@ -1,9 +1,9 @@
 'use client'
 
-import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Container } from '@/components/ui/container'
 import { fadeIn, slideInFromBottom } from '@/lib/animations'
+import { OptimizedImage } from '@/components/atoms/optimized-image'
 
 const doctorInfo = {
   name: 'Dr. Farzaneh',
@@ -34,50 +34,28 @@ export function DoctorMessage() {
             className="group relative aspect-[3/4] overflow-hidden rounded-3xl shadow-2xl transition-all hover:shadow-3xl"
           >
             <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/10 via-purple-800/10 to-fuchsia-700/10 opacity-0 transition-opacity group-hover:opacity-100" />
-            <Image
+            <OptimizedImage
               src={doctorInfo.image.src}
               alt={doctorInfo.image.alt}
               fill
-              className="object-contain object-center transition-transform duration-500 group-hover:scale-105"
               priority
               sizes="(min-width: 768px) 50vw, 100vw"
-              quality={100}
+              quality={90}
+              className="object-contain object-center transition-transform duration-500 group-hover:scale-105"
             />
           </motion.div>
 
           {/* Message */}
-          <motion.div
-            variants={slideInFromBottom}
-            className="flex flex-col justify-center space-y-6"
-          >
-            <motion.h2 
-              className="font-serif text-3xl font-bold text-indigo-900 dark:text-fuchsia-300 md:text-4xl"
-              whileHover={{ scale: 1.02 }}
-            >
-              Message from {doctorInfo.name}
-            </motion.h2>
-            {doctorInfo.message.split('\n\n').map((paragraph, index) => (
-              <motion.p
-                key={index}
-                className="text-lg leading-relaxed text-neutral-700 dark:text-neutral-300"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.2 }}
-              >
-                {paragraph}
-              </motion.p>
-            ))}
-            <motion.div 
-              className="pt-4"
-              whileHover={{ scale: 1.02 }}
-            >
-              <span className="bg-gradient-to-r from-indigo-900 via-purple-800 to-fuchsia-700 bg-clip-text font-serif text-xl font-semibold text-transparent dark:from-indigo-400 dark:via-purple-300 dark:to-fuchsia-200">
-                {doctorInfo.name}
-              </span>
-              <p className="mt-1 text-neutral-600 dark:text-neutral-400">
-                {doctorInfo.title}
-              </p>
-            </motion.div>
+          <motion.div variants={slideInFromBottom} className="flex flex-col justify-center">
+            <h2 className="font-serif text-3xl font-bold text-neutral-900 dark:text-neutral-50 md:text-4xl">
+              {doctorInfo.name}
+            </h2>
+            <p className="mt-2 text-lg font-medium text-primary">{doctorInfo.title}</p>
+            <div className="mt-6 space-y-4 text-lg text-neutral-700 dark:text-neutral-300">
+              {doctorInfo.message.split('\n\n').map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
+              ))}
+            </div>
           </motion.div>
         </motion.div>
       </Container>

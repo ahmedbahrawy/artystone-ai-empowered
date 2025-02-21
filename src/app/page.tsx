@@ -7,7 +7,6 @@ import {
   ClinicGallery,
   FeaturesSection,
   ServicesSection,
-  TestimonialsSection,
   CTASection,
   BookingSection,
   ContactSection,
@@ -23,7 +22,6 @@ export default function HomePage() {
       <ClinicGallery />
       <ServicesSection />
       <BookingSection />
-      <TestimonialsSection />
       <ContactSection />
       <CTASection />
     </main>

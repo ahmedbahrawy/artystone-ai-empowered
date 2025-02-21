@@ -4,8 +4,26 @@ import * as React from 'react'
 import { motion } from 'framer-motion'
 import { Container } from '@/components/ui/container'
 import { fadeIn, slideInFromBottom } from '@/lib/animations'
+import dynamic from 'next/dynamic'
+
+// Separate video component to handle client-side logic
+const HeroVideo = dynamic(
+  () => import('./hero-video').then((mod) => mod.HeroVideo),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="relative aspect-video w-full animate-pulse rounded-2xl bg-neutral-100 dark:bg-neutral-800" />
+    ),
+  }
+)
 
 export function HeroSection() {
+  const [isMounted, setIsMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
   return (
     <section className="relative min-h-[90vh] pt-20 lg:min-h-screen">
       <Container className="relative z-10">
@@ -13,7 +31,7 @@ export function HeroSection() {
           {/* Text Content */}
           <motion.div
             initial="hidden"
-            animate="visible"
+            animate={isMounted ? "visible" : "hidden"}
             variants={slideInFromBottom}
             className="flex flex-col justify-center md:min-h-[600px]"
           >
@@ -40,46 +58,19 @@ export function HeroSection() {
           </motion.div>
 
           {/* Video Content */}
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={fadeIn}
-            className="relative mx-auto w-full"
-          >
-            <div className="relative rounded-2xl shadow-2xl">
-              <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-indigo-500/20 via-primary-500/20 to-secondary-500/20 blur" />
-              <div className="relative rounded-2xl">
-                <div style={{
-                  position: 'relative',
-                  width: '100%',
-                  height: '0',
-                  paddingTop: '56.2500%',
-                  paddingBottom: '0',
-                  boxShadow: '0 2px 8px 0 rgba(63,69,81,0.16)',
-                  overflow: 'hidden',
-                  borderRadius: '16px',
-                  willChange: 'transform'
-                }}>
-                  <iframe 
-                    loading="lazy" 
-                    style={{
-                      position: 'absolute',
-                      width: '100%',
-                      height: '100%',
-                      top: '0',
-                      left: '0',
-                      border: 'none',
-                      padding: '0',
-                      margin: '0'
-                    }}
-                    src="https://www.canva.com/design/DAGfdjqqaS0/LjhE9TDOmIIQrapuhmZXtw/watch?embed&autoplay=1"
-                    allowFullScreen={true}
-                    allow="autoplay; fullscreen"
-                  />
-                </div>
+          {isMounted && (
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={fadeIn}
+              className="relative mx-auto w-full"
+            >
+              <div className="relative rounded-2xl shadow-2xl">
+                <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-indigo-500/20 via-primary-500/20 to-secondary-500/20 blur" />
+                <HeroVideo />
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          )}
         </div>
       </Container>
 

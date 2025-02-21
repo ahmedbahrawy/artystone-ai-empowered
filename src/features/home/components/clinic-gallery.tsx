@@ -1,9 +1,9 @@
 'use client'
 
-import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Container } from '@/components/ui/container'
 import { fadeIn, slideInFromBottom } from '@/lib/animations'
+import { OptimizedImage } from '@/components/atoms/optimized-image'
 
 interface ClinicImage {
   src: string
@@ -59,15 +59,16 @@ const clinicImages: ClinicImage[] = [
   },
 ]
 
-function GalleryImage({ image }: { image: ClinicImage }) {
+function GalleryImage({ image, index }: { image: ClinicImage; index: number }) {
   return (
     <div className="group relative aspect-[4/3] overflow-hidden rounded-2xl">
-      <Image
+      <OptimizedImage
         src={image.src}
         alt={image.alt}
         fill
         sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
         className="object-cover transition-transform duration-300 group-hover:scale-105"
+        priority={index < 3} // Only prioritize loading for the first 3 images
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       <div className="absolute bottom-0 left-0 right-0 p-4 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
@@ -104,8 +105,8 @@ export function ClinicGallery() {
             variants={slideInFromBottom}
             className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
           >
-            {clinicImages.map((image) => (
-              <GalleryImage key={image.src} image={image} />
+            {clinicImages.map((image, index) => (
+              <GalleryImage key={image.src} image={image} index={index} />
             ))}
           </motion.div>
         </motion.div>

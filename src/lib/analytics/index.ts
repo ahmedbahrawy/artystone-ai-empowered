@@ -6,7 +6,7 @@ declare global {
   }
 }
 
-export const GA_TRACKING_ID = 'G-XXXXXXXXXX' // Replace with actual GA4 tracking ID
+export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_ID
 
 interface EventParams {
   action: string
@@ -15,18 +15,28 @@ interface EventParams {
   value?: number
 }
 
+interface PerformanceMetric {
+  metric: string
+  value: number
+  id: string
+}
+
 export const pageview = (url: string) => {
-  window.gtag('config', GA_TRACKING_ID, {
-    page_path: url,
-  })
+  if (typeof window.gtag !== 'undefined') {
+    window.gtag('config', GA_TRACKING_ID!, {
+      page_path: url,
+    })
+  }
 }
 
 export const trackEvent = ({ action, category, label, value }: EventParams) => {
-  window.gtag('event', action, {
-    event_category: category,
-    event_label: label,
-    value: value,
-  })
+  if (typeof window.gtag !== 'undefined') {
+    window.gtag('event', action, {
+      event_category: category,
+      event_label: label,
+      value: value,
+    })
+  }
 }
 
 // Custom events for key user interactions
@@ -57,5 +67,20 @@ export const analyticsEvents = {
       action: 'search_services',
       category: 'Engagement',
       label: query,
+    }),
+
+  performanceMetric: ({ metric, value, id }: PerformanceMetric) =>
+    trackEvent({
+      action: 'web_vital',
+      category: 'Web Vitals',
+      label: `${metric}_${id}`,
+      value,
+    }),
+
+  errorTracking: (error: Error, componentStack?: string) =>
+    trackEvent({
+      action: 'error',
+      category: 'Error',
+      label: `${error.name}: ${error.message}${componentStack ? `\n${componentStack}` : ''}`,
     }),
 } 

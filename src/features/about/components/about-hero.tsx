@@ -3,22 +3,26 @@
 import { motion } from 'framer-motion'
 import { Container, Section } from '@/components/ui/container'
 import { slideInFromBottom, stagger } from '@/lib/animations'
-import { VideoEmbed } from '@/components/atoms/video-embed'
-import { videos } from '@/lib/media-config'
+import dynamic from 'next/dynamic'
+
+const HeroVideo = dynamic(
+  () => import('@/features/home/components/hero-video').then((mod) => mod.HeroVideo),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="relative aspect-video w-full animate-pulse bg-neutral-800" />
+    ),
+  }
+)
 
 export function AboutHero() {
   return (
     <Section className="relative overflow-hidden bg-white pt-32 dark:bg-neutral-900">
       {/* Background Video */}
       <div className="absolute inset-0 z-0">
-        <VideoEmbed
-          src={videos.hero}
-          className="h-full w-full object-cover opacity-50"
-          autoPlay
-          loop
-          muted
-          playsInline
-        />
+        <div className="h-full w-full">
+          <HeroVideo />
+        </div>
         <div className="absolute inset-0 bg-black/50" />
       </div>
 

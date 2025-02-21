@@ -4,9 +4,18 @@ import { motion } from 'framer-motion'
 import { Container } from '@/components/ui/container'
 import { slideInFromBottom, stagger } from '@/lib/animations'
 import { BookButton } from '@/components/atoms/book-button'
-import { VideoEmbed } from '@/components/atoms/video-embed'
-import { videos } from '@/lib/media-config'
+import dynamic from 'next/dynamic'
 import { cn } from '@/lib/utils'
+
+const HeroVideo = dynamic(
+  () => import('@/features/home/components/hero-video').then((mod) => mod.HeroVideo),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="relative aspect-video w-full animate-pulse bg-neutral-800" />
+    ),
+  }
+)
 
 interface ServicesHeroProps {
   className?: string
@@ -23,14 +32,9 @@ export function ServicesHero({ className }: ServicesHeroProps) {
     >
       {/* Background Video */}
       <div className="absolute inset-0 z-0">
-        <VideoEmbed
-          src={videos.hero}
-          className="h-full w-full object-cover opacity-50"
-          autoPlay
-          loop
-          muted
-          playsInline
-        />
+        <div className="h-full w-full">
+          <HeroVideo />
+        </div>
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/50" />
       </div>
 
