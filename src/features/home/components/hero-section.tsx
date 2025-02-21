@@ -4,8 +4,6 @@ import * as React from 'react'
 import { motion } from 'framer-motion'
 import { Container } from '@/components/ui/container'
 import { fadeIn, slideInFromBottom } from '@/lib/animations'
-import { VideoEmbed } from '@/components/atoms/video-embed'
-import { videos } from '@/lib/media-config'
 
 export function HeroSection() {
   return (
@@ -46,12 +44,47 @@ export function HeroSection() {
             initial="hidden"
             animate="visible"
             variants={fadeIn}
-            className="relative mx-auto max-w-2xl"
+            className="relative mx-auto w-full"
           >
-            <div className="relative rounded-3xl shadow-2xl">
-              <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-br from-indigo-500/20 via-primary-500/20 to-secondary-500/20 blur" />
-              <div className="relative rounded-3xl">
-                <VideoEmbed src={videos.hero} className="shadow-none" />
+            <div className="relative rounded-2xl shadow-2xl">
+              <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-indigo-500/20 via-primary-500/20 to-secondary-500/20 blur" />
+              <div className="relative rounded-2xl">
+                <div style={{
+                  position: 'relative',
+                  width: '100%',
+                  height: '0',
+                  paddingTop: '56.2500%',
+                  paddingBottom: '0',
+                  boxShadow: '0 2px 8px 0 rgba(63,69,81,0.16)',
+                  overflow: 'hidden',
+                  borderRadius: '16px',
+                  willChange: 'transform'
+                }}>
+                  <iframe 
+                    loading="lazy" 
+                    style={{
+                      position: 'absolute',
+                      width: '100%',
+                      height: '100%',
+                      top: '0',
+                      left: '0',
+                      border: 'none',
+                      padding: '0',
+                      margin: '0'
+                    }}
+                    src="https://www.canva.com/design/DAGfdjqqaS0/LjhE9TDOmIIQrapuhmZXtw/watch?embed&autoplay=1"
+                    allowFullScreen={true}
+                    allow="autoplay; fullscreen"
+                  />
+                </div>
+                <a 
+                  href="https://www.canva.com/design/DAGfdjqqaS0/LjhE9TDOmIIQrapuhmZXtw/watch?utm_content=DAGfdjqqaS0&utm_campaign=designshare&utm_medium=embeds&utm_source=link" 
+                  target="_blank" 
+                  rel="noopener"
+                  className="mt-2 block text-center text-sm text-neutral-600 hover:text-primary-500 dark:text-neutral-400 dark:hover:text-primary-400"
+                >
+                  Black Green White Modern Digital Youtube Intro by Ahmed Bahrawy
+                </a>
               </div>
             </div>
           </motion.div>
