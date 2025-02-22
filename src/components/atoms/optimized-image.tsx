@@ -17,6 +17,7 @@ type OptimizedImageProps = {
   loading?: 'lazy' | 'eager'
   placeholder?: 'blur' | 'empty'
   blurDataURL?: string
+  onLoad?: () => void
 }
 
 const shimmer = (w: number, h: number) => `
@@ -53,6 +54,7 @@ export function OptimizedImage({
   loading,
   placeholder = 'empty',
   blurDataURL,
+  onLoad,
 }: OptimizedImageProps) {
   // Default sizes based on common breakpoints
   const defaultSizes = '(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw'
@@ -80,6 +82,9 @@ export function OptimizedImage({
         onLoad={(event) => {
           const target = event.target as HTMLImageElement
           target.classList.remove('opacity-0')
+          if (onLoad) {
+            onLoad()
+          }
         }}
       />
     </div>

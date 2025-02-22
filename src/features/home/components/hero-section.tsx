@@ -12,7 +12,11 @@ const HeroVideo = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="relative aspect-video w-full animate-pulse rounded-2xl bg-neutral-100 dark:bg-neutral-800" />
+      <div className="relative aspect-video w-full animate-pulse rounded-2xl bg-neutral-100 dark:bg-neutral-800">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="h-16 w-16 rounded-full border-4 border-primary-500/20 border-t-primary-500 animate-spin" />
+        </div>
+      </div>
     ),
   }
 )
@@ -21,13 +25,14 @@ export function HeroSection() {
   const [isMounted, setIsMounted] = React.useState(false)
 
   React.useEffect(() => {
-    setIsMounted(true)
+    const timer = setTimeout(() => setIsMounted(true), 100)
+    return () => clearTimeout(timer)
   }, [])
 
   return (
-    <section className="relative min-h-[90vh] pt-20 lg:min-h-screen">
+    <section className="relative min-h-[90vh] pt-24 md:pt-28 lg:min-h-screen lg:pt-32">
       <Container className="relative z-10">
-        <div className="grid items-center gap-8 pt-8 md:grid-cols-2 md:gap-12 lg:pt-12">
+        <div className="grid items-center gap-8 md:grid-cols-2 md:gap-12">
           {/* Text Content */}
           <motion.div
             initial="hidden"

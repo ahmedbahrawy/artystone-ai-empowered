@@ -6,10 +6,26 @@ export function HeroVideo() {
   const videoRef = React.useRef<HTMLVideoElement>(null)
   const [isLoaded, setIsLoaded] = React.useState(false)
   const [hasPlayError, setHasPlayError] = React.useState(false)
+  const [isVisible, setIsVisible] = React.useState(false)
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting)
+      },
+      { threshold: 0.1 }
+    )
+
+    if (videoRef.current) {
+      observer.observe(videoRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
 
   React.useEffect(() => {
     const video = videoRef.current
-    if (!video || !isLoaded) return
+    if (!video || !isLoaded || !isVisible) return
 
     let mounted = true
 
@@ -29,7 +45,6 @@ export function HeroVideo() {
 
     playVideo()
 
-    // Add click handler for manual play on autoplay failure
     const handleClick = () => {
       if (hasPlayError) {
         playVideo()
@@ -45,18 +60,20 @@ export function HeroVideo() {
         video.removeEventListener('click', handleClick)
       }
     }
-  }, [isLoaded, hasPlayError])
+  }, [isLoaded, hasPlayError, isVisible])
 
   return (
-    <div className="relative overflow-hidden rounded-2xl aspect-video">
+    <div className="relative aspect-video overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-800">
       <video
         ref={videoRef}
-        className={`w-full h-full object-cover ${hasPlayError ? 'cursor-pointer' : ''}`}
+        className={`h-full w-full object-cover transition-opacity duration-300 ${
+          isLoaded ? 'opacity-100' : 'opacity-0'
+        } ${hasPlayError ? 'cursor-pointer' : ''}`}
         autoPlay
         loop
         muted
         playsInline
-        preload="auto"
+        preload="metadata"
         onLoadedData={() => setIsLoaded(true)}
         aria-label="Welcome to Arty Stone Clinic"
       >
@@ -64,9 +81,9 @@ export function HeroVideo() {
         Your browser does not support the video tag.
       </video>
       {hasPlayError && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+        <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <button
-            className="rounded-full bg-white/90 p-4 text-neutral-900 shadow-lg hover:bg-white"
+            className="rounded-full bg-white/90 p-4 text-neutral-900 shadow-lg transition-all hover:bg-white hover:shadow-xl"
             onClick={() => videoRef.current?.play()}
             aria-label="Play video"
           >

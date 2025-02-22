@@ -17,7 +17,7 @@ const HeroVideo = dynamic(
 
 export function AboutHero() {
   return (
-    <Section className="relative overflow-hidden bg-white pt-32 dark:bg-neutral-900">
+    <Section className="relative overflow-hidden bg-white pt-24 md:pt-28 lg:pt-32 dark:bg-neutral-900">
       {/* Background Video */}
       <div className="absolute inset-0 z-0">
         <div className="h-full w-full">

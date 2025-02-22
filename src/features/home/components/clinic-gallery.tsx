@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { Container } from '@/components/ui/container'
 import { fadeIn, slideInFromBottom } from '@/lib/animations'
 import { OptimizedImage } from '@/components/atoms/optimized-image'
+import React from 'react'
 
 interface ClinicImage {
   src: string
@@ -60,15 +61,21 @@ const clinicImages: ClinicImage[] = [
 ]
 
 function GalleryImage({ image, index }: { image: ClinicImage; index: number }) {
+  const [isLoaded, setIsLoaded] = React.useState(false)
+
   return (
-    <div className="group relative aspect-[4/3] overflow-hidden rounded-2xl">
+    <div className="group relative aspect-[4/3] overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-800">
       <OptimizedImage
         src={image.src}
         alt={image.alt}
         fill
         sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
-        className="object-cover transition-transform duration-300 group-hover:scale-105"
-        priority={index < 3} // Only prioritize loading for the first 3 images
+        className={`object-cover transition-all duration-500 ${
+          isLoaded ? 'scale-100 opacity-100' : 'scale-105 opacity-0'
+        } group-hover:scale-105`}
+        priority={index < 3}
+        loading={index < 3 ? 'eager' : 'lazy'}
+        onLoad={() => setIsLoaded(true)}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       <div className="absolute bottom-0 left-0 right-0 p-4 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
@@ -77,6 +84,11 @@ function GalleryImage({ image, index }: { image: ClinicImage; index: number }) {
           <p className="mt-1 text-sm text-white/90">{image.description}</p>
         )}
       </div>
+      {!isLoaded && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="h-8 w-8 rounded-full border-2 border-primary-500/20 border-t-primary-500 animate-spin" />
+        </div>
+      )}
     </div>
   )
 }

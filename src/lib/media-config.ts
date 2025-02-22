@@ -3,7 +3,7 @@ export const images = {
   logoLight: '/images/logo-light.svg',
   logoDark: '/images/logo-dark.svg',
   heroBackground: '/images/hero-bg.webp',
-  aboutHero: '/images/about-hero.webp',
+  aboutHero: '/images/front-clinic.webp',
   servicesHero: '/images/services-hero.webp',
   contactHero: '/images/contact-hero.webp',
   blogHero: '/images/blog-hero.webp',
