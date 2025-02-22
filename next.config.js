@@ -29,18 +29,6 @@ const nextConfig = {
         protocol: 'https',
         hostname: '**.hotdoc.com.au',
       },
-      {
-        protocol: 'https',
-        hostname: '**.googleapis.com',
-      },
-      {
-        protocol: 'https',
-        hostname: '**.gstatic.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'artystoneclinic.com.au',
-      },
     ],
   },
   
@@ -57,17 +45,11 @@ const nextConfig = {
   
   // Webpack configuration
   webpack: (config, { dev, isServer }) => {
-    // Handle OpenTelemetry dynamic imports
-    config.module.rules.push({
-      test: /node_modules\/@opentelemetry\/instrumentation\/build\/esm\/platform\/node\/instrumentation\.js$/,
-      use: 'null-loader',
-    });
-
     // Optimize SVG
     config.module.rules.push({
       test: /\.svg$/,
       use: ['@svgr/webpack'],
-    });
+    })
 
     // Production optimizations
     if (!dev) {
