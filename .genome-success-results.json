@@ -1,43 +1,108 @@
 {
   "regionIdentifier": "next",
   "geneExpressionResults": [],
-  "otherIssues": [
+  "otherIssues": [],
+  "children": [
     {
-      "message": "',' expected.",
-      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/lib/schema/location-schema.ts"
-    },
-    {
-      "message": "No value exists in scope for the shorthand property 's'. Either declare one or provide an initializer.",
-      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/lib/schema/location-schema.ts"
-    },
-    {
-      "message": "',' expected.",
-      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/lib/schema/location-schema.ts"
-    },
-    {
-      "message": "No value exists in scope for the shorthand property 'healthcare'. Either declare one or provide an initializer.",
-      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/lib/schema/location-schema.ts"
-    },
-    {
-      "message": "',' expected.",
-      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/lib/schema/location-schema.ts"
-    },
-    {
-      "message": "No value exists in scope for the shorthand property 'services'. Either declare one or provide an initializer.",
-      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/lib/schema/location-schema.ts"
-    },
-    {
-      "message": "',' expected.",
-      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/lib/schema/location-schema.ts"
-    },
-    {
-      "message": "Unterminated string literal.",
-      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/lib/schema/location-schema.ts"
-    },
-    {
-      "message": "':' expected.",
-      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/lib/schema/location-schema.ts"
+      "regionIdentifier": "",
+      "geneExpressionResults": [],
+      "otherIssues": [],
+      "children": [
+        {
+          "regionIdentifier": "",
+          "geneExpressionResults": [],
+          "otherIssues": [],
+          "children": [
+            {
+              "regionIdentifier": "",
+              "geneExpressionResults": [],
+              "otherIssues": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "regionIdentifier": "",
+          "geneExpressionResults": [],
+          "otherIssues": [],
+          "children": [
+            {
+              "regionIdentifier": "",
+              "geneExpressionResults": [],
+              "otherIssues": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "regionIdentifier": "",
+          "geneExpressionResults": [],
+          "otherIssues": [],
+          "children": [
+            {
+              "regionIdentifier": "",
+              "geneExpressionResults": [],
+              "otherIssues": [],
+              "children": [
+                {
+                  "regionIdentifier": "",
+                  "geneExpressionResults": [],
+                  "otherIssues": [],
+                  "children": []
+                },
+                {
+                  "regionIdentifier": "",
+                  "geneExpressionResults": [],
+                  "otherIssues": [],
+                  "children": []
+                },
+                {
+                  "regionIdentifier": "",
+                  "geneExpressionResults": [],
+                  "otherIssues": [],
+                  "children": []
+                },
+                {
+                  "regionIdentifier": "",
+                  "geneExpressionResults": [],
+                  "otherIssues": [],
+                  "children": []
+                },
+                {
+                  "regionIdentifier": "",
+                  "geneExpressionResults": [],
+                  "otherIssues": [],
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "regionIdentifier": "",
+          "geneExpressionResults": [],
+          "otherIssues": [],
+          "children": []
+        },
+        {
+          "regionIdentifier": "",
+          "geneExpressionResults": [],
+          "otherIssues": [],
+          "children": []
+        },
+        {
+          "regionIdentifier": "",
+          "geneExpressionResults": [],
+          "otherIssues": [],
+          "children": []
+        },
+        {
+          "regionIdentifier": "",
+          "geneExpressionResults": [],
+          "otherIssues": [],
+          "children": []
+        }
+      ]
     }
-  ],
-  "children": []
+  ]
 }
