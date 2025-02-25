@@ -17,7 +17,10 @@ export function PromoRibbon({ className }: PromoRibbonProps) {
       animate="visible"
       variants={fadeIn}
       className={cn(
-        "bg-gradient-to-r from-indigo-600 via-primary-500 to-secondary-500 text-white py-2",
+        "bg-gradient-to-r from-indigo-600 via-primary-500 to-secondary-500",
+        "text-white py-2 transition-all duration-300",
+        "hover:from-indigo-700 hover:via-primary-600 hover:to-secondary-600",
+        "backdrop-blur-md shadow-sm",
         className
       )}
     >
@@ -27,7 +30,7 @@ export function PromoRibbon({ className }: PromoRibbonProps) {
             Doctors Consulting Rooms for rent - 
             <button 
               onClick={() => window.location.href = '/contact'}
-              className="underline ml-1 hover:text-white/90 font-semibold"
+              className="underline ml-1 hover:text-white/90 transition-colors duration-200 font-semibold"
             >
               Contact us
             </button>

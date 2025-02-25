@@ -90,6 +90,20 @@
   code, pre {
     @apply font-mono;
   }
+
+  .main-content {
+    @apply pt-36; /* Account for promo ribbon (32px) + header (80px) + extra spacing */
+  }
+
+  /* Add smooth scrolling for the whole page */
+  html {
+    @apply scroll-smooth;
+  }
+
+  /* Ensure content is pushed down below the fixed header */
+  body > main {
+    @apply main-content;
+  }
 }
 
 @layer components {
