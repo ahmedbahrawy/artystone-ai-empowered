@@ -1,12 +1,12 @@
 import React from 'react';
 import { PageLayout } from './page-layout';
-import { generateMetadata, MetadataOptions } from '@/lib/metadata';
+import { generateMetadata, GenerateMetadataOptions } from '@/lib/metadata';
 
 interface PageWrapperProps {
   children: React.ReactNode;
   title?: string;
   subtitle?: string;
-  metadataOptions?: Partial<MetadataOptions>;
+  metadataOptions?: Partial<GenerateMetadataOptions>;
   layoutProps?: Omit<React.ComponentProps<typeof PageLayout>, 'children'>;
 }
 
