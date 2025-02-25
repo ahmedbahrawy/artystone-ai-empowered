@@ -1,3 +1,5 @@
+'use client'
+
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
@@ -11,6 +13,11 @@ const alertVariants = cva(
         default: "bg-background text-foreground",
         destructive:
           "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive",
+        success:
+          "border-green-500/50 text-green-700 dark:text-green-400 [&>svg]:text-green-500",
+        warning:
+          "border-yellow-500/50 text-yellow-700 dark:text-yellow-400 [&>svg]:text-yellow-500",
+        info: "border-blue-500/50 text-blue-700 dark:text-blue-400 [&>svg]:text-blue-500",
       },
     },
     defaultVariants: {
@@ -19,17 +26,76 @@ const alertVariants = cva(
   }
 )
 
-const Alert = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants>
->(({ className, variant, ...props }, ref) => (
-  <div
-    ref={ref}
-    role="alert"
-    className={cn(alertVariants({ variant }), className)}
-    {...props}
-  />
-))
+const alertStatusMap = {
+  default: "polite",
+  destructive: "assertive",
+  success: "polite",
+  warning: "polite",
+  info: "polite",
+} as const
+
+export interface AlertProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof alertVariants> {
+  onClose?: () => void
+  autoClose?: number
+  showIcon?: boolean
+}
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
+  ({ className, variant = "default", children, onClose, autoClose, showIcon = true, ...props }, ref) => {
+    const [isVisible, setIsVisible] = React.useState(true)
+
+    React.useEffect(() => {
+      if (autoClose && onClose) {
+        const timer = setTimeout(() => {
+          setIsVisible(false)
+          onClose()
+        }, autoClose)
+
+        return () => clearTimeout(timer)
+      }
+    }, [autoClose, onClose])
+
+    if (!isVisible) return null
+
+    return (
+      <div
+        ref={ref}
+        role="alert"
+        aria-live={alertStatusMap[variant || "default"]}
+        className={cn(alertVariants({ variant }), className)}
+        {...props}
+      >
+        {children}
+        {onClose && (
+          <button
+            onClick={() => {
+              setIsVisible(false)
+              onClose()
+            }}
+            className="absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-70 transition-opacity hover:opacity-100"
+            aria-label="Close alert"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+        )}
+      </div>
+    )
+  }
+)
+
 Alert.displayName = "Alert"
 
 const AlertTitle = React.forwardRef<
