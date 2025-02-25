@@ -1,27 +1,25 @@
-import type { Metadata } from 'next'
-import { AboutHero, AboutMission, AboutValues, AboutCTA } from '@/features/about'
-import { Header } from '@/components/layout/header'
+import { Metadata } from 'next';
+import { PageWrapper, getMetadata } from '@/components/layout/page-wrapper';
+import { AboutContent } from '@/features/about/about-content';
 
-export const metadata: Metadata = {
-  title: "About Our Medical Practice",
-  description: "Learn about Arty Stone Clinic's commitment to excellence in family medicine and healthcare services. Meet our experienced team of doctors and medical professionals.",
-  keywords: ['about us', 'medical practice', 'family medicine', 'healthcare services', 'medical team', 'clinic history'],
-  openGraph: {
-    title: "About Our Medical Practice | Arty Stone Clinic",
-    description: "Learn about Arty Stone Clinic's commitment to excellence in family medicine and healthcare services.",
-  },
-}
+export const metadata: Metadata = getMetadata({
+  title: 'About Us | Artystone Clinic',
+  description: 'Learn about Artystone Clinic\'s history, mission, and our dedicated team of healthcare professionals.',
+  path: '/about',
+  keywords: ['about us', 'medical clinic', 'healthcare team', 'clinic history', 'medical professionals'],
+});
 
 export default function AboutPage() {
   return (
-    <>
-      <Header variant="transparent" />
-      <main>
-        <AboutHero />
-        <AboutMission />
-        <AboutValues />
-        <AboutCTA />
-      </main>
-    </>
-  )
+    <PageWrapper
+      title="About Artystone Clinic"
+      subtitle="Learn about our history, mission, and dedicated team"
+      layoutProps={{
+        backgroundGradient: 'primary',
+        backgroundPattern: 'dots',
+      }}
+    >
+      <AboutContent />
+    </PageWrapper>
+  );
 } 
