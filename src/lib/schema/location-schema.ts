@@ -174,12 +174,21 @@ export function generateFAQSchema() {
 export function generateArticleSchema(metadata: Metadata) {
   if (!metadata.title || typeof metadata.title === 'object') return null
 
+  const ogImages = metadata.openGraph?.images
+  let ogImage: string | undefined
+
+  if (Array.isArray(ogImages) && ogImages.length > 0) {
+    ogImage = typeof ogImages[0] === 'string' ? ogImages[0] : ogImages[0]?.url
+  } else if (ogImages && !Array.isArray(ogImages)) {
+    ogImage = typeof ogImages === 'string' ? ogImages : ogImages.url
+  }
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: metadata.title,
     description: metadata.description,
-    image: metadata.openGraph?.images?.[0]?.url,
+    image: ogImage,
     datePublished: new Date().toISOString(),
     dateModified: new Date().toISOString(),
     author: {
