@@ -93,6 +93,7 @@ export function HeroImage() {
   const isInView = useInView(containerRef, { once: false, amount: 0.1 });
   const controls = useAnimation();
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [isVideoError, setIsVideoError] = useState(false);
   const [showStatsCard, setShowStatsCard] = useState(false);
   const { resolvedTheme, isReducedMotion } = useThemeContext();
   
@@ -112,13 +113,19 @@ export function HeroImage() {
     if (videoRef.current) {
       setIsVideoLoaded(true);
       handleVideoLoad();
-      // Ensure video is playing
+      // Enhanced video playback with better error handling
       videoRef.current.play().catch(error => {
         console.warn('Video autoplay failed:', error);
+        setIsVideoError(true);
         handleVideoError();
       });
     }
   };
+
+  // Reset video error state when video source changes
+  useEffect(() => {
+    setIsVideoError(false);
+  }, [videoSrc]);
 
   useEffect(() => {
     if (isInView) {
@@ -128,6 +135,9 @@ export function HeroImage() {
     }
   }, [controls, isInView]);
 
+  // Enhanced video loading state
+  const showVideo = videoSrc && !isVideoError && !isReducedMotion;
+  
   const themeEmoji = resolvedTheme === 'dark' ? '🌙' : resolvedTheme === 'semi-light' ? '🌤️' : '☀️';
 
   return (
@@ -135,26 +145,27 @@ export function HeroImage() {
       ref={containerRef}
       className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl transform-gpu"
     >
-      {/* Theme indicator */}
+      {/* Theme indicator with enhanced styling */}
       <AnimatedElement
         animation="fade-down"
         delay={0.5}
         duration={0.4}
-        className="absolute top-4 right-4 z-20 bg-background/80 backdrop-blur-sm rounded-full p-2 shadow-md"
+        className="absolute top-4 right-4 z-20 bg-background/90 backdrop-blur-md rounded-full p-2.5 shadow-lg ring-1 ring-neutral-200/10 dark:ring-neutral-800/10"
         skipAnimation={isReducedMotion}
       >
         <motion.span 
           className="text-xl" 
           aria-label={`Current theme: ${resolvedTheme}`}
           whileHover={{ scale: 1.1 }}
+          transition={{ type: "spring", stiffness: 400 }}
         >
           {themeEmoji}
         </motion.span>
       </AnimatedElement>
       
-      {/* Video/Image container with enhanced scaling */}
+      {/* Enhanced video/image container with better loading states */}
       <div className="absolute inset-0 w-full h-full">
-        {videoSrc ? (
+        {showVideo ? (
           <motion.video
             ref={videoRef}
             autoPlay
@@ -163,14 +174,17 @@ export function HeroImage() {
             playsInline
             className="absolute inset-0 w-full h-full object-cover"
             onLoadedMetadata={handleVideoMetadataLoaded}
-            onError={handleVideoError}
-            initial={{ filter: 'blur(10px)', scale: 1.1 }}
+            onError={() => {
+              setIsVideoError(true);
+              handleVideoError();
+            }}
+            initial={{ filter: 'blur(10px)', scale: 1.1, opacity: 0 }}
             animate={{ 
               filter: isVideoLoaded ? 'blur(0px)' : 'blur(10px)',
               scale: isVideoLoaded ? 1 : 1.1,
               opacity: isVideoLoaded ? 1 : 0
             }}
-            transition={{ duration: 1.2, ease: 'easeOut' }}
+            transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1] }}
             preload="auto"
             poster={fallbackImage}
           >
@@ -186,23 +200,29 @@ export function HeroImage() {
             />
           </motion.video>
         ) : (
-          <Image 
-            src={fallbackImage} 
-            alt="Arty Stone Clinic Welcome"
-            fill
-            priority
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 50vw"
-            quality={90}
-            onLoadingComplete={() => setIsVideoLoaded(true)}
-          />
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+          >
+            <Image 
+              src={fallbackImage} 
+              alt="Arty Stone Clinic Welcome"
+              fill
+              priority
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              quality={90}
+              onLoadingComplete={() => setIsVideoLoaded(true)}
+            />
+          </motion.div>
         )}
       </div>
 
-      {/* Enhanced gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/50 to-transparent dark:from-background/95 dark:via-background/70 dark:to-transparent/30" />
+      {/* Enhanced gradient overlay with better theme adaptation */}
+      <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/50 to-transparent dark:from-background/98 dark:via-background/80 dark:to-transparent/40 transition-colors duration-300" />
       
-      {/* Floating stats card with improved positioning */}
+      {/* Enhanced floating stats card */}
       {showStatsCard && isInView && (
         <AnimatedElement
           animation="fade-up"
@@ -210,20 +230,25 @@ export function HeroImage() {
           duration={0.6}
           className="absolute bottom-8 left-8 z-10 max-w-[300px] sm:max-w-[340px]"
         >
-          <StatsCard />
+          <motion.div
+            whileHover={{ scale: 1.02, y: -4 }}
+            transition={{ type: "spring", stiffness: 400 }}
+          >
+            <StatsCard />
+          </motion.div>
         </AnimatedElement>
       )}
       
-      {/* Enhanced decorative elements */}
+      {/* Enhanced decorative elements with better theme adaptation */}
       {!isReducedMotion && (
         <motion.div 
           className="absolute top-0 left-0 w-full h-full pointer-events-none"
           initial={{ opacity: 0 }}
-          animate={{ opacity: isInView ? 0.7 : 0 }}
+          animate={{ opacity: isInView ? 0.8 : 0 }}
           transition={{ duration: 1, delay: 0.5 }}
         >
-          <div className="absolute top-[10%] right-[10%] w-24 h-24 rounded-full bg-primary/10 blur-2xl" />
-          <div className="absolute bottom-[20%] left-[20%] w-40 h-40 rounded-full bg-secondary/10 blur-2xl" />
+          <div className="absolute top-[10%] right-[10%] w-32 h-32 rounded-full bg-primary/5 dark:bg-primary/10 blur-3xl animate-pulse" />
+          <div className="absolute bottom-[20%] left-[20%] w-48 h-48 rounded-full bg-secondary/5 dark:bg-secondary/10 blur-3xl animate-pulse" />
         </motion.div>
       )}
     </div>
