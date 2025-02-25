@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import * as React from 'react';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 
 type Theme = 'dark' | 'system';
@@ -26,7 +26,15 @@ interface ThemeContextType {
   setThemePreference: (preference: ThemePreference) => void;
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+const ThemeContext = React.createContext<ThemeContextType | undefined>(undefined);
+
+export function useThemeContext() {
+  const context = React.useContext(ThemeContext);
+  if (context === undefined) {
+    throw new Error('useThemeContext must be used within a ThemeProvider');
+  }
+  return context;
+}
 
 export function ThemeProvider({
   children,
@@ -37,15 +45,17 @@ export function ThemeProvider({
   storageKey = 'theme-preference',
   ...props
 }: ThemeProviderProps) {
-  const [isReducedMotion, setIsReducedMotion] = useState(false);
-  const [isHighContrast, setIsHighContrast] = useState(false);
-  const [prefersDarkScheme, setPrefersDarkScheme] = useState(false);
-  const [themePreference, setThemePreference] = useState<ThemePreference>(defaultTheme);
-  const [theme, setTheme] = useState<Theme>('system');
-  const [resolvedTheme, setResolvedTheme] = useState<Theme>('dark');
+  const [isReducedMotion, setIsReducedMotion] = React.useState(false);
+  const [isHighContrast, setIsHighContrast] = React.useState(false);
+  const [prefersDarkScheme, setPrefersDarkScheme] = React.useState(false);
+  const [themePreference, setThemePreference] = React.useState<ThemePreference>(defaultTheme);
+  const [theme, setTheme] = React.useState<Theme>('system');
+  const [resolvedTheme, setResolvedTheme] = React.useState<Theme>('dark');
 
   // Check for user preferences
-  useEffect(() => {
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     // Check for reduced motion preference
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     setIsReducedMotion(motionQuery.matches);
@@ -76,27 +86,18 @@ export function ThemeProvider({
   }, []);
 
   // Handle theme changes
-  const handleThemeChange = useCallback((newTheme: Theme) => {
+  const handleThemeChange = React.useCallback((newTheme: Theme) => {
     setTheme(newTheme);
-    
-    // Determine resolved theme
-    if (newTheme === 'system') {
-      setResolvedTheme(prefersDarkScheme ? 'dark' : 'dark');
-    } else {
-      setResolvedTheme(newTheme);
-    }
-    
-    // Update theme preference
+    setResolvedTheme('dark'); // Always resolve to dark theme
     setThemePreference(newTheme as ThemePreference);
-    
-    // Store preference in localStorage
     localStorage.setItem(storageKey, newTheme);
-  }, [prefersDarkScheme, storageKey]);
+  }, [storageKey]);
 
   // Initialize theme from localStorage or default
-  useEffect(() => {
-    const storedPreference = localStorage.getItem(storageKey) as ThemePreference | null;
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
     
+    const storedPreference = localStorage.getItem(storageKey) as ThemePreference | null;
     if (storedPreference) {
       setThemePreference(storedPreference);
       handleThemeChange(storedPreference as Theme);
@@ -105,14 +106,7 @@ export function ThemeProvider({
     }
   }, [defaultTheme, handleThemeChange, storageKey]);
 
-  // Update resolved theme when system preference changes
-  useEffect(() => {
-    if (theme === 'system') {
-      setResolvedTheme('dark');
-    }
-  }, [prefersDarkScheme, theme]);
-
-  const value = {
+  const value = React.useMemo(() => ({
     theme,
     resolvedTheme,
     setTheme: handleThemeChange,
@@ -121,7 +115,15 @@ export function ThemeProvider({
     prefersDarkScheme,
     themePreference,
     setThemePreference: (preference: ThemePreference) => handleThemeChange(preference as Theme),
-  };
+  }), [
+    theme,
+    resolvedTheme,
+    handleThemeChange,
+    isReducedMotion,
+    isHighContrast,
+    prefersDarkScheme,
+    themePreference
+  ]);
 
   return (
     <ThemeContext.Provider value={value}>
@@ -130,21 +132,14 @@ export function ThemeProvider({
         defaultTheme={themePreference}
         enableSystem={enableSystem}
         themes={themes}
-        storageKey={storageKey}
+        value={{
+          dark: 'dark',
+          system: 'dark',
+        }}
         {...props}
       >
         {children}
       </NextThemesProvider>
     </ThemeContext.Provider>
   );
-}
-
-export const useThemeContext = () => {
-  const context = useContext(ThemeContext);
-  
-  if (context === undefined) {
-    throw new Error('useThemeContext must be used within a ThemeProvider');
-  }
-  
-  return context;
-}; 
+} 
