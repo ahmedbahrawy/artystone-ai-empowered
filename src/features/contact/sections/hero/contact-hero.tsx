@@ -11,7 +11,7 @@ export function ContactHero() {
           Contact Us
         </Typography>
         <Typography variant="lead" className="text-muted-foreground">
-          We're here to help and answer any questions you might have.
+          We&apos;re here to help and answer any questions you might have.
           Feel free to reach out to us.
         </Typography>
       </div>
