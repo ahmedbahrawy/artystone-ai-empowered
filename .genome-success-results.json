@@ -1,108 +1,11 @@
 {
   "regionIdentifier": "next",
   "geneExpressionResults": [],
-  "otherIssues": [],
-  "children": [
+  "otherIssues": [
     {
-      "regionIdentifier": "",
-      "geneExpressionResults": [],
-      "otherIssues": [],
-      "children": [
-        {
-          "regionIdentifier": "",
-          "geneExpressionResults": [],
-          "otherIssues": [],
-          "children": [
-            {
-              "regionIdentifier": "",
-              "geneExpressionResults": [],
-              "otherIssues": [],
-              "children": []
-            }
-          ]
-        },
-        {
-          "regionIdentifier": "",
-          "geneExpressionResults": [],
-          "otherIssues": [],
-          "children": [
-            {
-              "regionIdentifier": "",
-              "geneExpressionResults": [],
-              "otherIssues": [],
-              "children": []
-            }
-          ]
-        },
-        {
-          "regionIdentifier": "",
-          "geneExpressionResults": [],
-          "otherIssues": [],
-          "children": [
-            {
-              "regionIdentifier": "",
-              "geneExpressionResults": [],
-              "otherIssues": [],
-              "children": [
-                {
-                  "regionIdentifier": "",
-                  "geneExpressionResults": [],
-                  "otherIssues": [],
-                  "children": []
-                },
-                {
-                  "regionIdentifier": "",
-                  "geneExpressionResults": [],
-                  "otherIssues": [],
-                  "children": []
-                },
-                {
-                  "regionIdentifier": "",
-                  "geneExpressionResults": [],
-                  "otherIssues": [],
-                  "children": []
-                },
-                {
-                  "regionIdentifier": "",
-                  "geneExpressionResults": [],
-                  "otherIssues": [],
-                  "children": []
-                },
-                {
-                  "regionIdentifier": "",
-                  "geneExpressionResults": [],
-                  "otherIssues": [],
-                  "children": []
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "regionIdentifier": "",
-          "geneExpressionResults": [],
-          "otherIssues": [],
-          "children": []
-        },
-        {
-          "regionIdentifier": "",
-          "geneExpressionResults": [],
-          "otherIssues": [],
-          "children": []
-        },
-        {
-          "regionIdentifier": "",
-          "geneExpressionResults": [],
-          "otherIssues": [],
-          "children": []
-        },
-        {
-          "regionIdentifier": "",
-          "geneExpressionResults": [],
-          "otherIssues": [],
-          "children": []
-        }
-      ]
+      "message": "Cannot find module 'next-themes/dist/types' or its corresponding type declarations.",
+      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/components/theme-provider.tsx"
     }
-  ]
+  ],
+  "children": []
 }
