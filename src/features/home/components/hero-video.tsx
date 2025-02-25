@@ -1,24 +1,19 @@
 'use client'
 
 import * as React from 'react'
-import { useThemeContext } from '@/providers/theme-provider'
 import Image from 'next/image'
+import { useThemeVideo } from '@/lib/hooks/use-theme-video'
 
 export function HeroVideo() {
   const videoRef = React.useRef<HTMLVideoElement>(null)
-  const [isLoaded, setIsLoaded] = React.useState(false)
-  const { resolvedTheme } = useThemeContext()
-
-  const videoSrc = React.useMemo(() => {
-    switch (resolvedTheme) {
-      case 'dark':
-        return '/videos/clinic-dark.mp4'
-      case 'semi-light':
-        return '/videos/clinic-semi-light.mp4'
-      default:
-        return '/videos/clinic-light.mp4'
-    }
-  }, [resolvedTheme])
+  const {
+    videoSrc,
+    poster,
+    isLoaded,
+    hasError,
+    handleLoadedData,
+    handleError,
+  } = useThemeVideo()
 
   React.useEffect(() => {
     const video = videoRef.current
@@ -51,15 +46,16 @@ export function HeroVideo() {
         muted
         playsInline
         preload="auto"
-        onLoadedData={() => setIsLoaded(true)}
-        poster="/images/clinic-welcome.webp"
+        onLoadedData={handleLoadedData}
+        onError={handleError}
+        poster={poster}
         aria-label="Welcome to Arty Stone Clinic"
       >
         <source src={videoSrc} type="video/mp4" />
       </video>
-      {!isLoaded && (
+      {(!isLoaded || hasError) && (
         <Image
-          src="/images/clinic-welcome.webp"
+          src={poster}
           alt="Welcome to Arty Stone Clinic"
           fill
           priority
