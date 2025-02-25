@@ -96,9 +96,7 @@ export function HeroContent(): JSX.Element {
           size="lg" 
           className="w-full sm:w-auto"
           aria-label="Book an appointment"
-        >
-          Book Appointment
-        </BookButton>
+        />
         <Button
           variant="outline"
           size="lg"
