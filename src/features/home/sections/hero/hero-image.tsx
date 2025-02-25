@@ -92,40 +92,22 @@ export function HeroImage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const isInView = useInView(containerRef, { once: false, amount: 0.1 });
   const controls = useAnimation();
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-  const [isVideoError, setIsVideoError] = useState(false);
   const [showStatsCard, setShowStatsCard] = useState(false);
   const { resolvedTheme, isReducedMotion } = useThemeContext();
   
   const { 
     videoSrc, 
-    fallbackImage, 
-    handleVideoLoad, 
-    handleVideoError 
+    poster,
+    isLoaded,
+    hasError,
+    handleLoadedData,
+    handleError
   } = useThemeVideo({
     lightVideo: '/home-hero.mp4',
-    semiLightVideo: '/home-hero.mp4',
     darkVideo: '/home-hero.mp4',
-    fallbackImage: '/images/clinic-welcome.webp',
+    semiLightVideo: '/home-hero.mp4',
+    poster: '/images/clinic-welcome.webp',
   });
-
-  const handleVideoMetadataLoaded = () => {
-    if (videoRef.current) {
-      setIsVideoLoaded(true);
-      handleVideoLoad();
-      // Enhanced video playback with better error handling
-      videoRef.current.play().catch(error => {
-        console.warn('Video autoplay failed:', error);
-        setIsVideoError(true);
-        handleVideoError();
-      });
-    }
-  };
-
-  // Reset video error state when video source changes
-  useEffect(() => {
-    setIsVideoError(false);
-  }, [videoSrc]);
 
   useEffect(() => {
     if (isInView) {
@@ -136,7 +118,7 @@ export function HeroImage() {
   }, [controls, isInView]);
 
   // Enhanced video loading state
-  const showVideo = videoSrc && !isVideoError && !isReducedMotion;
+  const showVideo = videoSrc && !hasError && !isReducedMotion;
   
   const themeEmoji = resolvedTheme === 'dark' ? '🌙' : resolvedTheme === 'semi-light' ? '🌤️' : '☀️';
 
@@ -173,31 +155,19 @@ export function HeroImage() {
             loop
             playsInline
             className="absolute inset-0 w-full h-full object-cover"
-            onLoadedMetadata={handleVideoMetadataLoaded}
-            onError={() => {
-              setIsVideoError(true);
-              handleVideoError();
-            }}
+            onLoadedData={handleLoadedData}
+            onError={handleError}
             initial={{ filter: 'blur(10px)', scale: 1.1, opacity: 0 }}
             animate={{ 
-              filter: isVideoLoaded ? 'blur(0px)' : 'blur(10px)',
-              scale: isVideoLoaded ? 1 : 1.1,
-              opacity: isVideoLoaded ? 1 : 0
+              filter: isLoaded ? 'blur(0px)' : 'blur(10px)',
+              scale: isLoaded ? 1 : 1.1,
+              opacity: isLoaded ? 1 : 0
             }}
             transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1] }}
             preload="auto"
-            poster={fallbackImage}
+            poster={poster}
           >
             <source src={videoSrc} type="video/mp4" />
-            <Image 
-              src={fallbackImage} 
-              alt="Arty Stone Clinic Welcome"
-              fill
-              priority
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 50vw"
-              quality={90}
-            />
           </motion.video>
         ) : (
           <motion.div
@@ -206,14 +176,13 @@ export function HeroImage() {
             transition={{ duration: 0.8 }}
           >
             <Image 
-              src={fallbackImage} 
+              src={poster}
               alt="Arty Stone Clinic Welcome"
               fill
               priority
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 50vw"
               quality={90}
-              onLoadingComplete={() => setIsVideoLoaded(true)}
             />
           </motion.div>
         )}
@@ -248,7 +217,6 @@ export function HeroImage() {
           transition={{ duration: 1, delay: 0.5 }}
         >
           <div className="absolute top-[10%] right-[10%] w-32 h-32 rounded-full bg-primary/5 dark:bg-primary/10 blur-3xl animate-pulse" />
-          <div className="absolute bottom-[20%] left-[20%] w-48 h-48 rounded-full bg-secondary/5 dark:bg-secondary/10 blur-3xl animate-pulse" />
         </motion.div>
       )}
     </div>
