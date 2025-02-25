@@ -9,6 +9,8 @@ export function HeroVideo() {
   const [isVisible, setIsVisible] = React.useState(false)
 
   React.useEffect(() => {
+    if (typeof window === 'undefined') return
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsVisible(entry.isIntersecting)
@@ -24,6 +26,8 @@ export function HeroVideo() {
   }, [])
 
   React.useEffect(() => {
+    if (typeof window === 'undefined') return
+    
     const video = videoRef.current
     if (!video || !isLoaded || !isVisible) return
 
@@ -31,6 +35,7 @@ export function HeroVideo() {
 
     const playVideo = async () => {
       try {
+        if (!video.paused) return
         await video.play()
         if (mounted) {
           setHasPlayError(false)

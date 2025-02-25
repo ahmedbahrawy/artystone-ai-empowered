@@ -21,6 +21,9 @@
 /build
 /dist
 
+# genome
+.genome-results.json
+
 # misc
 .DS_Store
 *.pem

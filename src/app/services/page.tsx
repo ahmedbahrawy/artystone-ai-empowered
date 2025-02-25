@@ -5,6 +5,7 @@ import { Header } from '@/components/layout/header'
 export const metadata: Metadata = {
   title: "Medical Services & Family Healthcare",
   description: "Comprehensive medical services including family medicine, women's health, preventive care, and general wellness. Expert healthcare services provided by experienced family doctors.",
+  keywords: ['medical services', 'family healthcare', 'women\'s health', 'preventive care', 'wellness', 'family medicine'],
   openGraph: {
     title: "Medical Services & Family Healthcare | Arty Stone Clinic",
     description: "Comprehensive medical services including family medicine, women's health, preventive care, and general wellness.",

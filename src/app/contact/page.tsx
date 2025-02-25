@@ -5,6 +5,7 @@ import { ContactHero, ContactDetails, ContactOfficeHours, ContactCTA } from '@/f
 export const metadata: Metadata = {
   title: "Contact & Book Appointments",
   description: "Book appointments with our family doctors at Arty Stone Clinic. Easy online booking, multiple contact options, and flexible office hours for your convenience.",
+  keywords: ['contact', 'appointments', 'booking', 'office hours', 'clinic contact', 'medical appointments'],
   openGraph: {
     title: "Contact & Book Appointments | Arty Stone Clinic",
     description: "Book appointments with our family doctors at Arty Stone Clinic. Easy online booking and flexible office hours.",

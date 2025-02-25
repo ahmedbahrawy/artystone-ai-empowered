@@ -7,27 +7,28 @@ import { fadeIn, slideInFromBottom } from '@/lib/animations'
 import dynamic from 'next/dynamic'
 
 // Separate video component to handle client-side logic
-const HeroVideo = dynamic(
-  () => import('./hero-video').then((mod) => mod.HeroVideo),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="relative aspect-video w-full animate-pulse rounded-2xl bg-neutral-100 dark:bg-neutral-800">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="h-16 w-16 rounded-full border-4 border-primary-500/20 border-t-primary-500 animate-spin" />
-        </div>
+const HeroVideo = dynamic(() => import('./hero-video').then(mod => mod.HeroVideo), {
+  ssr: false,
+  loading: () => (
+    <div className="relative aspect-video w-full animate-pulse rounded-2xl bg-neutral-100 dark:bg-neutral-800">
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="h-16 w-16 rounded-full border-4 border-primary-500/20 border-t-primary-500 animate-spin" />
       </div>
-    ),
-  }
-)
+    </div>
+  ),
+})
 
 export function HeroSection() {
   const [isMounted, setIsMounted] = React.useState(false)
 
   React.useEffect(() => {
-    const timer = setTimeout(() => setIsMounted(true), 100)
-    return () => clearTimeout(timer)
+    if (typeof window === 'undefined') return
+    setIsMounted(true)
   }, [])
+
+  if (!isMounted) {
+    return null
+  }
 
   return (
     <section className="relative min-h-[90vh] pt-24 md:pt-28 lg:min-h-screen lg:pt-32">
@@ -36,7 +37,7 @@ export function HeroSection() {
           {/* Text Content */}
           <motion.div
             initial="hidden"
-            animate={isMounted ? "visible" : "hidden"}
+            animate="visible"
             variants={slideInFromBottom}
             className="flex flex-col justify-center md:min-h-[600px]"
           >
@@ -63,19 +64,17 @@ export function HeroSection() {
           </motion.div>
 
           {/* Video Content */}
-          {isMounted && (
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={fadeIn}
-              className="relative mx-auto w-full"
-            >
-              <div className="relative rounded-2xl shadow-2xl">
-                <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-indigo-500/20 via-primary-500/20 to-secondary-500/20 blur" />
-                <HeroVideo />
-              </div>
-            </motion.div>
-          )}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={fadeIn}
+            className="relative mx-auto w-full"
+          >
+            <div className="relative rounded-2xl shadow-2xl">
+              <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-indigo-500/20 via-primary-500/20 to-secondary-500/20 blur" />
+              <HeroVideo />
+            </div>
+          </motion.div>
         </div>
       </Container>
 

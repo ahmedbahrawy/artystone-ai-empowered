@@ -1,5 +1,4 @@
-'use client'
-
+import { Metadata } from 'next'
 import {
   HeroSection,
   StatsSection,
@@ -12,9 +11,15 @@ import {
   ContactSection,
 } from '@/features/home'
 
+export const metadata: Metadata = {
+  title: 'Arty Stone Clinic',
+  description: 'Welcome to Arty Stone Clinic - Your trusted healthcare partner',
+  keywords: ['clinic', 'healthcare', 'medical', 'doctor', 'treatment', 'Arty Stone Clinic'],
+}
+
 export default function HomePage() {
   return (
-    <main>
+    <>
       <HeroSection />
       <StatsSection />
       <DoctorMessage />
@@ -24,6 +29,6 @@ export default function HomePage() {
       <BookingSection />
       <ContactSection />
       <CTASection />
-    </main>
+    </>
   )
 }

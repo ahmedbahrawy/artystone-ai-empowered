@@ -9,6 +9,7 @@ import { ErrorBoundary } from "@/components/error-boundary";
 import { PerformanceMonitor } from "@/components/performance-monitor";
 import Script from "next/script";
 import "./globals.css";
+import React from "react";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -108,11 +109,21 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
+        {/* Google Fonts Preconnect - Must be first */}
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preconnect"
+          href="https://fonts.googleapis.com"
+          crossOrigin="anonymous"
+        />
+
         {/* Resource Hints */}
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         
         {/* DNS Prefetch */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
@@ -147,11 +158,19 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <div className="flex min-h-screen flex-col">
-              <Header />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </div>
+            <React.Suspense
+              fallback={
+                <div className="flex min-h-screen items-center justify-center">
+                  <div className="h-16 w-16 rounded-full border-4 border-primary-500/20 border-t-primary-500 animate-spin" />
+                </div>
+              }
+            >
+              <div className="flex min-h-screen flex-col">
+                <Header />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </div>
+            </React.Suspense>
           </ThemeProvider>
         </ErrorBoundary>
         <PerformanceMonitor />
