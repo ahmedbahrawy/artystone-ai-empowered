@@ -1,20 +1,37 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { BookButton } from '@/components/atoms/book-button';
 import { Badge } from '@/components/ui/badge';
 
-export function HeroContent() {
+const contentVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (custom: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      delay: custom * 0.1,
+    },
+  }),
+};
+
+export function HeroContent(): JSX.Element {
   return (
     <div className="flex flex-col gap-6">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
+        variants={contentVariants}
+        initial="hidden"
+        animate="visible"
+        custom={1}
       >
-        <Badge variant="secondary" className="mb-4">
+        <Badge 
+          variant="secondary" 
+          className="mb-4"
+          aria-label="Announcement"
+        >
           ✨ Now Accepting New Patients
         </Badge>
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -24,9 +41,10 @@ export function HeroContent() {
       </motion.div>
 
       <motion.p
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
+        variants={contentVariants}
+        initial="hidden"
+        animate="visible"
+        custom={2}
         className="text-xl text-gray-600 dark:text-gray-300"
       >
         Experience comprehensive medical care with Dr. Farzaneh. We offer family medicine,
@@ -34,35 +52,43 @@ export function HeroContent() {
       </motion.p>
 
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
+        variants={contentVariants}
+        initial="hidden"
+        animate="visible"
+        custom={3}
         className="flex flex-col sm:flex-row gap-4"
       >
-        <BookButton size="lg" className="w-full sm:w-auto">
+        <BookButton 
+          size="lg" 
+          className="w-full sm:w-auto"
+          aria-label="Book an appointment"
+        >
           Book Appointment
         </BookButton>
         <Button
           variant="outline"
           size="lg"
           className="w-full sm:w-auto"
+          aria-label="Learn more about our services"
         >
           Learn More
         </Button>
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
+        variants={contentVariants}
+        initial="hidden"
+        animate="visible"
+        custom={4}
         className="mt-6 flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300"
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2" role="status">
           <svg
             className="h-5 w-5 text-green-500"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path
               strokeLinecap="round"
@@ -73,12 +99,13 @@ export function HeroContent() {
           </svg>
           <span>Bulk Billing Available</span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2" role="status">
           <svg
             className="h-5 w-5 text-green-500"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path
               strokeLinecap="round"
