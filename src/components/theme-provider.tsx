@@ -4,15 +4,24 @@ import * as React from 'react'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
 import { ThemeSwitcher } from './theme-switcher'
 
-export function ThemeProvider({ 
-  children, 
-  ...props 
-}: { 
+interface ThemeProviderProps {
   children: React.ReactNode;
-  attribute?: string;
+  attribute?: 'class' | 'data-theme' | 'data-mode';
   defaultTheme?: string;
   enableSystem?: boolean;
   disableTransitionOnChange?: boolean;
-}) {
-  return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
+  themes?: string[];
+}
+
+export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+  return (
+    <NextThemesProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      {...props}
+    >
+      {children}
+    </NextThemesProvider>
+  );
 } 

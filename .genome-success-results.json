@@ -1,11 +1,108 @@
 {
   "regionIdentifier": "next",
   "geneExpressionResults": [],
-  "otherIssues": [
+  "otherIssues": [],
+  "children": [
     {
-      "message": "[object Object]",
-      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/components/theme-provider.tsx"
+      "regionIdentifier": "",
+      "geneExpressionResults": [],
+      "otherIssues": [],
+      "children": [
+        {
+          "regionIdentifier": "",
+          "geneExpressionResults": [],
+          "otherIssues": [],
+          "children": [
+            {
+              "regionIdentifier": "",
+              "geneExpressionResults": [],
+              "otherIssues": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "regionIdentifier": "",
+          "geneExpressionResults": [],
+          "otherIssues": [],
+          "children": [
+            {
+              "regionIdentifier": "",
+              "geneExpressionResults": [],
+              "otherIssues": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "regionIdentifier": "",
+          "geneExpressionResults": [],
+          "otherIssues": [],
+          "children": [
+            {
+              "regionIdentifier": "",
+              "geneExpressionResults": [],
+              "otherIssues": [],
+              "children": [
+                {
+                  "regionIdentifier": "",
+                  "geneExpressionResults": [],
+                  "otherIssues": [],
+                  "children": []
+                },
+                {
+                  "regionIdentifier": "",
+                  "geneExpressionResults": [],
+                  "otherIssues": [],
+                  "children": []
+                },
+                {
+                  "regionIdentifier": "",
+                  "geneExpressionResults": [],
+                  "otherIssues": [],
+                  "children": []
+                },
+                {
+                  "regionIdentifier": "",
+                  "geneExpressionResults": [],
+                  "otherIssues": [],
+                  "children": []
+                },
+                {
+                  "regionIdentifier": "",
+                  "geneExpressionResults": [],
+                  "otherIssues": [],
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "regionIdentifier": "",
+          "geneExpressionResults": [],
+          "otherIssues": [],
+          "children": []
+        },
+        {
+          "regionIdentifier": "",
+          "geneExpressionResults": [],
+          "otherIssues": [],
+          "children": []
+        },
+        {
+          "regionIdentifier": "",
+          "geneExpressionResults": [],
+          "otherIssues": [],
+          "children": []
+        },
+        {
+          "regionIdentifier": "",
+          "geneExpressionResults": [],
+          "otherIssues": [],
+          "children": []
+        }
+      ]
     }
-  ],
-  "children": []
+  ]
 }
