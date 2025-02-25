@@ -11,15 +11,19 @@ export function HeroImage(): JSX.Element {
   const [videoError, setVideoError] = useState(false);
   const [aspectRatio, setAspectRatio] = useState('16/9');
   const [containerHeight, setContainerHeight] = useState(0);
+  const [videoDimensions, setVideoDimensions] = useState<{width: number, height: number} | null>(null);
+  
   const {
     videoSrc,
     isLoading,
     poster,
     handleVideoLoad,
     handleVideoError,
-    fallbackUsed
+    fallbackUsed,
+    currentTheme
   } = useThemeVideo({
     lightVideo: '/videos/clinic-light.mp4',
+    semiLightVideo: '/videos/clinic-semi-light.mp4',
     darkVideo: '/videos/clinic-dark.mp4',
     poster: '/images/clinic-welcome.webp',
     fallbackVideo: '/home-hero.mp4'
@@ -39,24 +43,31 @@ export function HeroImage(): JSX.Element {
       const ratio = `${video.videoWidth}/${video.videoHeight}`;
       setAspectRatio(ratio);
       
-      // Store video reference for calculations
-      videoRef.current = video;
+      // Store video dimensions for calculations
+      setVideoDimensions({
+        width: video.videoWidth,
+        height: video.videoHeight
+      });
       
       // Calculate container height based on video dimensions
-      updateContainerSize();
+      updateContainerSize(video.videoWidth, video.videoHeight);
     }
     handleVideoLoad();
   };
 
   // Adjust container size based on window size and video dimensions
-  const updateContainerSize = () => {
+  const updateContainerSize = (videoWidth?: number, videoHeight?: number) => {
     if (containerRef.current) {
       const width = containerRef.current.offsetWidth;
       let height;
       
       // If we have video dimensions, use them for precise ratio
-      if (videoRef.current && videoRef.current.videoWidth && videoRef.current.videoHeight) {
-        const videoRatio = videoRef.current.videoHeight / videoRef.current.videoWidth;
+      if (videoWidth && videoHeight) {
+        const videoRatio = videoHeight / videoWidth;
+        height = width * videoRatio;
+      } else if (videoDimensions) {
+        // Use stored dimensions if available
+        const videoRatio = videoDimensions.height / videoDimensions.width;
         height = width * videoRatio;
       } else {
         // Default to 9/16 ratio if video dimensions aren't available
@@ -70,15 +81,37 @@ export function HeroImage(): JSX.Element {
 
   // Update container size on window resize and component mount
   useEffect(() => {
-    updateContainerSize();
-    
     const handleResize = () => {
       updateContainerSize();
     };
     
+    updateContainerSize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [videoDimensions]);
+
+  // Get overlay gradient based on theme
+  const getOverlayGradient = () => {
+    switch(currentTheme) {
+      case 'dark':
+        return {
+          primary: "from-blue-600/30 via-transparent to-purple-600/30",
+          secondary: "from-gray-900/60 to-transparent"
+        };
+      case 'semi-light':
+        return {
+          primary: "from-blue-500/25 via-transparent to-purple-500/25",
+          secondary: "from-gray-800/50 to-transparent"
+        };
+      default: // light
+        return {
+          primary: "from-blue-400/20 via-transparent to-purple-400/20",
+          secondary: "from-gray-700/40 to-transparent"
+        };
+    }
+  };
+
+  const overlayGradient = getOverlayGradient();
 
   return (
     <div className="relative w-full h-full min-h-[500px] lg:min-h-[600px] flex items-center justify-center">
@@ -97,9 +130,9 @@ export function HeroImage(): JSX.Element {
           height: containerHeight > 0 ? `${containerHeight}px` : undefined
         }}
       >
-        {/* Overlay gradients - enhanced for better visibility */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 via-transparent to-purple-600/30 mix-blend-overlay z-10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent z-10" />
+        {/* Overlay gradients - enhanced for better visibility and theme-aware */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${overlayGradient.primary} mix-blend-overlay z-10`} />
+        <div className={`absolute inset-0 bg-gradient-to-t ${overlayGradient.secondary} z-10`} />
         
         {/* Video container with proper aspect ratio */}
         <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
@@ -126,6 +159,13 @@ export function HeroImage(): JSX.Element {
             priority
             quality={95}
           />
+        </div>
+
+        {/* Theme indicator - subtle visual cue for current theme */}
+        <div className="absolute top-4 right-4 z-20 flex items-center gap-2 bg-white/20 dark:bg-gray-900/20 backdrop-blur-sm rounded-full px-3 py-1.5">
+          <span className="text-sm text-white font-medium drop-shadow-md">
+            {currentTheme === 'dark' ? '🌙' : currentTheme === 'semi-light' ? '🌤️' : '☀️'}
+          </span>
         </div>
 
         {/* Floating Stats Card - Improved positioning */}

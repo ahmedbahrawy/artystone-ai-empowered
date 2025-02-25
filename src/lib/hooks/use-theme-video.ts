@@ -5,6 +5,7 @@ import { useTheme } from 'next-themes';
 
 interface ThemeVideoOptions {
   lightVideo: string;
+  semiLightVideo?: string;
   darkVideo: string;
   poster: string;
   fallbackVideo?: string;
@@ -12,6 +13,7 @@ interface ThemeVideoOptions {
 
 export function useThemeVideo({ 
   lightVideo, 
+  semiLightVideo,
   darkVideo, 
   poster,
   fallbackVideo = '/home-hero.mp4' 
@@ -23,7 +25,15 @@ export function useThemeVideo({
 
   useEffect(() => {
     const currentTheme = theme === 'system' ? systemTheme : theme;
-    const selectedVideo = currentTheme === 'dark' ? darkVideo : lightVideo;
+    let selectedVideo;
+    
+    if (currentTheme === 'dark') {
+      selectedVideo = darkVideo;
+    } else if (currentTheme === 'semi-light' && semiLightVideo) {
+      selectedVideo = semiLightVideo;
+    } else {
+      selectedVideo = lightVideo;
+    }
     
     // Check if we need to use fallback
     if (fallbackUsed) {
@@ -33,7 +43,7 @@ export function useThemeVideo({
     }
     
     setIsLoading(true);
-  }, [theme, systemTheme, lightVideo, darkVideo, fallbackVideo, fallbackUsed]);
+  }, [theme, systemTheme, lightVideo, semiLightVideo, darkVideo, fallbackVideo, fallbackUsed]);
 
   const handleVideoLoad = () => {
     setIsLoading(false);
@@ -53,6 +63,7 @@ export function useThemeVideo({
     poster,
     handleVideoLoad,
     handleVideoError,
-    fallbackUsed
+    fallbackUsed,
+    currentTheme: theme === 'system' ? systemTheme : theme
   };
 } 

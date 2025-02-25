@@ -4,7 +4,7 @@ import * as React from 'react'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
 import { ThemeSwitcher } from './theme-switcher'
 
-type Theme = 'light' | 'dark' | 'system'
+type Theme = 'light' | 'dark' | 'semi-light' | 'system'
 
 interface ThemeProviderProps {
   children: React.ReactNode;
@@ -16,7 +16,7 @@ interface ThemeProviderProps {
   storageKey?: string;
 }
 
-const defaultThemes: Theme[] = ['light', 'dark', 'system']
+const defaultThemes: Theme[] = ['light', 'semi-light', 'dark', 'system']
 
 export function ThemeProvider({
   children,
