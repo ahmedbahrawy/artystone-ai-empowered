@@ -1,10 +1,28 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { useThemeVideo } from '@/lib/hooks/use-theme-video';
 
 export function HeroImage(): JSX.Element {
+  const [videoError, setVideoError] = useState(false);
+  const {
+    videoSrc,
+    isLoading,
+    poster,
+    handleVideoLoad,
+  } = useThemeVideo({
+    lightVideo: '/videos/clinic-light.mp4',
+    darkVideo: '/videos/clinic-dark.mp4',
+    poster: '/images/clinic-welcome.webp',
+  });
+
+  const handleVideoError = () => {
+    console.warn('Video failed to load:', videoSrc);
+    setVideoError(true);
+  };
+
   return (
     <div className="relative w-full h-full min-h-[500px] lg:min-h-[600px]">
       <motion.div
@@ -17,29 +35,37 @@ export function HeroImage(): JSX.Element {
         }}
         className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl"
       >
+        {/* Overlay gradients */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-transparent to-purple-600/20 mix-blend-overlay z-10" />
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent z-10" />
         
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover scale-105"
-          poster="/images/clinic-welcome.webp"
-        >
-          <source src="/home-hero.mp4" type="video/mp4" />
-          <source src="/artystone-hero.mp4" type="video/mp4" />
-          <Image
-            src="/images/clinic-welcome.webp"
-            alt="Welcome to Arty Stone Medical Clinic"
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            priority
-            quality={95}
-          />
-        </video>
+        {/* Video with aspect ratio container */}
+        <div className="relative w-full h-full">
+          <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+            {!videoError && (
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                className={`w-full h-full object-cover transition-opacity duration-500 ${!isLoading ? 'opacity-100' : 'opacity-0'}`}
+                poster={poster}
+                onLoadedData={handleVideoLoad}
+                onError={handleVideoError}
+                src={videoSrc}
+              />
+            )}
+            <Image
+              src={poster}
+              alt="Welcome to Arty Stone Medical Clinic"
+              fill
+              className={`object-cover transition-opacity duration-500 ${isLoading || videoError ? 'opacity-100' : 'opacity-0'}`}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority
+              quality={95}
+            />
+          </div>
+        </div>
 
         {/* Floating Stats Card */}
         <motion.div
@@ -53,9 +79,9 @@ export function HeroImage(): JSX.Element {
               {[1, 2, 3].map((index) => (
                 <div
                   key={index}
-                  className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 border-2 border-white dark:border-gray-800 flex items-center justify-center shadow-lg"
+                  className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800 border-2 border-white dark:border-gray-800 flex items-center justify-center shadow-lg"
                 >
-                  <span className="text-blue-600 text-sm">★</span>
+                  <span className="text-blue-600 dark:text-blue-400 text-sm">★</span>
                 </div>
               ))}
             </div>
