@@ -5,11 +5,11 @@
 @layer base {
   :root {
     --background: 40 30% 98%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 40 30% 98%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 40 30% 98%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --foreground: 222.2 47% 25%;
+    --card: 40 25% 98%;
+    --card-foreground: 222.2 47% 25%;
+    --popover: 40 25% 98%;
+    --popover-foreground: 222.2 47% 25%;
     --primary: 217 89% 61%;
     --primary-foreground: 210 40% 98%;
     --secondary: 27 19% 52%;
@@ -27,11 +27,11 @@
   }
 
   .dark {
-    --background: 222.2 24% 10%;
+    --background: 222.2 24% 15%;
     --foreground: 210 40% 98%;
-    --card: 222.2 24% 10%;
+    --card: 222.2 24% 15%;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 24% 10%;
+    --popover: 222.2 24% 15%;
     --popover-foreground: 210 40% 98%;
     --primary: 217 89% 70%;
     --primary-foreground: 222.2 47.4% 11.2%;
@@ -50,24 +50,24 @@
 
   /* Semi-light theme - a softer light theme with slightly darker tones */
   [data-theme="semi-light"] {
-    --background: 210 40% 98%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 210 40% 98%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 210 40% 98%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 231 48% 55%;
+    --background: 40 25% 95%;
+    --foreground: 222.2 47% 20%;
+    --card: 40 25% 95%;
+    --card-foreground: 222.2 47% 20%;
+    --popover: 40 25% 95%;
+    --popover-foreground: 222.2 47% 20%;
+    --primary: 217 80% 55%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 270 59% 55%;
+    --secondary: 27 19% 55%;
     --secondary-foreground: 210 40% 98%;
-    --accent: 326 73% 60%;
+    --accent: 27 25% 50%;
     --accent-foreground: 210 40% 98%;
-    --muted: 210 40% 90%;
+    --muted: 40 20% 92%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 70% 50%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 85%;
-    --input: 214.3 31.8% 85%;
+    --border: 27 15% 85%;
+    --input: 27 15% 85%;
     --ring: var(--primary);
   }
 
