@@ -1,10 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { inter, playfairDisplay, jetbrainsMono } from "@/lib/fonts";
 import { ThemeProvider } from "@/components/theme-provider";
+import { LocationProvider } from "@/components/providers/location-provider";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { getAllServices } from "@/lib/content/services";
-import { generateMedicalPracticeSchema } from "@/lib/schema/medical-practice";
+import { generateLocationSchema, generateFAQSchema } from "@/lib/schema/location-schema";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { PerformanceMonitor } from "@/components/performance-monitor";
 import Script from "next/script";
@@ -22,18 +23,51 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://artystoneclinic.com.au'),
   title: {
-    default: "Arty Stone Clinic | Family Medicine & Healthcare Services",
-    template: "%s | Arty Stone Clinic"
+    default: "Dr. Farzaneh's Arty Stone Medical Clinic | Family Healthcare Frankston Victoria",
+    template: "%s | Dr. Farzaneh's Arty Stone Medical Clinic Frankston"
   },
-  description: "Experience comprehensive family healthcare services at Arty Stone Clinic. Specializing in women's health, preventive care, and general wellness. Book your appointment today.",
-  keywords: ["family medicine", "women's health", "healthcare services", "medical clinic", "family doctors", "health checkup", "preventive care", "medical appointments"],
+  description: "Experience expert healthcare with Dr. Farzaneh at Arty Stone Medical Clinic in Frankston, Victoria. Specializing in family medicine, women's health, and comprehensive medical services. Medicare bulk billing available. Book your appointment today.",
+  keywords: [
+    'medical clinic frankston',
+    'doctor frankston victoria',
+    'dr farzaneh frankston',
+    'bulk billing doctor frankston',
+    'family doctor frankston',
+    'womens health clinic frankston',
+    'medical centre frankston',
+    'gp clinic frankston',
+    'after hours doctor frankston',
+    'bulk billing medical centre frankston',
+    'healthcare services victoria',
+    'medical appointments frankston',
+    'family healthcare victoria',
+    'arty stone clinic',
+    'telehealth consultations victoria'
+  ],
   openGraph: {
-    title: "Arty Stone Clinic | Family Medicine & Healthcare Services",
-    description: "Experience comprehensive family healthcare services at Arty Stone Clinic. Specializing in women's health, preventive care, and general wellness.",
-    url: "https://artystoneclinic.com.au",
-    siteName: "Arty Stone Clinic",
-    locale: "en_AU",
-    type: "website",
+    type: 'website',
+    locale: 'en_AU',
+    url: 'https://artystoneclinic.com.au',
+    siteName: "Dr. Farzaneh's Arty Stone Medical Clinic",
+    title: "Expert Family Healthcare in Frankston Victoria | Dr. Farzaneh's Arty Stone Medical Clinic",
+    description: "Your trusted local medical clinic in Frankston, Victoria. Dr. Farzaneh provides comprehensive healthcare services including family medicine, women's health, and bulk billing options.",
+    images: [
+      {
+        url: 'https://artystoneclinic.com.au/images/clinic-exterior.jpg',
+        width: 1200,
+        height: 630,
+        alt: "Arty Stone Medical Clinic Frankston"
+      }
+    ]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Dr. Farzaneh's Arty Stone Medical Clinic | Frankston Victoria",
+    description: "Expert healthcare services in Frankston. Family medicine, women's health, and bulk billing available.",
+    images: ['https://artystoneclinic.com.au/images/clinic-exterior.jpg'],
+  },
+  alternates: {
+    canonical: 'https://artystoneclinic.com.au'
   },
   robots: {
     index: true,
@@ -46,58 +80,40 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  alternates: {
-    canonical: 'https://artystoneclinic.com.au',
-  },
   verification: {
     google: 'your-google-verification-code',
   },
-  icons: {
-    icon: [
-      {
-        url: "/favicon/favicon.ico",
-        sizes: "any",
-      },
-      {
-        url: "/favicon/favicon-16x16.png",
-        sizes: "16x16",
-        type: "image/png",
-      },
-      {
-        url: "/favicon/favicon-32x32.png",
-        sizes: "32x32",
-        type: "image/png",
-      },
-    ],
-    apple: [
-      {
-        url: "/favicon/apple-touch-icon.png",
-        sizes: "180x180",
-        type: "image/png",
-      },
-    ],
-    other: [
-      {
-        rel: "android-chrome-192x192",
-        url: "/favicon/android-chrome-192x192.png",
-      },
-      {
-        rel: "android-chrome-512x512",
-        url: "/favicon/android-chrome-512x512.png",
-      },
-    ],
-  },
-  manifest: "/favicon/site.webmanifest",
+  authors: [{ name: 'Dr. Farzaneh' }],
+  generator: 'Next.js',
+  applicationName: "Arty Stone Medical Clinic",
+  referrer: 'origin-when-cross-origin',
+  creator: 'Dr. Farzaneh',
+  publisher: 'Arty Stone Medical Clinic',
+  category: 'Healthcare',
+  formatDetection: {
+    email: true,
+    address: true,
+    telephone: true,
+  }
 };
 
-const services = getAllServices();
-const schema = generateMedicalPracticeSchema(services);
+const mainLocation = {
+  latitude: -27.4698,
+  longitude: 153.0251,
+  state: "Queensland",
+  city: "Brisbane",
+  postalCode: "4000",
+  streetAddress: "123 Example Street",
+};
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const locationSchema = generateLocationSchema();
+  const faqSchema = generateFAQSchema();
+
   return (
     <html
       lang="en"
@@ -107,7 +123,12 @@ export default function RootLayout({
       <head>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@graph': [locationSchema, faqSchema]
+            })
+          }}
         />
         {/* Google Fonts Preconnect - Must be first */}
         <link
@@ -138,17 +159,18 @@ export default function RootLayout({
           async
           defer
         />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', {
-              page_path: window.location.pathname,
-              transport_type: 'beacon'
-            });
-          `}
-        </Script>
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+            `,
+          }}
+        />
       </head>
       <body className="font-sans antialiased">
         <ErrorBoundary>
@@ -158,19 +180,11 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <React.Suspense
-              fallback={
-                <div className="flex min-h-screen items-center justify-center">
-                  <div className="h-16 w-16 rounded-full border-4 border-primary-500/20 border-t-primary-500 animate-spin" />
-                </div>
-              }
-            >
-              <div className="flex min-h-screen flex-col">
-                <Header />
-                <main className="flex-1">{children}</main>
-                <Footer />
-              </div>
-            </React.Suspense>
+            <LocationProvider>
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </LocationProvider>
           </ThemeProvider>
         </ErrorBoundary>
         <PerformanceMonitor />
