@@ -161,8 +161,14 @@ export default function RootLayout({
             defaultTheme="system"
           >
             <LocationProvider>
+              <a 
+                href="#main-content" 
+                className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-white focus:text-primary-600 dark:focus:bg-gray-900 dark:focus:text-primary-400"
+              >
+                Skip to main content
+              </a>
               <Header />
-              <main className="flex-1">
+              <main id="main-content" className="flex-1">
                 {children}
               </main>
               <Footer />

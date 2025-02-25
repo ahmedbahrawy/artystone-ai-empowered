@@ -1,3 +1,5 @@
+import { type Metadata } from 'next'
+
 interface Location {
   latitude: number;
   longitude: number;
@@ -20,77 +22,92 @@ interface ServiceArea {
   };
 }
 
+interface BreadcrumbItem {
+  name: string
+  item: string
+}
+
+export function generateBreadcrumbSchema(items: BreadcrumbItem[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: `https://artystoneclinic.com.au${item.item}`,
+    })),
+  }
+}
+
 export function generateLocationSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'MedicalClinic',
-    'name': "Dr. Farzaneh's Arty Stone Medical Clinic",
-    'description': "Expert family healthcare services in Frankston, Victoria. Specializing in family medicine, women's health, and comprehensive medical care.",
-    'url': 'https://artystoneclinic.com.au',
-    'telephone': '+61-YOUR-PHONE-NUMBER',
-    'email': 'info@artystoneclinic.com.au',
-    'address': {
+    '@id': 'https://artystoneclinic.com.au/#clinic',
+    name: "Dr. Farzaneh's Arty Stone Medical Clinic",
+    url: 'https://artystoneclinic.com.au',
+    telephone: '+61397810370',
+    email: 'info@artystoneclinic.com.au',
+    description: 'Expert family healthcare services specializing in family medicine, women\'s health, and comprehensive medical care. Medicare bulk billing available.',
+    address: {
       '@type': 'PostalAddress',
-      'streetAddress': 'YOUR-STREET-ADDRESS',
-      'addressLocality': 'Frankston',
-      'addressRegion': 'VIC',
-      'postalCode': 'YOUR-POSTAL-CODE',
-      'addressCountry': 'AU'
+      streetAddress: '1/55 Beach St',
+      addressLocality: 'Frankston',
+      addressRegion: 'VIC',
+      postalCode: '3199',
+      addressCountry: 'AU',
     },
-    'geo': {
+    geo: {
       '@type': 'GeoCoordinates',
-      'latitude': 'YOUR-LATITUDE',
-      'longitude': 'YOUR-LONGITUDE'
+      latitude: -38.143848,
+      longitude: 145.121981,
     },
-    'openingHoursSpecification': [
+    openingHoursSpecification: [
       {
         '@type': 'OpeningHoursSpecification',
-        'dayOfWeek': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-        'opens': '09:00',
-        'closes': '17:00'
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        opens: '09:00',
+        closes: '17:30',
       },
       {
         '@type': 'OpeningHoursSpecification',
-        'dayOfWeek': ['Saturday'],
-        'opens': '10:00',
-        'closes': '14:00'
-      }
+        dayOfWeek: 'Saturday',
+        opens: '09:00',
+        closes: '13:00',
+      },
     ],
-    'availableService': [
+    availableService: [
       {
-        '@type': 'MedicalService',
-        'name': 'Family Medicine',
-        'description': 'Comprehensive family healthcare services'
+        '@type': 'MedicalProcedure',
+        name: 'Family Medicine',
+        description: 'Comprehensive family healthcare services',
       },
       {
-        '@type': 'MedicalService',
-        'name': "Women's Health",
-        'description': 'Specialized women\'s healthcare services'
+        '@type': 'MedicalProcedure',
+        name: "Women's Health",
+        description: 'Specialized women\'s health services',
       },
       {
-        '@type': 'MedicalService',
-        'name': 'Bulk Billing',
-        'description': 'Medicare bulk billing available for eligible patients'
+        '@type': 'MedicalProcedure',
+        name: 'Preventive Care',
+        description: 'Preventive healthcare and wellness services',
       },
-      {
-        '@type': 'MedicalService',
-        'name': 'Telehealth Consultations',
-        'description': 'Remote medical consultations available'
-      }
     ],
-    'medicalSpecialty': ['Family Medicine', "Women's Health", 'General Practice'],
-    'priceRange': '$$',
-    'paymentAccepted': ['Cash', 'Credit Card', 'EFTPOS', 'Medicare'],
-    'areaServed': {
-      '@type': 'GeoCircle',
-      'geoMidpoint': {
-        '@type': 'GeoCoordinates',
-        'latitude': 'YOUR-LATITUDE',
-        'longitude': 'YOUR-LONGITUDE'
-      },
-      'geoRadius': '10000'
-    }
-  };
+    hasMap: 'https://www.google.com/maps?cid=your-google-place-id',
+    sameAs: [
+      'https://www.facebook.com/artystoneclinic',
+      'https://www.linkedin.com/company/artystone-clinic',
+    ],
+    priceRange: '$$',
+    paymentAccepted: ['Credit Card', 'Medicare', 'Private Health Insurance'],
+    medicalSpecialty: ['Family Medicine', "Women's Health", 'Preventive Medicine'],
+    healthcareService: {
+      '@type': 'MedicalTherapy',
+      medicineSystem: 'Western Medicine',
+      relevantSpecialty: ['Family Practice', 'Primary Care'],
+    },
+  }
 }
 
 export function generateServiceAreaSchema(areas: ServiceArea[]) {
@@ -117,39 +134,66 @@ export function generateFAQSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    'mainEntity': [
+    mainEntity: [
       {
         '@type': 'Question',
-        'name': 'Does Dr. Farzaneh\'s Arty Stone Medical Clinic offer bulk billing?',
-        'acceptedAnswer': {
+        name: 'Do you offer bulk billing?',
+        acceptedAnswer: {
           '@type': 'Answer',
-          'text': 'Yes, we offer bulk billing for eligible Medicare card holders including children under 16, pensioners, and healthcare card holders.'
-        }
+          text: 'Yes, we offer bulk billing for eligible Medicare card holders including children under 16, pensioners, and healthcare card holders.',
+        },
       },
       {
         '@type': 'Question',
-        'name': 'What services does the clinic provide?',
-        'acceptedAnswer': {
+        name: 'What are your opening hours?',
+        acceptedAnswer: {
           '@type': 'Answer',
-          'text': 'We provide comprehensive healthcare services including family medicine, women\'s health, preventive care, health assessments, vaccinations, and telehealth consultations.'
-        }
+          text: 'We are open Monday to Friday from 9:00 AM to 5:30 PM, and Saturday from 9:00 AM to 1:00 PM.',
+        },
       },
       {
         '@type': 'Question',
-        'name': 'Where is the clinic located?',
-        'acceptedAnswer': {
+        name: 'Do I need to make an appointment?',
+        acceptedAnswer: {
           '@type': 'Answer',
-          'text': 'Our clinic is conveniently located in Frankston, Victoria. We serve patients from Frankston and surrounding areas.'
-        }
+          text: 'While we accept walk-ins, we recommend booking an appointment to minimize waiting times. You can book online through HotDoc or call us.',
+        },
       },
       {
         '@type': 'Question',
-        'name': 'How can I book an appointment?',
-        'acceptedAnswer': {
+        name: 'What services do you offer?',
+        acceptedAnswer: {
           '@type': 'Answer',
-          'text': 'You can book an appointment online through our website, call our clinic directly, or use our online booking system. We also offer telehealth consultations for eligible patients.'
-        }
-      }
-    ]
-  };
+          text: 'We offer comprehensive family healthcare services including family medicine, women\'s health, preventive care, chronic disease management, and more.',
+        },
+      },
+    ],
+  }
+}
+
+export function generateArticleSchema(metadata: Metadata) {
+  if (!metadata.title || typeof metadata.title === 'object') return null
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: metadata.title,
+    description: metadata.description,
+    image: metadata.openGraph?.images?.[0]?.url,
+    datePublished: new Date().toISOString(),
+    dateModified: new Date().toISOString(),
+    author: {
+      '@type': 'Person',
+      name: 'Dr. Farzaneh',
+      jobTitle: 'General Practitioner',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: "Dr. Farzaneh's Arty Stone Medical Clinic",
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://artystoneclinic.com.au/images/artystone-logo.svg',
+      },
+    },
+  }
 } 
