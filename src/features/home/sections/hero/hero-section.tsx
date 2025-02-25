@@ -1,48 +1,63 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, MotionStyle } from 'framer-motion';
 import { HeroContent } from './hero-content';
-import { HeroImage } from './hero-image';
 import { SectionGrid } from '@/components/ui/section-container';
 import { useThemeContext } from '@/providers/theme-provider';
 import { AnimatedElement } from '@/components/ui/animated-element';
 import { Container } from '@/components/ui/container';
-import dynamic from 'next/dynamic'
+import dynamic from 'next/dynamic';
+import { useInView } from 'react-intersection-observer';
 
-// Properly import the HeroVideo component
+// Optimized video component with intersection observer
 const HeroVideo = dynamic(
   () => import('@/features/home/components/hero-video').then((mod) => mod.HeroVideo),
   {
     ssr: false,
-    loading: () => (
-      <div className="relative aspect-video w-full animate-pulse rounded-2xl bg-neutral-100 dark:bg-neutral-800">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="h-16 w-16 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
-        </div>
-      </div>
-    ),
+    loading: () => <HeroVideoPlaceholder />,
   }
-)
+);
+
+// Separate placeholder component for better performance
+const HeroVideoPlaceholder = () => (
+  <div className="relative aspect-video w-full rounded-2xl bg-neutral-100 dark:bg-neutral-800">
+    <div className="absolute inset-0 flex items-center justify-center">
+      <div className="h-12 w-12 rounded-full border-3 border-primary/20 border-t-primary animate-spin" />
+    </div>
+  </div>
+);
 
 export function HeroSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const { isReducedMotion } = useThemeContext();
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+  
+  // Intersection observer for video loading
+  const { ref: videoRef, inView } = useInView({
+    threshold: 0.1,
+    triggerOnce: true
+  });
+  
+  // Load video when section comes into view
+  useEffect(() => {
+    if (inView && !shouldLoadVideo) {
+      setShouldLoadVideo(true);
+    }
+  }, [inView, shouldLoadVideo]);
   
   const { scrollY } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"]
   });
   
-  // Enhanced parallax effect
-  const contentY = useTransform(scrollY, [0, 500], [0, 75]);
-  const imageY = useTransform(scrollY, [0, 500], [0, 100]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0.6]);
-  const scale = useTransform(scrollY, [0, 300], [1, 1.05]);
+  // Optimized transform calculations
+  const contentY = useTransform(scrollY, [0, 500], [0, 50]);
+  const opacity = useTransform(scrollY, [0, 300], [1, 0.8]);
+  const scale = useTransform(scrollY, [0, 300], [1, 1.02]);
 
   const contentStyle: MotionStyle = isReducedMotion ? {} : { y: contentY };
-  const imageStyle: MotionStyle = isReducedMotion ? {} : { 
-    y: imageY,
+  const mediaStyle: MotionStyle = isReducedMotion ? {} : { 
     opacity,
     scale
   };
@@ -50,21 +65,25 @@ export function HeroSection() {
   return (
     <section 
       ref={sectionRef}
-      className="relative min-h-[90vh] flex items-center py-20 overflow-hidden"
+      id="hero"
+      className="relative min-h-[80vh] flex items-center py-16 overflow-hidden"
+      aria-label="Welcome to Arty Stone Medical Clinic"
     >
-      {/* Background gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-background/25 to-background pointer-events-none" />
+      {/* Optimized gradient overlay */}
+      <div 
+        className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/20 to-background" 
+        aria-hidden="true"
+      />
       
-      {/* Content container */}
       <Container className="relative z-10">
         <SectionGrid 
           columns={2}
-          gap={12}
+          gap={8}
           className="items-center"
         >
           <AnimatedElement
             animation="fade-up"
-            duration={0.6}
+            duration={0.5}
             className="z-10 relative"
             style={contentStyle}
           >
@@ -72,23 +91,31 @@ export function HeroSection() {
           </AnimatedElement>
 
           <AnimatedElement
-            animation="zoom-in"
-            duration={0.6}
-            delay={0.2}
-            className="relative w-full min-h-[600px] lg:min-h-[700px] rounded-2xl overflow-hidden"
-            style={imageStyle}
+            ref={videoRef}
+            animation="fade-in"
+            duration={0.5}
+            delay={0.1}
+            className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl"
+            style={mediaStyle}
           >
-            <HeroImage />
+            {shouldLoadVideo ? (
+              <HeroVideo />
+            ) : (
+              <HeroVideoPlaceholder />
+            )}
           </AnimatedElement>
         </SectionGrid>
       </Container>
 
-      {/* Decorative elements */}
+      {/* Optimized decorative elements */}
       {!isReducedMotion && (
-        <>
-          <div className="absolute top-1/4 left-0 w-1/3 h-1/3 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-1/4 right-0 w-1/3 h-1/3 bg-secondary/10 rounded-full blur-3xl animate-pulse" />
-        </>
+        <div 
+          className="absolute inset-0 pointer-events-none"
+          aria-hidden="true"
+        >
+          <div className="absolute top-1/4 left-0 w-1/4 h-1/4 bg-primary/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-0 w-1/4 h-1/4 bg-secondary/5 rounded-full blur-3xl" />
+        </div>
       )}
     </section>
   );
