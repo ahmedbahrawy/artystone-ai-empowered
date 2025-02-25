@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect, useRef, memo } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { HeroContent } from './hero-content';
+import { HeroContent as HeroContentComponent } from './hero-content';
 import { HeroImage } from './hero-image';
+import { HeroGrid, HeroMedia } from '@/components/ui/hero-container';
 
 // Memoize components to prevent unnecessary re-renders
-const MemoizedHeroContent = memo(HeroContent);
+const MemoizedHeroContent = memo(HeroContentComponent);
 const MemoizedHeroImage = memo(HeroImage);
 
 export function HeroSection() {
@@ -63,10 +64,7 @@ export function HeroSection() {
   }, [isReducedMotion]);
 
   return (
-    <div 
-      ref={sectionRef}
-      className="relative grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16 items-center min-h-[70vh]"
-    >
+    <HeroGrid ref={sectionRef}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -177,6 +175,6 @@ export function HeroSection() {
           />
         </div>
       )}
-    </div>
+    </HeroGrid>
   );
 } 

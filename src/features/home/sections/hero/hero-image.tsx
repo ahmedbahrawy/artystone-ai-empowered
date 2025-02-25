@@ -7,6 +7,7 @@ import { useThemeVideo } from '@/lib/hooks/use-theme-video';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Clock, Users, Award } from 'lucide-react';
+import { HeroMedia } from '@/components/ui/hero-container';
 import dynamic from 'next/dynamic';
 
 // Lazy load the stats card component
@@ -131,13 +132,9 @@ export function HeroImage() {
   const themeEmoji = resolvedTheme === 'dark' ? '🌙' : resolvedTheme === 'semi-light' ? '🌤️' : '☀️';
 
   return (
-    <motion.div
+    <HeroMedia
       ref={containerRef}
-      className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl"
       style={{ aspectRatio }}
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: isVideoLoaded ? 1 : 0.7, scale: isVideoLoaded ? 1 : 0.98 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
     >
       {/* Theme indicator */}
       <motion.div
@@ -208,6 +205,6 @@ export function HeroImage() {
         <div className="absolute top-10 right-10 w-20 h-20 rounded-full bg-blue-500/10 blur-xl" />
         <div className="absolute bottom-20 left-20 w-32 h-32 rounded-full bg-purple-500/10 blur-xl" />
       </motion.div>
-    </motion.div>
+    </HeroMedia>
   );
 } 

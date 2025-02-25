@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Calendar, Star } from 'lucide-react';
 import Link from 'next/link';
+import { HeroContent as HeroContentContainer } from '@/components/ui/hero-container';
 
 export function HeroContent() {
   const [isReducedMotion, setIsReducedMotion] = useState(false);
@@ -48,7 +49,7 @@ export function HeroContent() {
   // Don't render animations until client-side to prevent hydration mismatch
   if (!isClient) {
     return (
-      <div className="space-y-6 opacity-0">
+      <HeroContentContainer className="opacity-0">
         <div className="inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-medium">
           <span className="flex h-2 w-2 rounded-full bg-emerald-500 mr-2" />
           <span className="text-muted-foreground">Trusted by 10,000+ patients</span>
@@ -62,7 +63,7 @@ export function HeroContent() {
         <p className="max-w-lg text-muted-foreground text-lg sm:text-xl">
           Experience exceptional care with our team of specialists dedicated to your well-being. We combine cutting-edge technology with compassionate service.
         </p>
-      </div>
+      </HeroContentContainer>
     );
   }
 

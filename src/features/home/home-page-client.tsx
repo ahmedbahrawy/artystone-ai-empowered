@@ -6,6 +6,7 @@ import { HeroSection, StatsSection } from '@/features/home';
 import { Container } from '@/components/ui/container';
 import { ThemeSwitcher } from '@/components/theme-switcher';
 import { ChevronUp, Menu, X } from 'lucide-react';
+import { HeroContainer } from '@/components/ui/hero-container';
 
 // Lazy load non-critical sections
 const DoctorMessage = lazy(() => import('@/features/home').then(mod => ({ default: mod.DoctorMessage })));
@@ -208,15 +209,14 @@ export function HomePageClient() {
       {/* Hero Section with Stats - Always render immediately */}
       <section 
         id="hero"
-        className="relative bg-gradient-to-b from-blue-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800/50 pt-8 lg:pt-12"
+        className="relative pt-8 lg:pt-12"
       >
-        <Container className="py-12 md:py-20">
+        <HeroContainer>
           <HeroSection />
           <div className="mt-12 md:mt-16">
             <StatsSection />
           </div>
-        </Container>
-        <div className="absolute inset-0 bg-grid-gray-900/[0.02] dark:bg-grid-white/[0.02]" />
+        </HeroContainer>
       </section>
 
       {/* Doctor Profile Section - Lazy loaded */}
