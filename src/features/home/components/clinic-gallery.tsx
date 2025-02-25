@@ -75,7 +75,7 @@ function GalleryImage({ image, index }: { image: ClinicImage; index: number }) {
         } group-hover:scale-105`}
         priority={index < 3}
         loading={index < 3 ? 'eager' : 'lazy'}
-        onLoad={() => setIsLoaded(true)}
+        onLoadingComplete={() => setIsLoaded(true)}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       <div className="absolute bottom-0 left-0 right-0 p-4 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
