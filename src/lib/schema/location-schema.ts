@@ -178,9 +178,18 @@ export function generateArticleSchema(metadata: Metadata) {
   let ogImage: string | undefined
 
   if (Array.isArray(ogImages) && ogImages.length > 0) {
-    ogImage = typeof ogImages[0] === 'string' ? ogImages[0] : ogImages[0]?.url
+    const firstImage = ogImages[0]
+    if (typeof firstImage === 'string') {
+      ogImage = firstImage
+    } else if (firstImage && typeof firstImage === 'object' && 'url' in firstImage) {
+      ogImage = firstImage.url
+    }
   } else if (ogImages && !Array.isArray(ogImages)) {
-    ogImage = typeof ogImages === 'string' ? ogImages : ogImages.url
+    if (typeof ogImages === 'string') {
+      ogImage = ogImages
+    } else if (typeof ogImages === 'object' && 'url' in ogImages) {
+      ogImage = ogImages.url
+    }
   }
 
   return {
