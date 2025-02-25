@@ -1,13 +1,40 @@
-# Allow all crawlers
+# Arty Stone Clinic Robots.txt
+# Main configuration for search engine crawlers
+
+# Allow all well-behaved crawlers
 User-agent: *
 Allow: /
+Allow: /about
+Allow: /services
+Allow: /contact
+Allow: /sitemap.xml
 
-# Sitemap location
-Sitemap: https://artystoneclinic.com.au/sitemap.xml
-
-# Disallow admin and api routes
+# Block access to sensitive areas
 Disallow: /api/*
 Disallow: /admin/*
+Disallow: /_next/*
+Disallow: /*?*
+Disallow: /*?
+Disallow: /*.json$
 
-# Crawl-delay for all bots
-Crawl-delay: 1 
+# Special rules for specific bots
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# Rate limiting
+Crawl-delay: 1
+
+# Help search engines find our content
+Sitemap: https://artystoneclinic.com.au/sitemap.xml
+
+# Clean URLs only
+Clean-param: utm_source&utm_medium&utm_campaign&utm_term&utm_content
+Clean-param: fbclid
+Clean-param: gclid
+Clean-param: _ga 
