@@ -1,12 +1,27 @@
 'use client'
 
 import * as React from 'react'
+import { useThemeContext } from '@/providers/theme-provider'
+import Image from 'next/image'
 
 export function HeroVideo() {
   const videoRef = React.useRef<HTMLVideoElement>(null)
   const [isLoaded, setIsLoaded] = React.useState(false)
   const [hasPlayError, setHasPlayError] = React.useState(false)
   const [isVisible, setIsVisible] = React.useState(false)
+  const { resolvedTheme } = useThemeContext()
+
+  // Get the correct video source based on theme
+  const videoSrc = React.useMemo(() => {
+    switch (resolvedTheme) {
+      case 'dark':
+        return '/videos/clinic-dark.mp4'
+      case 'semi-light':
+        return '/videos/clinic-semi-light.mp4'
+      default:
+        return '/videos/clinic-light.mp4'
+    }
+  }, [resolvedTheme])
 
   React.useEffect(() => {
     if (typeof window === 'undefined') return
@@ -82,8 +97,16 @@ export function HeroVideo() {
         onLoadedData={() => setIsLoaded(true)}
         aria-label="Welcome to Arty Stone Clinic"
       >
-        <source src="/home-hero.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
+        <source src={videoSrc} type="video/mp4" />
+        <Image
+          src="/images/clinic-welcome.webp"
+          alt="Welcome to Arty Stone Clinic"
+          fill
+          priority
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          quality={90}
+        />
       </video>
       {hasPlayError && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
