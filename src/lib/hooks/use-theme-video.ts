@@ -4,19 +4,15 @@ import { useThemeContext } from '@/providers/theme-provider'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 interface UseThemeVideoOptions {
-  darkVideo?: string
-  lightVideo?: string
-  semiLightVideo?: string
-  poster?: string
+  video?: string;
+  poster?: string;
 }
 
 export function useThemeVideo({
-  darkVideo = '/videos/home-hero.mp4',
-  lightVideo = '/videos/home-hero.mp4',
-  semiLightVideo = '/videos/home-hero.mp4',
+  video = '/videos/home-hero.mp4',
   poster = '/images/clinic-welcome.webp',
 }: UseThemeVideoOptions = {}) {
-  const { resolvedTheme, isReducedMotion } = useThemeContext()
+  const { isReducedMotion } = useThemeContext()
   const [isLoaded, setIsLoaded] = useState(false)
   const [hasError, setHasError] = useState(false)
   const [isPreloading, setIsPreloading] = useState(true)
@@ -26,16 +22,8 @@ export function useThemeVideo({
 
   const videoSrc = useMemo(() => {
     if (!shouldShowVideo) return null
-    
-    switch (resolvedTheme) {
-      case 'dark':
-        return darkVideo
-      case 'semi-light':
-        return semiLightVideo
-      default:
-        return lightVideo
-    }
-  }, [resolvedTheme, darkVideo, lightVideo, semiLightVideo, shouldShowVideo])
+    return video
+  }, [video, shouldShowVideo])
 
   // Reset states when video source changes
   useEffect(() => {

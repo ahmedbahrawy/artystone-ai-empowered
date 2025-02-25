@@ -3,8 +3,8 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 
-type Theme = 'light' | 'dark' | 'semi-light' | 'system';
-type ThemePreference = 'system' | 'light' | 'dark' | 'semi-light';
+type Theme = 'dark' | 'system';
+type ThemePreference = 'system' | 'dark';
 
 interface ThemeProviderProps {
   children: React.ReactNode;
@@ -22,7 +22,6 @@ interface ThemeContextType {
   isReducedMotion: boolean;
   isHighContrast: boolean;
   prefersDarkScheme: boolean;
-  prefersLightScheme: boolean;
   themePreference: ThemePreference;
   setThemePreference: (preference: ThemePreference) => void;
 }
@@ -34,17 +33,16 @@ export function ThemeProvider({
   defaultTheme = 'system',
   enableSystem = true,
   attribute = 'class',
-  themes = ['light', 'dark', 'semi-light', 'system'],
+  themes = ['dark', 'system'],
   storageKey = 'theme-preference',
   ...props
 }: ThemeProviderProps) {
   const [isReducedMotion, setIsReducedMotion] = useState(false);
   const [isHighContrast, setIsHighContrast] = useState(false);
   const [prefersDarkScheme, setPrefersDarkScheme] = useState(false);
-  const [prefersLightScheme, setPrefersLightScheme] = useState(false);
   const [themePreference, setThemePreference] = useState<ThemePreference>(defaultTheme);
   const [theme, setTheme] = useState<Theme>('system');
-  const [resolvedTheme, setResolvedTheme] = useState<Theme>('light');
+  const [resolvedTheme, setResolvedTheme] = useState<Theme>('dark');
 
   // Check for user preferences
   useEffect(() => {
@@ -62,26 +60,18 @@ export function ThemeProvider({
     const handleContrastChange = () => setIsHighContrast(contrastQuery.matches);
     contrastQuery.addEventListener('change', handleContrastChange);
     
-    // Check for color scheme preference
+    // Check for dark scheme preference
     const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
     setPrefersDarkScheme(darkQuery.matches);
     
     const handleDarkChange = () => setPrefersDarkScheme(darkQuery.matches);
     darkQuery.addEventListener('change', handleDarkChange);
     
-    // Check for light scheme preference
-    const lightQuery = window.matchMedia('(prefers-color-scheme: light)');
-    setPrefersLightScheme(lightQuery.matches);
-    
-    const handleLightChange = () => setPrefersLightScheme(lightQuery.matches);
-    lightQuery.addEventListener('change', handleLightChange);
-    
     // Cleanup
     return () => {
       motionQuery.removeEventListener('change', handleMotionChange);
       contrastQuery.removeEventListener('change', handleContrastChange);
       darkQuery.removeEventListener('change', handleDarkChange);
-      lightQuery.removeEventListener('change', handleLightChange);
     };
   }, []);
 
@@ -91,7 +81,7 @@ export function ThemeProvider({
     
     // Determine resolved theme
     if (newTheme === 'system') {
-      setResolvedTheme(prefersDarkScheme ? 'dark' : 'light');
+      setResolvedTheme(prefersDarkScheme ? 'dark' : 'dark');
     } else {
       setResolvedTheme(newTheme);
     }
@@ -118,7 +108,7 @@ export function ThemeProvider({
   // Update resolved theme when system preference changes
   useEffect(() => {
     if (theme === 'system') {
-      setResolvedTheme(prefersDarkScheme ? 'dark' : 'light');
+      setResolvedTheme('dark');
     }
   }, [prefersDarkScheme, theme]);
 
@@ -129,7 +119,6 @@ export function ThemeProvider({
     isReducedMotion,
     isHighContrast,
     prefersDarkScheme,
-    prefersLightScheme,
     themePreference,
     setThemePreference: (preference: ThemePreference) => handleThemeChange(preference as Theme),
   };
