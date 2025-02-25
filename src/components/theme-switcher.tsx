@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { useTheme } from 'next-themes'
 import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
 
 const themes = [
   {
@@ -22,7 +23,15 @@ const themes = [
   },
 ] as const
 
-export function ThemeSwitcher() {
+interface ThemeSwitcherProps {
+  position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left'
+  className?: string
+}
+
+export function ThemeSwitcher({ 
+  position = 'bottom-right',
+  className
+}: ThemeSwitcherProps) {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = React.useState(false)
 
@@ -32,8 +41,15 @@ export function ThemeSwitcher() {
 
   if (!mounted) return null
 
+  const positionClasses = {
+    'bottom-right': 'bottom-4 right-4',
+    'bottom-left': 'bottom-4 left-4',
+    'top-right': 'top-20 right-4',
+    'top-left': 'top-20 left-4',
+  }
+
   return (
-    <div className="fixed bottom-4 right-4 z-50">
+    <div className={cn(`fixed z-50 ${positionClasses[position]}`, className)}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

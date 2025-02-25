@@ -12,6 +12,7 @@ import {
   CTASection,
 } from '@/features/home';
 import { Container } from '@/components/ui/container';
+import { ThemeSwitcher } from '@/components/theme-switcher';
 
 export function HomePageClient() {
   const { scrollYProgress } = useScroll();
@@ -44,6 +45,9 @@ export function HomePageClient() {
         className="fixed top-0 left-0 right-0 h-1 bg-blue-500 dark:bg-blue-400 origin-left z-50"
         style={{ scaleX }}
       />
+
+      {/* Theme Switcher */}
+      <ThemeSwitcher position="bottom-left" />
 
       {/* Quick Navigation Dots */}
       <nav className="fixed right-4 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-4">
