@@ -149,6 +149,17 @@ export default {
         inner: "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",
         none: "none",
       },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'grid-white': 'url("data:image/svg+xml,%3Csvg width=\'40\' height=\'40\' viewBox=\'0 0 40 40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23fff\' fill-opacity=\'0.1\' fill-rule=\'evenodd\'%3E%3Cpath d=\'M0 40L40 0H20L0 20M40 40V20L20 40\'/%3E%3C/g%3E%3C/svg%3E")',
+        'grid-gray-900': 'url("data:image/svg+xml,%3Csvg width=\'40\' height=\'40\' viewBox=\'0 0 40 40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23111827\' fill-opacity=\'0.1\' fill-rule=\'evenodd\'%3E%3Cpath d=\'M0 40L40 0H20L0 20M40 40V20L20 40\'/%3E%3C/g%3E%3C/svg%3E")',
+        'dot-white': 'radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px)',
+        'dot-gray-900': 'radial-gradient(circle, rgba(17,24,39,0.1) 1px, transparent 1px)',
+      },
+      backgroundSize: {
+        'dot-pattern': '24px 24px',
+      },
     },
   },
   plugins: [

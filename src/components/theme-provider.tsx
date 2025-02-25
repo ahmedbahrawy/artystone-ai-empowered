@@ -28,6 +28,17 @@ export function ThemeProvider({
   storageKey = 'theme',
   ...props
 }: ThemeProviderProps) {
+  const [mounted, setMounted] = React.useState(false)
+
+  // Ensure theme changes don't cause hydration mismatch
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return <>{children}</>
+  }
+
   return (
     <NextThemesProvider
       attribute={attribute}

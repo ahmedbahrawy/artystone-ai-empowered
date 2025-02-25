@@ -23,6 +23,7 @@
 
 # genome
 .genome-results.json
+.genome.*
 
 # misc
 .DS_Store

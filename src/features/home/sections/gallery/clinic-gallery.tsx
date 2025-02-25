@@ -6,24 +6,34 @@ import { GalleryImage } from './gallery-image';
 
 const galleryImages = [
   {
-    src: '/images/clinic-reception.jpg',
-    alt: 'Modern clinic reception area',
-    caption: 'Welcoming Reception Area',
+    src: '/images/front-clinic.webp',
+    alt: 'Arty Stone Medical Clinic Front View',
+    caption: 'Modern Medical Facility',
   },
   {
-    src: '/images/consultation-room.jpg',
-    alt: 'Clean and comfortable consultation room',
-    caption: 'Consultation Room',
+    src: '/images/dr-office.webp',
+    alt: 'Clean and professional doctor\'s office',
+    caption: 'Professional Consultation Room',
   },
   {
-    src: '/images/waiting-area.jpg',
-    alt: 'Comfortable waiting area',
+    src: '/images/waiating-area.webp',
+    alt: 'Comfortable patient waiting area',
     caption: 'Comfortable Waiting Area',
   },
   {
-    src: '/images/treatment-room.jpg',
-    alt: 'Well-equipped treatment room',
-    caption: 'Treatment Room',
+    src: '/images/equiped-dr-office.webp',
+    alt: 'Well-equipped medical examination room',
+    caption: 'State-of-the-art Equipment',
+  },
+  {
+    src: '/images/main-signage.webp',
+    alt: 'Clinic main entrance signage',
+    caption: 'Easy to Find Location',
+  },
+  {
+    src: '/images/street-clinic.webp',
+    alt: 'Street view of the clinic',
+    caption: 'Convenient Location',
   },
 ];
 
@@ -46,7 +56,7 @@ export function ClinicGallery() {
         </motion.div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
         {galleryImages.map((image, index) => (
           <motion.div
             key={image.src}

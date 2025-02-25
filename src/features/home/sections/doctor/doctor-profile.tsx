@@ -51,7 +51,7 @@ export function DoctorProfile(): JSX.Element {
           className="relative w-full md:w-1/3 aspect-[3/4]"
         >
           <Image
-            src="/images/doctor-portrait.jpg"
+            src="/images/dr.farzaneh.png"
             alt="Dr. Farzaneh"
             fill
             className="object-cover rounded-xl"
