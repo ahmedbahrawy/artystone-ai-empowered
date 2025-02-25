@@ -19,6 +19,7 @@ export function useThemeVideo({
   const { resolvedTheme } = useThemeContext()
   const [isLoaded, setIsLoaded] = useState(false)
   const [hasError, setHasError] = useState(false)
+  const [isPreloading, setIsPreloading] = useState(true)
 
   const videoSrc = useMemo(() => {
     switch (resolvedTheme) {
@@ -31,6 +32,40 @@ export function useThemeVideo({
     }
   }, [resolvedTheme, darkVideo, lightVideo, semiLightVideo])
 
+  // Preload video
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    setIsPreloading(true)
+    setIsLoaded(false)
+
+    const preloadVideo = document.createElement('video')
+    preloadVideo.src = videoSrc
+    preloadVideo.preload = 'auto'
+    
+    const handleCanPlayThrough = () => {
+      setIsPreloading(false)
+    }
+
+    const handleError = () => {
+      setIsPreloading(false)
+      setHasError(true)
+      console.warn('Video preloading failed:', videoSrc)
+    }
+
+    preloadVideo.addEventListener('canplaythrough', handleCanPlayThrough)
+    preloadVideo.addEventListener('error', handleError)
+
+    // Start loading
+    preloadVideo.load()
+
+    return () => {
+      preloadVideo.removeEventListener('canplaythrough', handleCanPlayThrough)
+      preloadVideo.removeEventListener('error', handleError)
+      preloadVideo.src = ''
+    }
+  }, [videoSrc])
+
   const handleLoadedData = useCallback(() => {
     setIsLoaded(true)
     setHasError(false)
@@ -41,15 +76,12 @@ export function useThemeVideo({
     console.warn('Video failed to load:', videoSrc)
   }, [videoSrc])
 
-  useEffect(() => {
-    setIsLoaded(false)
-  }, [videoSrc])
-
   return {
     videoSrc,
     poster,
     isLoaded,
     hasError,
+    isPreloading,
     handleLoadedData,
     handleError,
   }

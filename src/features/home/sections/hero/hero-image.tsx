@@ -100,6 +100,7 @@ export function HeroImage() {
     poster,
     isLoaded,
     hasError,
+    isPreloading,
     handleLoadedData,
     handleError
   } = useThemeVideo({
@@ -148,27 +149,40 @@ export function HeroImage() {
       {/* Enhanced video/image container with better loading states */}
       <div className="absolute inset-0 w-full h-full">
         {showVideo ? (
-          <motion.video
-            ref={videoRef}
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover"
-            onLoadedData={handleLoadedData}
-            onError={handleError}
-            initial={{ filter: 'blur(10px)', scale: 1.1, opacity: 0 }}
-            animate={{ 
-              filter: isLoaded ? 'blur(0px)' : 'blur(10px)',
-              scale: isLoaded ? 1 : 1.1,
-              opacity: isLoaded ? 1 : 0
-            }}
-            transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1] }}
-            preload="auto"
-            poster={poster}
-          >
-            <source src={videoSrc} type="video/mp4" />
-          </motion.video>
+          <>
+            <motion.video
+              ref={videoRef}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+                isLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
+              onLoadedData={handleLoadedData}
+              onError={handleError}
+              initial={{ filter: 'blur(10px)', scale: 1.1, opacity: 0 }}
+              animate={{ 
+                filter: isLoaded ? 'blur(0px)' : 'blur(10px)',
+                scale: isLoaded ? 1 : 1.1,
+                opacity: isLoaded ? 1 : 0
+              }}
+              transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1] }}
+              preload="auto"
+              poster={poster}
+            >
+              <source src={videoSrc} type="video/mp4" />
+            </motion.video>
+            {/* Loading indicator */}
+            {isPreloading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-background/20 backdrop-blur-sm">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="h-12 w-12 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
+                  <p className="text-sm text-primary font-medium">Loading video...</p>
+                </div>
+              </div>
+            )}
+          </>
         ) : (
           <motion.div
             initial={{ opacity: 0 }}
@@ -177,7 +191,7 @@ export function HeroImage() {
           >
             <Image 
               src={poster}
-              alt="Arty Stone Clinic Welcome"
+              alt="Welcome to Arty Stone Clinic"
               fill
               priority
               className="object-cover"
