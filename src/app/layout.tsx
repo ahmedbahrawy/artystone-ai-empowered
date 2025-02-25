@@ -72,6 +72,8 @@ export const metadata: Metadata = {
     title: `${CLINIC_NAME} | ${CLINIC_LOCATION}`,
     description: `Expert healthcare services in ${CLINIC_LOCATION}. Family medicine, women's health, and bulk billing available.`,
     images: ['https://artystoneclinic.com.au/images/clinic-exterior.jpg'],
+    site: '@Web',
+    creator: '@ArtystoneC5190',
   },
   alternates: {
     canonical: 'https://artystoneclinic.com.au'
