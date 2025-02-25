@@ -13,8 +13,16 @@ import {
   UserCheck,
   Shield
 } from 'lucide-react';
+import type { ColorVariant } from './feature-card';
 
-const features = [
+interface Feature {
+  title: string;
+  description: string;
+  icon: typeof Stethoscope;
+  color: ColorVariant;
+}
+
+const features: Feature[] = [
   {
     title: 'Family Medicine',
     description: 'Comprehensive healthcare for all ages, from children to seniors. Our experienced doctors provide personalized care for your entire family.',
@@ -51,7 +59,7 @@ const features = [
     icon: Shield,
     color: 'indigo'
   },
-];
+] as const;
 
 export function FeaturesSection() {
   return (

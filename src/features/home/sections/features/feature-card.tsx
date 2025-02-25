@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
-type ColorVariant = 'blue' | 'green' | 'purple' | 'orange' | 'pink' | 'indigo';
+export type ColorVariant = 'blue' | 'green' | 'purple' | 'orange' | 'pink' | 'indigo';
 
 interface FeatureCardProps {
   title: string;
