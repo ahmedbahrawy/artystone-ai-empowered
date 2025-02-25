@@ -1,108 +1,71 @@
 {
   "regionIdentifier": "next",
   "geneExpressionResults": [],
-  "otherIssues": [],
-  "children": [
+  "otherIssues": [
     {
-      "regionIdentifier": "",
-      "geneExpressionResults": [],
-      "otherIssues": [],
-      "children": [
-        {
-          "regionIdentifier": "",
-          "geneExpressionResults": [],
-          "otherIssues": [],
-          "children": [
-            {
-              "regionIdentifier": "",
-              "geneExpressionResults": [],
-              "otherIssues": [],
-              "children": []
-            }
-          ]
-        },
-        {
-          "regionIdentifier": "",
-          "geneExpressionResults": [],
-          "otherIssues": [],
-          "children": [
-            {
-              "regionIdentifier": "",
-              "geneExpressionResults": [],
-              "otherIssues": [],
-              "children": []
-            }
-          ]
-        },
-        {
-          "regionIdentifier": "",
-          "geneExpressionResults": [],
-          "otherIssues": [],
-          "children": [
-            {
-              "regionIdentifier": "",
-              "geneExpressionResults": [],
-              "otherIssues": [],
-              "children": [
-                {
-                  "regionIdentifier": "",
-                  "geneExpressionResults": [],
-                  "otherIssues": [],
-                  "children": []
-                },
-                {
-                  "regionIdentifier": "",
-                  "geneExpressionResults": [],
-                  "otherIssues": [],
-                  "children": []
-                },
-                {
-                  "regionIdentifier": "",
-                  "geneExpressionResults": [],
-                  "otherIssues": [],
-                  "children": []
-                },
-                {
-                  "regionIdentifier": "",
-                  "geneExpressionResults": [],
-                  "otherIssues": [],
-                  "children": []
-                },
-                {
-                  "regionIdentifier": "",
-                  "geneExpressionResults": [],
-                  "otherIssues": [],
-                  "children": []
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "regionIdentifier": "",
-          "geneExpressionResults": [],
-          "otherIssues": [],
-          "children": []
-        },
-        {
-          "regionIdentifier": "",
-          "geneExpressionResults": [],
-          "otherIssues": [],
-          "children": []
-        },
-        {
-          "regionIdentifier": "",
-          "geneExpressionResults": [],
-          "otherIssues": [],
-          "children": []
-        },
-        {
-          "regionIdentifier": "",
-          "geneExpressionResults": [],
-          "otherIssues": [],
-          "children": []
-        }
-      ]
+      "message": "Cannot find module './sections/stats/stats-section' or its corresponding type declarations.",
+      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/features/home/index.ts"
+    },
+    {
+      "message": "Cannot find module './sections/stats/stat-card' or its corresponding type declarations.",
+      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/features/home/index.ts"
+    },
+    {
+      "message": "Cannot find module './sections/doctor/doctor-message' or its corresponding type declarations.",
+      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/features/home/index.ts"
+    },
+    {
+      "message": "Cannot find module './sections/doctor/doctor-profile' or its corresponding type declarations.",
+      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/features/home/index.ts"
+    },
+    {
+      "message": "Cannot find module './sections/features/features-section' or its corresponding type declarations.",
+      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/features/home/index.ts"
+    },
+    {
+      "message": "Cannot find module './sections/features/feature-card' or its corresponding type declarations.",
+      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/features/home/index.ts"
+    },
+    {
+      "message": "Cannot find module './sections/services/services-section' or its corresponding type declarations.",
+      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/features/home/index.ts"
+    },
+    {
+      "message": "Cannot find module './sections/services/service-card' or its corresponding type declarations.",
+      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/features/home/index.ts"
+    },
+    {
+      "message": "Cannot find module './sections/gallery/clinic-gallery' or its corresponding type declarations.",
+      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/features/home/index.ts"
+    },
+    {
+      "message": "Cannot find module './sections/gallery/gallery-image' or its corresponding type declarations.",
+      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/features/home/index.ts"
+    },
+    {
+      "message": "Cannot find module './sections/booking/booking-section' or its corresponding type declarations.",
+      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/features/home/index.ts"
+    },
+    {
+      "message": "Cannot find module './sections/booking/booking-form' or its corresponding type declarations.",
+      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/features/home/index.ts"
+    },
+    {
+      "message": "Cannot find module './sections/contact/contact-section' or its corresponding type declarations.",
+      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/features/home/index.ts"
+    },
+    {
+      "message": "Cannot find module './sections/contact/contact-form' or its corresponding type declarations.",
+      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/features/home/index.ts"
+    },
+    {
+      "message": "Cannot find module './sections/cta/cta-section' or its corresponding type declarations.",
+      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/features/home/index.ts"
+    },
+    {
+      "message": "[object Object]",
+      "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/features/home/sections/hero/hero-content.tsx"
     }
-  ]
+  ],
+  "children": []
 }
