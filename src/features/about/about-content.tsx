@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useThemeContext } from '@/providers/theme-provider';
-import { AboutHero } from './sections/hero';
-import { AboutMission } from './sections/mission';
-import { AboutValues } from './sections/values';
-import { AboutCTA } from './sections/cta';
+import { AboutHero } from './components/about-hero';
+import { AboutMission } from './components/about-mission';
+import { AboutValues } from './components/about-values';
+import { AboutCTA } from './components/about-cta';
 
 export function AboutContent() {
   const { isReducedMotion } = useThemeContext();
