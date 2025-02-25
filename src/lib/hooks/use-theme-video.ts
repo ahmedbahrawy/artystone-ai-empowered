@@ -11,9 +11,9 @@ interface UseThemeVideoOptions {
 }
 
 export function useThemeVideo({
-  darkVideo = '/videos/clinic-dark.mp4',
-  lightVideo = '/videos/clinic-light.mp4',
-  semiLightVideo = '/videos/clinic-semi-light.mp4',
+  darkVideo = '/videos/home-hero.mp4',
+  lightVideo = '/videos/home-hero.mp4',
+  semiLightVideo = '/videos/home-hero.mp4',
   poster = '/images/clinic-welcome.webp',
 }: UseThemeVideoOptions = {}) {
   const { resolvedTheme, isReducedMotion } = useThemeContext()
