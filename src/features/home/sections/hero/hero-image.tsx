@@ -92,7 +92,6 @@ export function HeroImage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const isInView = useInView(containerRef, { once: false, amount: 0.1 });
   const controls = useAnimation();
-  const [aspectRatio, setAspectRatio] = useState('16/9');
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [showStatsCard, setShowStatsCard] = useState(false);
   const { resolvedTheme, isReducedMotion } = useThemeContext();
@@ -111,8 +110,6 @@ export function HeroImage() {
 
   const handleVideoMetadataLoaded = () => {
     if (videoRef.current) {
-      const { videoWidth, videoHeight } = videoRef.current;
-      setAspectRatio(`${videoWidth}/${videoHeight}`);
       setIsVideoLoaded(true);
       handleVideoLoad();
     }
@@ -121,44 +118,17 @@ export function HeroImage() {
   useEffect(() => {
     if (isInView) {
       controls.start('visible');
-      // Delay showing the stats card for better perceived performance
       const timer = setTimeout(() => setShowStatsCard(true), 800);
       return () => clearTimeout(timer);
     }
   }, [controls, isInView]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (containerRef.current) {
-        const width = containerRef.current.offsetWidth;
-        const height = width * (9 / 16); // Default 16:9 ratio
-        containerRef.current.style.height = `${height}px`;
-      }
-    };
-
-    handleResize();
-    
-    // Use a more efficient event listener with debounce
-    let resizeTimer: NodeJS.Timeout;
-    const debouncedResize = () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(handleResize, 100);
-    };
-    
-    window.addEventListener('resize', debouncedResize);
-    return () => {
-      window.removeEventListener('resize', debouncedResize);
-      clearTimeout(resizeTimer);
-    };
-  }, []);
 
   const themeEmoji = resolvedTheme === 'dark' ? '🌙' : resolvedTheme === 'semi-light' ? '🌤️' : '☀️';
 
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-full lg:min-h-[600px] rounded-2xl overflow-hidden shadow-xl"
-      style={{ aspectRatio }}
+      className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl transform-gpu"
     >
       {/* Theme indicator */}
       <AnimatedElement
@@ -177,60 +147,67 @@ export function HeroImage() {
         </motion.span>
       </AnimatedElement>
       
-      {/* Video element with loading optimization */}
-      {videoSrc ? (
-        <motion.video
-          ref={videoRef}
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-          onLoadedMetadata={handleVideoMetadataLoaded}
-          onError={handleVideoError}
-          initial={{ filter: 'blur(10px)' }}
-          animate={{ filter: isVideoLoaded ? 'blur(0px)' : 'blur(10px)' }}
-          transition={{ duration: 0.8 }}
-          preload="auto"
-        >
-          <source src={videoSrc} type="video/mp4" />
+      {/* Video/Image container with enhanced scaling */}
+      <div className="absolute inset-0 w-full h-full">
+        {videoSrc ? (
+          <motion.video
+            ref={videoRef}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+            onLoadedMetadata={handleVideoMetadataLoaded}
+            onError={handleVideoError}
+            initial={{ filter: 'blur(10px)', scale: 1.1 }}
+            animate={{ 
+              filter: isVideoLoaded ? 'blur(0px)' : 'blur(10px)',
+              scale: isVideoLoaded ? 1 : 1.1
+            }}
+            transition={{ duration: 1.2, ease: 'easeOut' }}
+            preload="auto"
+          >
+            <source src={videoSrc} type="video/mp4" />
+            <Image 
+              src={fallbackImage} 
+              alt="Hero" 
+              fill
+              priority
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              quality={90}
+            />
+          </motion.video>
+        ) : (
           <Image 
             src={fallbackImage} 
             alt="Hero" 
             fill
             priority
             className="object-cover"
-            sizes="100vw"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            quality={90}
+            onLoadingComplete={() => setIsVideoLoaded(true)}
           />
-        </motion.video>
-      ) : (
-        <Image 
-          src={fallbackImage} 
-          alt="Hero" 
-          fill
-          priority
-          className="object-cover"
-          sizes="100vw"
-          onLoadingComplete={() => setIsVideoLoaded(true)}
-        />
-      )}
+        )}
+      </div>
 
-      {/* Overlay gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/40 to-transparent dark:from-background/90 dark:via-background/60 dark:to-transparent" />
+      {/* Enhanced gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/50 to-transparent dark:from-background/95 dark:via-background/70 dark:to-transparent/30" />
       
-      {/* Floating stats card - only render when in view for better performance */}
+      {/* Floating stats card with improved positioning */}
       {showStatsCard && isInView && (
         <AnimatedElement
           animation="fade-up"
           delay={0.3}
           duration={0.6}
-          className="absolute bottom-6 left-6 z-10 max-w-[280px] sm:max-w-[320px]"
+          className="absolute bottom-8 left-8 z-10 max-w-[300px] sm:max-w-[340px]"
         >
           <StatsCard />
         </AnimatedElement>
       )}
       
-      {/* Simplified decorative elements - reduced for better performance */}
+      {/* Enhanced decorative elements */}
       {!isReducedMotion && (
         <motion.div 
           className="absolute top-0 left-0 w-full h-full pointer-events-none"
@@ -238,8 +215,8 @@ export function HeroImage() {
           animate={{ opacity: isInView ? 0.7 : 0 }}
           transition={{ duration: 1, delay: 0.5 }}
         >
-          <div className="absolute top-10 right-10 w-20 h-20 rounded-full bg-primary/10 blur-xl" />
-          <div className="absolute bottom-20 left-20 w-32 h-32 rounded-full bg-secondary/10 blur-xl" />
+          <div className="absolute top-[10%] right-[10%] w-24 h-24 rounded-full bg-primary/10 blur-2xl" />
+          <div className="absolute bottom-[20%] left-[20%] w-40 h-40 rounded-full bg-secondary/10 blur-2xl" />
         </motion.div>
       )}
     </div>
