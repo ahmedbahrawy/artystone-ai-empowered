@@ -23,7 +23,7 @@ export function DoctorMessage() {
             surrounding areas.
           </p>
           <p>
-            Our clinic focuses on preventive care, women's health, chronic disease
+            Our clinic focuses on preventive care, women&apos;s health, chronic disease
             management, and family medicine. We believe in building long-term relationships
             with our patients and providing personalized care that meets their unique needs.
           </p>

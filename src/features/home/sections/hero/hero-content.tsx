@@ -82,7 +82,7 @@ export function HeroContent(): JSX.Element {
         className="text-xl text-gray-600 dark:text-gray-300"
       >
         Experience comprehensive medical care with Dr. Farzaneh. We offer family medicine,
-        women's health services, and bulk billing for eligible patients.
+        women&apos;s health services, and bulk billing for eligible patients.
       </motion.p>
 
       <motion.div
