@@ -8,6 +8,22 @@ import { SectionGrid } from '@/components/ui/section-container';
 import { useThemeContext } from '@/providers/theme-provider';
 import { AnimatedElement } from '@/components/ui/animated-element';
 import { Container } from '@/components/ui/container';
+import dynamic from 'next/dynamic'
+
+// Properly import the HeroVideo component
+const HeroVideo = dynamic(
+  () => import('@/features/home/components/hero-video').then((mod) => mod.HeroVideo),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="relative aspect-video w-full animate-pulse rounded-2xl bg-neutral-100 dark:bg-neutral-800">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="h-16 w-16 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
+        </div>
+      </div>
+    ),
+  }
+)
 
 export function HeroSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
