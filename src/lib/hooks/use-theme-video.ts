@@ -16,12 +16,17 @@ export function useThemeVideo({
   semiLightVideo = '/videos/clinic-semi-light.mp4',
   poster = '/images/clinic-welcome.webp',
 }: UseThemeVideoOptions = {}) {
-  const { resolvedTheme } = useThemeContext()
+  const { resolvedTheme, isReducedMotion } = useThemeContext()
   const [isLoaded, setIsLoaded] = useState(false)
   const [hasError, setHasError] = useState(false)
   const [isPreloading, setIsPreloading] = useState(true)
 
+  // If reduced motion is enabled, don't show video
+  const shouldShowVideo = !isReducedMotion
+
   const videoSrc = useMemo(() => {
+    if (!shouldShowVideo) return null
+    
     switch (resolvedTheme) {
       case 'dark':
         return darkVideo
@@ -30,14 +35,21 @@ export function useThemeVideo({
       default:
         return lightVideo
     }
-  }, [resolvedTheme, darkVideo, lightVideo, semiLightVideo])
+  }, [resolvedTheme, darkVideo, lightVideo, semiLightVideo, shouldShowVideo])
+
+  // Reset states when video source changes
+  useEffect(() => {
+    setIsLoaded(false)
+    setHasError(false)
+    setIsPreloading(true)
+  }, [videoSrc])
 
   // Preload video
   useEffect(() => {
-    if (typeof window === 'undefined') return
-
-    setIsPreloading(true)
-    setIsLoaded(false)
+    if (typeof window === 'undefined' || !videoSrc) {
+      setIsPreloading(false)
+      return
+    }
 
     const preloadVideo = document.createElement('video')
     preloadVideo.src = videoSrc
@@ -73,6 +85,7 @@ export function useThemeVideo({
 
   const handleError = useCallback(() => {
     setHasError(true)
+    setIsPreloading(false)
     console.warn('Video failed to load:', videoSrc)
   }, [videoSrc])
 
@@ -84,5 +97,6 @@ export function useThemeVideo({
     isPreloading,
     handleLoadedData,
     handleError,
+    shouldShowVideo,
   }
 } 

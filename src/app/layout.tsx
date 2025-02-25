@@ -159,6 +159,10 @@ export default function RootLayout({
         <ErrorBoundary>
           <ThemeProvider
             defaultTheme="system"
+            enableSystem
+            attribute="class"
+            themes={['light', 'dark', 'semi-light', 'system']}
+            storageKey="theme-preference"
           >
             <LocationProvider>
               <a 
