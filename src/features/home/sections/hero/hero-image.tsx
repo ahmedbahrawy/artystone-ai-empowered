@@ -1,31 +1,89 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useThemeVideo } from '@/lib/hooks/use-theme-video';
 
 export function HeroImage(): JSX.Element {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [videoError, setVideoError] = useState(false);
+  const [aspectRatio, setAspectRatio] = useState('16/9');
+  const [containerHeight, setContainerHeight] = useState(0);
   const {
     videoSrc,
     isLoading,
     poster,
     handleVideoLoad,
+    handleVideoError,
+    fallbackUsed
   } = useThemeVideo({
     lightVideo: '/videos/clinic-light.mp4',
     darkVideo: '/videos/clinic-dark.mp4',
     poster: '/images/clinic-welcome.webp',
+    fallbackVideo: '/home-hero.mp4'
   });
 
-  const handleVideoError = () => {
-    console.warn('Video failed to load:', videoSrc);
-    setVideoError(true);
+  const onVideoError = () => {
+    handleVideoError();
+    if (fallbackUsed) {
+      setVideoError(true);
+    }
   };
 
+  // Detect video aspect ratio on load
+  const handleVideoMetadataLoaded = (e: React.SyntheticEvent<HTMLVideoElement>) => {
+    const video = e.currentTarget;
+    if (video.videoWidth && video.videoHeight) {
+      const ratio = `${video.videoWidth}/${video.videoHeight}`;
+      setAspectRatio(ratio);
+      
+      // Store video reference for calculations
+      videoRef.current = video;
+      
+      // Calculate container height based on video dimensions
+      updateContainerSize();
+    }
+    handleVideoLoad();
+  };
+
+  // Adjust container size based on window size and video dimensions
+  const updateContainerSize = () => {
+    if (containerRef.current) {
+      const width = containerRef.current.offsetWidth;
+      let height;
+      
+      // If we have video dimensions, use them for precise ratio
+      if (videoRef.current && videoRef.current.videoWidth && videoRef.current.videoHeight) {
+        const videoRatio = videoRef.current.videoHeight / videoRef.current.videoWidth;
+        height = width * videoRatio;
+      } else {
+        // Default to 9/16 ratio if video dimensions aren't available
+        height = width * (9/16);
+      }
+      
+      setContainerHeight(height);
+      containerRef.current.style.height = `${height}px`;
+    }
+  };
+
+  // Update container size on window resize and component mount
+  useEffect(() => {
+    updateContainerSize();
+    
+    const handleResize = () => {
+      updateContainerSize();
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
-    <div className="relative w-full h-full min-h-[500px] lg:min-h-[600px]">
+    <div className="relative w-full h-full min-h-[500px] lg:min-h-[600px] flex items-center justify-center">
       <motion.div
+        ref={containerRef}
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{
@@ -33,60 +91,63 @@ export function HeroImage(): JSX.Element {
           delay: 0.2,
           ease: [0, 0.71, 0.2, 1.01]
         }}
-        className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl"
+        className="relative w-full rounded-2xl overflow-hidden shadow-2xl"
+        style={{ 
+          aspectRatio,
+          height: containerHeight > 0 ? `${containerHeight}px` : undefined
+        }}
       >
-        {/* Overlay gradients */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-transparent to-purple-600/20 mix-blend-overlay z-10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent z-10" />
+        {/* Overlay gradients - enhanced for better visibility */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 via-transparent to-purple-600/30 mix-blend-overlay z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent z-10" />
         
-        {/* Video with aspect ratio container */}
-        <div className="relative w-full h-full">
-          <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
-            {!videoError && (
-              <video
-                autoPlay
-                muted
-                loop
-                playsInline
-                className={`w-full h-full object-cover transition-opacity duration-500 ${!isLoading ? 'opacity-100' : 'opacity-0'}`}
-                poster={poster}
-                onLoadedData={handleVideoLoad}
-                onError={handleVideoError}
-                src={videoSrc}
-              />
-            )}
-            <Image
-              src={poster}
-              alt="Welcome to Arty Stone Medical Clinic"
-              fill
-              className={`object-cover transition-opacity duration-500 ${isLoading || videoError ? 'opacity-100' : 'opacity-0'}`}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              priority
-              quality={95}
+        {/* Video container with proper aspect ratio */}
+        <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+          {!videoError && (
+            <video
+              ref={videoRef}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className={`w-full h-full object-cover transition-opacity duration-500 ${!isLoading ? 'opacity-100' : 'opacity-0'}`}
+              poster={poster}
+              onLoadedMetadata={handleVideoMetadataLoaded}
+              onError={onVideoError}
+              src={videoSrc}
             />
-          </div>
+          )}
+          <Image
+            src={poster}
+            alt="Welcome to Arty Stone Medical Clinic"
+            fill
+            className={`object-cover transition-opacity duration-500 ${isLoading || videoError ? 'opacity-100' : 'opacity-0'}`}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority
+            quality={95}
+          />
         </div>
 
-        {/* Floating Stats Card */}
+        {/* Floating Stats Card - Improved positioning */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7, duration: 0.6 }}
-          className="absolute -bottom-6 left-6 bg-white dark:bg-gray-800/90 p-6 rounded-xl shadow-xl backdrop-blur-sm z-20"
+          className="absolute -bottom-6 left-6 md:left-8 bg-white/95 dark:bg-gray-800/95 p-4 md:p-6 rounded-xl shadow-xl backdrop-blur-sm z-20 max-w-[90%] md:max-w-[400px]"
         >
-          <div className="flex items-center gap-6">
-            <div className="flex -space-x-4">
+          <div className="flex items-center gap-3 md:gap-6">
+            <div className="flex -space-x-3 md:-space-x-4">
               {[1, 2, 3].map((index) => (
                 <div
                   key={index}
-                  className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800 border-2 border-white dark:border-gray-800 flex items-center justify-center shadow-lg"
+                  className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800 border-2 border-white dark:border-gray-800 flex items-center justify-center shadow-lg"
                 >
                   <span className="text-blue-600 dark:text-blue-400 text-sm">★</span>
                 </div>
               ))}
             </div>
-            <div>
-              <p className="font-semibold text-gray-900 dark:text-white text-lg">
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold text-gray-900 dark:text-white text-base md:text-lg truncate">
                 Trusted by 1000+ Patients
               </p>
               <div className="flex items-center gap-1 mt-1">
@@ -94,7 +155,7 @@ export function HeroImage(): JSX.Element {
                   {[1, 2, 3, 4, 5].map((star) => (
                     <svg
                       key={star}
-                      className="w-4 h-4 text-yellow-400"
+                      className="w-3 h-3 md:w-4 md:h-4 text-yellow-400"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -102,7 +163,7 @@ export function HeroImage(): JSX.Element {
                     </svg>
                   ))}
                 </div>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
+                <span className="text-xs md:text-sm text-gray-500 dark:text-gray-400 truncate">
                   5.0 Average Rating
                 </span>
               </div>
