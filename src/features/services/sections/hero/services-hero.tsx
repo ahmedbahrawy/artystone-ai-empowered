@@ -40,7 +40,7 @@ export function ServicesHero() {
           className="max-w-lg text-muted-foreground text-lg sm:text-xl mb-8"
         >
           <p>
-            Experience comprehensive healthcare services tailored to your needs. From family medicine to specialized care, we're here to support your well-being.
+            Experience comprehensive healthcare services tailored to your needs. From family medicine to specialized care, we&apos;re here to support your well-being.
           </p>
         </AnimatedElement>
 

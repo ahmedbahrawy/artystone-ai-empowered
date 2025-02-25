@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 
 type Theme = 'light' | 'dark' | 'semi-light' | 'system';
@@ -76,7 +76,7 @@ export function ThemeProvider({
   }, []);
 
   // Handle theme changes
-  const handleThemeChange = (newTheme: Theme) => {
+  const handleThemeChange = useCallback((newTheme: Theme) => {
     setTheme(newTheme);
     
     // Determine resolved theme
@@ -91,7 +91,7 @@ export function ThemeProvider({
     
     // Store preference in localStorage
     localStorage.setItem('theme-preference', newTheme);
-  };
+  }, [prefersDarkScheme]);
 
   // Initialize theme from localStorage or default
   useEffect(() => {
@@ -103,7 +103,7 @@ export function ThemeProvider({
     } else {
       handleThemeChange(defaultTheme as Theme);
     }
-  }, [defaultTheme]);
+  }, [defaultTheme, handleThemeChange]);
 
   // Update resolved theme when system preference changes
   useEffect(() => {

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { LocationConsentBanner } from '@/components/molecules/location-consent-banner';
 import { isRuralLocation, getStateFromCoordinates, getMMMClassification } from '@/lib/utils/geolocation';
 
@@ -60,31 +60,43 @@ const LOCATION_OPTIONS: PositionOptions = {
 };
 
 export function LocationProvider({ children }: LocationProviderProps) {
-  const [state, setState] = useState<LocationState>(initialState);
+  const [state, setState] = useState<LocationState>({
+    coordinates: null,
+    isRural: false,
+    state: '',
+    mmmClassification: 0,
+    isLoading: true,
+    error: null,
+    hasConsent: null,
+  });
 
-  const resetLocation = () => {
-    setState(initialState);
-  };
+  const resetLocation = useCallback(() => {
+    setState(prev => ({
+      ...prev,
+      coordinates: null,
+      isRural: false,
+      state: '',
+      mmmClassification: 0,
+      isLoading: false,
+      error: null,
+    }));
+  }, []);
 
-  const handleLocationSuccess = async (position: GeolocationPosition) => {
+  const handleLocationSuccess = useCallback(async (position: GeolocationPosition) => {
+    const { latitude, longitude } = position.coords;
+    const coordinates = { latitude, longitude };
+    
     try {
-      const coords = {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      };
-
-      const [detectedState, rural, mmm] = await Promise.all([
-        getStateFromCoordinates(coords),
-        Promise.resolve(isRuralLocation(coords)),
-        Promise.resolve(getMMMClassification(coords)),
-      ]);
-
+      const isRuralArea = await isRuralLocation(coordinates);
+      const stateFromCoords = await getStateFromCoordinates(coordinates);
+      const mmmClass = await getMMMClassification(coordinates);
+      
       setState(prev => ({
         ...prev,
-        coordinates: coords,
-        isRural: rural,
-        state: detectedState,
-        mmmClassification: mmm,
+        coordinates,
+        isRural: isRuralArea,
+        state: stateFromCoords,
+        mmmClassification: mmmClass,
         isLoading: false,
         error: null,
       }));
@@ -92,20 +104,22 @@ export function LocationProvider({ children }: LocationProviderProps) {
       setState(prev => ({
         ...prev,
         isLoading: false,
-        error: error instanceof Error ? error.message : 'Failed to process location',
+        error: 'Failed to process location data',
       }));
     }
-  };
+  }, []);
 
-  const handleLocationError = (error: GeolocationPositionError) => {
+  const handleLocationError = useCallback((error: GeolocationPositionError) => {
     setState(prev => ({
       ...prev,
       isLoading: false,
       error: error.message,
     }));
-  };
+  }, []);
 
-  const requestLocation = async () => {
+  const requestLocation = useCallback(async () => {
+    setState(prev => ({ ...prev, isLoading: true }));
+    
     if (!navigator.geolocation) {
       setState(prev => ({
         ...prev,
@@ -114,13 +128,12 @@ export function LocationProvider({ children }: LocationProviderProps) {
       }));
       return;
     }
-
-    setState(prev => ({ ...prev, isLoading: true }));
-
+    
     try {
       const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, LOCATION_OPTIONS);
+        navigator.geolocation.getCurrentPosition(resolve, reject);
       });
+      
       await handleLocationSuccess(position);
     } catch (error) {
       if (error instanceof GeolocationPositionError) {
@@ -133,18 +146,21 @@ export function LocationProvider({ children }: LocationProviderProps) {
         }));
       }
     }
-  };
+  }, [handleLocationSuccess, handleLocationError]);
 
-  const handleLocationConsent = async (accepted: boolean) => {
-    localStorage.setItem(LOCATION_CONSENT_KEY, String(accepted));
-    setState(prev => ({ ...prev, hasConsent: accepted }));
-    
+  const handleLocationConsent = useCallback(async (accepted: boolean) => {
     if (accepted) {
+      localStorage.setItem(LOCATION_CONSENT_KEY, 'true');
       await requestLocation();
     } else {
-      setState(prev => ({ ...prev, isLoading: false }));
+      localStorage.setItem(LOCATION_CONSENT_KEY, 'false');
+      setState(prev => ({ 
+        ...prev, 
+        hasConsent: false,
+        isLoading: false 
+      }));
     }
-  };
+  }, [requestLocation]);
 
   useEffect(() => {
     const storedConsent = localStorage.getItem(LOCATION_CONSENT_KEY);
@@ -159,7 +175,7 @@ export function LocationProvider({ children }: LocationProviderProps) {
     } else {
       setState(prev => ({ ...prev, hasConsent: null }));
     }
-  }, []);
+  }, [handleLocationConsent]);
 
   return (
     <LocationContext.Provider
@@ -170,11 +186,9 @@ export function LocationProvider({ children }: LocationProviderProps) {
       }}
     >
       {children}
-      <LocationConsentBanner
-        onAccept={() => handleLocationConsent(true)}
-        onDecline={() => handleLocationConsent(false)}
-        isVisible={state.hasConsent === null}
-      />
+      {state.hasConsent === null && (
+        <LocationConsentBanner onResponse={handleLocationConsent} />
+      )}
     </LocationContext.Provider>
   );
 } 

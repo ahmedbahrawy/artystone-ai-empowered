@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion, useAnimation, useInView, Variants } from 'framer-motion';
+import { motion, useAnimation, useInView, Variants, HTMLMotionProps } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 export type AnimationType = 
@@ -62,7 +62,7 @@ const variants: Record<AnimationType, Variants> = {
   }
 };
 
-interface AnimatedElementProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+interface AnimatedElementProps extends Omit<HTMLMotionProps<"div">, 'children'> {
   children: React.ReactNode;
   animation?: AnimationType;
   delay?: number;
