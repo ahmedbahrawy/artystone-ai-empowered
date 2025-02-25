@@ -54,16 +54,8 @@ export function useThemeVideo({
       });
     };
     
-    // Only preload videos if the user's connection is fast enough
-    if (navigator.connection) {
-      const connection = navigator.connection as any;
-      if (connection.effectiveType === '4g' && !connection.saveData) {
-        preloadVideos();
-      }
-    } else {
-      // If Network Information API is not available, preload anyway
-      preloadVideos();
-    }
+    // Preload videos - removed connection check that was causing issues
+    preloadVideos();
   }, [lightVideo, semiLightVideo, darkVideo, fallbackVideo]);
 
   useEffect(() => {

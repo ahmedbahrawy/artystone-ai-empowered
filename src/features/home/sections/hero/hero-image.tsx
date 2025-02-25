@@ -164,7 +164,7 @@ export function HeroImage() {
           initial={{ filter: 'blur(10px)' }}
           animate={{ filter: isVideoLoaded ? 'blur(0px)' : 'blur(10px)' }}
           transition={{ duration: 0.8 }}
-          loading="lazy"
+          preload="auto"
         >
           <source src={videoSrc} type="video/mp4" />
           <img src={fallbackImage} alt="Hero" className="w-full h-full object-cover" loading="eager" />
