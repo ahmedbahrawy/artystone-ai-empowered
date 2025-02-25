@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { inter, playfairDisplay, jetbrainsMono } from "@/lib/fonts";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/providers/theme-provider";
 import { LocationProvider } from "@/components/providers/location-provider";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
@@ -168,10 +168,7 @@ export default function RootLayout({
         
         <ErrorBoundary>
           <ThemeProvider
-            attribute="class"
             defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange={false}
           >
             <LocationProvider>
               <Header />
