@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, MotionStyle } from 'framer-motion';
 import { HeroContent } from './hero-content';
 import { HeroImage } from './hero-image';
 import { SectionGrid } from '@/components/ui/section-container';
@@ -22,6 +22,12 @@ export function HeroSection() {
   const imageY = useTransform(scrollY, [0, 500], [0, 75]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0.6]);
 
+  const contentStyle: MotionStyle = isReducedMotion ? {} : { y: contentY };
+  const imageStyle: MotionStyle = isReducedMotion ? {} : { 
+    y: imageY,
+    opacity
+  };
+
   return (
     <SectionGrid 
       ref={sectionRef}
@@ -33,7 +39,7 @@ export function HeroSection() {
         animation="fade-up"
         duration={0.6}
         className="z-10"
-        style={isReducedMotion ? undefined : { y: contentY }}
+        style={contentStyle}
       >
         <HeroContent />
       </AnimatedElement>
@@ -43,10 +49,7 @@ export function HeroSection() {
         duration={0.6}
         delay={0.2}
         className="relative w-full h-full lg:min-h-[600px] rounded-2xl overflow-hidden"
-        style={isReducedMotion ? undefined : { 
-          y: imageY,
-          opacity
-        }}
+        style={imageStyle}
       >
         <HeroImage />
         
