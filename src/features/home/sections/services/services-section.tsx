@@ -11,8 +11,16 @@ import {
   Microscope,
   Stethoscope
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
-const services = [
+interface Service {
+  title: string;
+  description: string;
+  icon: LucideIcon;
+  color: 'pink' | 'blue' | 'green' | 'red' | 'purple' | 'indigo';
+}
+
+const services: Service[] = [
   {
     title: "Women's Health",
     description: 'Comprehensive women's healthcare services including preventive care, family planning, and health screenings.',
