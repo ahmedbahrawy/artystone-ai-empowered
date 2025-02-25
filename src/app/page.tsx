@@ -3,12 +3,6 @@ import {
   HeroSection,
   StatsSection,
   DoctorMessage,
-  ClinicGallery,
-  FeaturesSection,
-  ServicesSection,
-  CTASection,
-  BookingSection,
-  ContactSection,
 } from '@/features/home'
 import { Container } from '@/components/ui/container'
 import { Separator } from '@/components/ui/separator'
@@ -35,50 +29,6 @@ export default function HomePage() {
       <section className="bg-white dark:bg-gray-900">
         <Container className="py-16 md:py-24">
           <DoctorMessage />
-        </Container>
-      </section>
-
-      <Separator />
-
-      {/* Features Section */}
-      <section className="bg-gray-50 dark:bg-gray-800">
-        <Container className="py-16 md:py-24">
-          <FeaturesSection />
-        </Container>
-      </section>
-
-      {/* Gallery Section */}
-      <section className="bg-white dark:bg-gray-900">
-        <Container className="py-16 md:py-24">
-          <ClinicGallery />
-        </Container>
-      </section>
-
-      {/* Services Section */}
-      <section className="bg-blue-50 dark:bg-gray-800">
-        <Container className="py-16 md:py-24">
-          <ServicesSection />
-        </Container>
-      </section>
-
-      {/* Booking Section */}
-      <section className="bg-white dark:bg-gray-900">
-        <Container className="py-16 md:py-24">
-          <BookingSection />
-        </Container>
-      </section>
-
-      {/* Contact Section */}
-      <section className="bg-gray-50 dark:bg-gray-800">
-        <Container className="py-16 md:py-24">
-          <ContactSection />
-        </Container>
-      </section>
-
-      {/* CTA Section */}
-      <section className="bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
-        <Container className="py-16 md:py-24">
-          <CTASection />
         </Container>
       </section>
     </>
