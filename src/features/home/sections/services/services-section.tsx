@@ -23,7 +23,7 @@ interface Service {
 const services: Service[] = [
   {
     title: "Women's Health",
-    description: 'Comprehensive women's healthcare services including preventive care, family planning, and health screenings.',
+    description: 'Comprehensive women&apos;s healthcare services including preventive care, family planning, and health screenings.',
     icon: Heart,
     color: 'pink',
   },
