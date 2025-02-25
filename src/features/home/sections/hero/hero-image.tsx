@@ -4,56 +4,55 @@ import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
-export function HeroImage() {
+export function HeroImage(): JSX.Element {
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full min-h-[400px] lg:min-h-[500px]">
       <motion.div
-        className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-purple-500/20 rounded-2xl"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-      />
-      <Image
-        src="/images/clinic-exterior.jpg"
-        alt="Arty Stone Medical Clinic Exterior"
-        fill
-        className="object-cover rounded-2xl"
-        sizes="(max-width: 768px) 100vw, 50vw"
-        priority
-        quality={90}
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 to-transparent rounded-2xl" />
-      
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{
+          duration: 0.5,
+          delay: 0.2,
+          ease: [0, 0.71, 0.2, 1.01]
+        }}
+        className="relative w-full h-full rounded-2xl overflow-hidden"
+      >
+        <Image
+          src="/images/hero-doctor.jpg"
+          alt="Doctor consulting with patient"
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          priority
+          quality={90}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 mix-blend-overlay" />
+      </motion.div>
+
+      {/* Floating Stats Card */}
       <motion.div
-        className="absolute bottom-6 left-6 right-6 bg-white/90 dark:bg-gray-900/90 p-4 rounded-xl backdrop-blur-sm"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
+        transition={{ delay: 0.5, duration: 0.5 }}
+        className="absolute -bottom-6 left-6 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg"
       >
         <div className="flex items-center gap-4">
-          <div className="flex-shrink-0">
-            <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center">
-              <svg
-                className="w-6 h-6 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+          <div className="flex -space-x-4">
+            {[1, 2, 3].map((index) => (
+              <div
+                key={index}
+                className="w-10 h-10 rounded-full bg-blue-100 border-2 border-white dark:border-gray-800 flex items-center justify-center"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </div>
+                <span className="text-blue-600 text-xs">★</span>
+              </div>
+            ))}
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
-              Extended Hours Available
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              Mon-Fri: 9am-5pm | Sat: 10am-2pm
+            <p className="font-semibold text-gray-900 dark:text-white">
+              Trusted by 1000+ Patients
+            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              5.0 Average Rating
             </p>
           </div>
         </div>

@@ -8,17 +8,51 @@ import { Badge } from '@/components/ui/badge';
 
 const contentVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
-  visible: (custom: number) => ({
+  visible: (delay: number) => ({
     opacity: 1,
     y: 0,
     transition: {
       duration: 0.6,
-      delay: custom * 0.1,
+      delay: delay * 0.1,
+      ease: 'easeOut',
     },
   }),
 };
 
+interface FeatureItemProps {
+  text: string;
+}
+
+function FeatureItem({ text }: FeatureItemProps): JSX.Element {
+  return (
+    <div className="flex items-center gap-2" role="status">
+      <svg
+        className="h-5 w-5 text-green-500"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      <span>{text}</span>
+    </div>
+  );
+}
+
 export function HeroContent(): JSX.Element {
+  const handleLearnMore = React.useCallback(() => {
+    const servicesSection = document.getElementById('services');
+    if (servicesSection) {
+      servicesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, []);
+
   return (
     <div className="flex flex-col gap-6">
       <motion.div
@@ -69,6 +103,7 @@ export function HeroContent(): JSX.Element {
           variant="outline"
           size="lg"
           className="w-full sm:w-auto"
+          onClick={handleLearnMore}
           aria-label="Learn more about our services"
         >
           Learn More
@@ -82,40 +117,8 @@ export function HeroContent(): JSX.Element {
         custom={4}
         className="mt-6 flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300"
       >
-        <div className="flex items-center gap-2" role="status">
-          <svg
-            className="h-5 w-5 text-green-500"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <span>Bulk Billing Available</span>
-        </div>
-        <div className="flex items-center gap-2" role="status">
-          <svg
-            className="h-5 w-5 text-green-500"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <span>Same Day Appointments</span>
-        </div>
+        <FeatureItem text="Bulk Billing Available" />
+        <FeatureItem text="Same Day Appointments" />
       </motion.div>
     </div>
   );

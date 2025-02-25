@@ -5,7 +5,6 @@ export { HeroImage } from './sections/hero/hero-image';
 
 // Stats Section
 export { StatsSection } from './sections/stats/stats-section';
-export { StatCard } from './sections/stats/stat-card';
 
 // Doctor Section
 export { DoctorMessage } from './sections/doctor/doctor-message';
