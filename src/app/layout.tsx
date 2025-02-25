@@ -4,7 +4,6 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { LocationProvider } from "@/components/providers/location-provider";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { getAllServices } from "@/lib/content/services";
 import { generateLocationSchema, generateFAQSchema } from "@/lib/schema/location-schema";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { PerformanceMonitor } from "@/components/performance-monitor";
@@ -18,15 +17,20 @@ export const viewport: Viewport = {
   maximumScale: 5,
   themeColor: "#2E90FF",
   colorScheme: "light dark",
+  viewportFit: "cover",
 };
+
+const CLINIC_NAME = "Dr. Farzaneh's Arty Stone Medical Clinic";
+const CLINIC_LOCATION = "Frankston, Victoria";
+const CLINIC_DESCRIPTION = "Expert family healthcare services specializing in family medicine, women's health, and comprehensive medical care. Medicare bulk billing available.";
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://artystoneclinic.com.au'),
   title: {
-    default: "Dr. Farzaneh's Arty Stone Medical Clinic | Family Healthcare Frankston Victoria",
-    template: "%s | Dr. Farzaneh's Arty Stone Medical Clinic Frankston"
+    default: `${CLINIC_NAME} | Family Healthcare ${CLINIC_LOCATION}`,
+    template: `%s | ${CLINIC_NAME} ${CLINIC_LOCATION}`
   },
-  description: "Experience expert healthcare with Dr. Farzaneh at Arty Stone Medical Clinic in Frankston, Victoria. Specializing in family medicine, women's health, and comprehensive medical services. Medicare bulk billing available. Book your appointment today.",
+  description: `Experience expert healthcare with Dr. Farzaneh at ${CLINIC_NAME} in ${CLINIC_LOCATION}. ${CLINIC_DESCRIPTION} Book your appointment today.`,
   keywords: [
     'medical clinic frankston',
     'doctor frankston victoria',
@@ -48,22 +52,22 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_AU',
     url: 'https://artystoneclinic.com.au',
-    siteName: "Dr. Farzaneh's Arty Stone Medical Clinic",
-    title: "Expert Family Healthcare in Frankston Victoria | Dr. Farzaneh's Arty Stone Medical Clinic",
-    description: "Your trusted local medical clinic in Frankston, Victoria. Dr. Farzaneh provides comprehensive healthcare services including family medicine, women's health, and bulk billing options.",
+    siteName: CLINIC_NAME,
+    title: `Expert Family Healthcare in ${CLINIC_LOCATION} | ${CLINIC_NAME}`,
+    description: `Your trusted local medical clinic in ${CLINIC_LOCATION}. ${CLINIC_DESCRIPTION}`,
     images: [
       {
         url: 'https://artystoneclinic.com.au/images/clinic-exterior.jpg',
         width: 1200,
         height: 630,
-        alt: "Arty Stone Medical Clinic Frankston"
+        alt: `${CLINIC_NAME} ${CLINIC_LOCATION}`
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Dr. Farzaneh's Arty Stone Medical Clinic | Frankston Victoria",
-    description: "Expert healthcare services in Frankston. Family medicine, women's health, and bulk billing available.",
+    title: `${CLINIC_NAME} | ${CLINIC_LOCATION}`,
+    description: `Expert healthcare services in ${CLINIC_LOCATION}. Family medicine, women's health, and bulk billing available.`,
     images: ['https://artystoneclinic.com.au/images/clinic-exterior.jpg'],
   },
   alternates: {
@@ -81,14 +85,14 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: 'your-google-verification-code',
+    google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION,
   },
   authors: [{ name: 'Dr. Farzaneh' }],
   generator: 'Next.js',
-  applicationName: "Arty Stone Medical Clinic",
+  applicationName: CLINIC_NAME,
   referrer: 'origin-when-cross-origin',
   creator: 'Dr. Farzaneh',
-  publisher: 'Arty Stone Medical Clinic',
+  publisher: CLINIC_NAME,
   category: 'Healthcare',
   formatDetection: {
     email: true,
@@ -97,19 +101,10 @@ export const metadata: Metadata = {
   }
 };
 
-const mainLocation = {
-  latitude: -27.4698,
-  longitude: 153.0251,
-  state: "Queensland",
-  city: "Brisbane",
-  postalCode: "4000",
-  streetAddress: "123 Example Street",
-};
-
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   const locationSchema = generateLocationSchema();
   const faqSchema = generateFAQSchema();
@@ -121,7 +116,6 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* Google Fonts Preconnect - Must be first */}
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"
@@ -132,29 +126,24 @@ export default function RootLayout({
           href="https://fonts.googleapis.com"
           crossOrigin="anonymous"
         />
-
-        {/* Resource Hints */}
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
-        
-        {/* DNS Prefetch */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
       </head>
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased min-h-screen flex flex-col">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@graph': [locationSchema, faqSchema]
-            })
+            }, null, process.env.NODE_ENV === 'development' ? 2 : 0)
           }}
         />
         
-        {/* Analytics Scripts */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
           strategy="afterInteractive"
@@ -167,7 +156,9 @@ export default function RootLayout({
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+              gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', {
+                page_path: window.location.pathname,
+              });
             `,
           }}
         />

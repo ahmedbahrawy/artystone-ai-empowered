@@ -4,21 +4,38 @@ import * as React from 'react'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
 import { ThemeSwitcher } from './theme-switcher'
 
+type Theme = 'light' | 'dark' | 'system'
+
 interface ThemeProviderProps {
   children: React.ReactNode;
   attribute?: 'class' | 'data-theme' | 'data-mode';
-  defaultTheme?: string;
+  defaultTheme?: Theme;
   enableSystem?: boolean;
   disableTransitionOnChange?: boolean;
-  themes?: string[];
+  themes?: Theme[];
+  storageKey?: string;
 }
 
-export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+const defaultThemes: Theme[] = ['light', 'dark', 'system']
+
+export function ThemeProvider({
+  children,
+  attribute = 'class',
+  defaultTheme = 'system',
+  enableSystem = true,
+  disableTransitionOnChange = false,
+  themes = defaultThemes,
+  storageKey = 'theme',
+  ...props
+}: ThemeProviderProps) {
   return (
     <NextThemesProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
+      attribute={attribute}
+      defaultTheme={defaultTheme}
+      enableSystem={enableSystem}
+      disableTransitionOnChange={disableTransitionOnChange}
+      themes={themes}
+      storageKey={storageKey}
       {...props}
     >
       {children}

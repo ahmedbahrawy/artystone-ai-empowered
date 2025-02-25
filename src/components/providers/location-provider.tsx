@@ -9,115 +9,171 @@ interface Coordinates {
   longitude: number;
 }
 
-interface LocationContextType {
+interface LocationState {
   coordinates: Coordinates | null;
   isRural: boolean;
   state: string;
   mmmClassification: number;
   isLoading: boolean;
   error: string | null;
+  hasConsent: boolean | null;
 }
 
-const LocationContext = createContext<LocationContextType>({
+interface LocationContextValue extends LocationState {
+  requestLocation: () => Promise<void>;
+  resetLocation: () => void;
+}
+
+const initialState: LocationState = {
   coordinates: null,
   isRural: false,
   state: '',
   mmmClassification: 0,
   isLoading: true,
   error: null,
+  hasConsent: null,
+};
+
+const LocationContext = createContext<LocationContextValue>({
+  ...initialState,
+  requestLocation: async () => {},
+  resetLocation: () => {},
 });
 
 export function useLocation() {
-  return useContext(LocationContext);
+  const context = useContext(LocationContext);
+  if (!context) {
+    throw new Error('useLocation must be used within a LocationProvider');
+  }
+  return context;
 }
 
 interface LocationProviderProps {
   children: React.ReactNode;
 }
 
+const LOCATION_CONSENT_KEY = 'locationConsent';
+const LOCATION_OPTIONS: PositionOptions = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0,
+};
+
 export function LocationProvider({ children }: LocationProviderProps) {
-  const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
-  const [isRural, setIsRural] = useState(false);
-  const [state, setState] = useState('');
-  const [mmmClassification, setMMMClassification] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [state, setState] = useState<LocationState>(initialState);
+
+  const resetLocation = () => {
+    setState(initialState);
+  };
 
   const handleLocationSuccess = async (position: GeolocationPosition) => {
-    const coords = {
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude,
-    };
-
-    setCoordinates(coords);
-    setIsRural(isRuralLocation(coords));
-    setMMMClassification(getMMMClassification(coords));
-
     try {
-      const detectedState = await getStateFromCoordinates(coords);
-      setState(detectedState);
-    } catch (err) {
-      console.error('Error getting state:', err);
-    }
+      const coords = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      };
 
-    setIsLoading(false);
+      const [detectedState, rural, mmm] = await Promise.all([
+        getStateFromCoordinates(coords),
+        Promise.resolve(isRuralLocation(coords)),
+        Promise.resolve(getMMMClassification(coords)),
+      ]);
+
+      setState(prev => ({
+        ...prev,
+        coordinates: coords,
+        isRural: rural,
+        state: detectedState,
+        mmmClassification: mmm,
+        isLoading: false,
+        error: null,
+      }));
+    } catch (error) {
+      setState(prev => ({
+        ...prev,
+        isLoading: false,
+        error: error instanceof Error ? error.message : 'Failed to process location',
+      }));
+    }
   };
 
   const handleLocationError = (error: GeolocationPositionError) => {
-    setError(error.message);
-    setIsLoading(false);
+    setState(prev => ({
+      ...prev,
+      isLoading: false,
+      error: error.message,
+    }));
   };
 
-  const requestLocation = () => {
+  const requestLocation = async () => {
     if (!navigator.geolocation) {
-      setError('Geolocation is not supported by your browser');
-      setIsLoading(false);
+      setState(prev => ({
+        ...prev,
+        isLoading: false,
+        error: 'Geolocation is not supported by your browser',
+      }));
       return;
     }
 
-    navigator.geolocation.getCurrentPosition(
-      handleLocationSuccess,
-      handleLocationError,
-      {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0,
+    setState(prev => ({ ...prev, isLoading: true }));
+
+    try {
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, LOCATION_OPTIONS);
+      });
+      await handleLocationSuccess(position);
+    } catch (error) {
+      if (error instanceof GeolocationPositionError) {
+        handleLocationError(error);
+      } else {
+        setState(prev => ({
+          ...prev,
+          isLoading: false,
+          error: 'Failed to get location',
+        }));
       }
-    );
+    }
   };
 
-  const handleLocationConsent = (accepted: boolean) => {
+  const handleLocationConsent = async (accepted: boolean) => {
+    localStorage.setItem(LOCATION_CONSENT_KEY, String(accepted));
+    setState(prev => ({ ...prev, hasConsent: accepted }));
+    
     if (accepted) {
-      requestLocation();
+      await requestLocation();
     } else {
-      setIsLoading(false);
+      setState(prev => ({ ...prev, isLoading: false }));
     }
   };
 
   useEffect(() => {
-    const hasConsent = localStorage.getItem('locationConsent');
-    if (hasConsent === 'true') {
-      requestLocation();
-    } else if (hasConsent === 'false') {
-      setIsLoading(false);
+    const storedConsent = localStorage.getItem(LOCATION_CONSENT_KEY);
+    if (storedConsent === 'true') {
+      handleLocationConsent(true);
+    } else if (storedConsent === 'false') {
+      setState(prev => ({ 
+        ...prev, 
+        hasConsent: false,
+        isLoading: false 
+      }));
+    } else {
+      setState(prev => ({ ...prev, hasConsent: null }));
     }
   }, []);
 
   return (
     <LocationContext.Provider
       value={{
-        coordinates,
-        isRural,
-        state,
-        mmmClassification,
-        isLoading,
-        error,
+        ...state,
+        requestLocation,
+        resetLocation,
       }}
     >
       {children}
       <LocationConsentBanner
         onAccept={() => handleLocationConsent(true)}
         onDecline={() => handleLocationConsent(false)}
+        isVisible={state.hasConsent === null}
       />
     </LocationContext.Provider>
   );
