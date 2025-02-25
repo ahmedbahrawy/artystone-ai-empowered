@@ -14,8 +14,8 @@ import {
   Microscope,
   Stethoscope,
   Brain,
-  Lungs,
-  Pills
+  Lung,
+  Pill
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -80,14 +80,14 @@ const services: Service[] = [
   {
     title: 'Respiratory Care',
     description: 'Diagnosis and treatment of respiratory conditions and allergies.',
-    icon: Lungs,
+    icon: Lung,
     category: 'Specialized Care',
     features: ['Asthma care', 'COPD management', 'Allergy testing']
   },
   {
     title: 'Medication Management',
     description: 'Expert medication reviews and management for optimal health outcomes.',
-    icon: Pills,
+    icon: Pill,
     category: 'General Care',
     features: ['Medication reviews', 'Prescriptions', 'Drug monitoring']
   }

@@ -68,7 +68,7 @@ interface AnimatedElementProps extends Omit<React.HTMLAttributes<HTMLDivElement>
   delay?: number;
   duration?: number;
   once?: boolean;
-  threshold?: number;
+  amount?: number;
   className?: string;
   as?: React.ElementType;
   skipAnimation?: boolean;
@@ -80,7 +80,7 @@ export function AnimatedElement({
   delay = 0,
   duration = 0.5,
   once = true,
-  threshold = 0.1,
+  amount = 0.1,
   className,
   as: Component = motion.div,
   skipAnimation = false,
@@ -89,7 +89,7 @@ export function AnimatedElement({
   const [isReducedMotion, setIsReducedMotion] = useState(false);
   const controls = useAnimation();
   const ref = React.useRef(null);
-  const isInView = useInView(ref, { once, threshold });
+  const isInView = useInView(ref, { once, amount });
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -148,7 +148,7 @@ export function AnimatedGroup({
   staggerChildren = 0.1,
   delayChildren = 0,
   once = true,
-  threshold = 0.1,
+  amount = 0.1,
   className,
   skipAnimation = false,
   ...props
@@ -156,7 +156,7 @@ export function AnimatedGroup({
   const [isReducedMotion, setIsReducedMotion] = useState(false);
   const controls = useAnimation();
   const ref = React.useRef(null);
-  const isInView = useInView(ref, { once, threshold });
+  const isInView = useInView(ref, { once, amount });
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
