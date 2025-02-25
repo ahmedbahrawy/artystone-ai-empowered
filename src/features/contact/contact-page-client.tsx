@@ -4,6 +4,7 @@ import React, { Suspense, lazy } from 'react';
 import { PageLayout } from '@/components/layout/page-layout';
 import { SectionContainer } from '@/components/ui/section-container';
 import { ContactHero } from './sections/hero/contact-hero';
+import { ContactMap } from './sections/map/contact-map';
 
 // Lazy load non-critical sections
 const ContactDetails = lazy(() => import('./sections/details/contact-details').then(mod => ({ default: mod.ContactDetails })));
@@ -44,9 +45,16 @@ export function ContactPageClient() {
         </Suspense>
       </SectionContainer>
 
-      {/* Office Hours Section */}
+      {/* Map Section */}
       <SectionContainer
         backgroundGradient="secondary"
+        paddingY={24}
+      >
+        <ContactMap />
+      </SectionContainer>
+
+      {/* Office Hours Section */}
+      <SectionContainer
         backgroundPattern="grid"
         paddingY={24}
       >
