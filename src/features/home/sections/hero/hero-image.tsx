@@ -102,9 +102,9 @@ export function HeroImage() {
     handleVideoLoad, 
     handleVideoError 
   } = useThemeVideo({
-    lightVideo: '/videos/clinic-light.mp4',
-    semiLightVideo: '/videos/clinic-semi-light.mp4',
-    darkVideo: '/videos/clinic-dark.mp4',
+    lightVideo: '/home-hero.mp4',
+    semiLightVideo: '/home-hero.mp4',
+    darkVideo: '/home-hero.mp4',
     fallbackImage: '/images/clinic-welcome.webp',
   });
 
@@ -112,6 +112,11 @@ export function HeroImage() {
     if (videoRef.current) {
       setIsVideoLoaded(true);
       handleVideoLoad();
+      // Ensure video is playing
+      videoRef.current.play().catch(error => {
+        console.warn('Video autoplay failed:', error);
+        handleVideoError();
+      });
     }
   };
 
@@ -162,15 +167,17 @@ export function HeroImage() {
             initial={{ filter: 'blur(10px)', scale: 1.1 }}
             animate={{ 
               filter: isVideoLoaded ? 'blur(0px)' : 'blur(10px)',
-              scale: isVideoLoaded ? 1 : 1.1
+              scale: isVideoLoaded ? 1 : 1.1,
+              opacity: isVideoLoaded ? 1 : 0
             }}
             transition={{ duration: 1.2, ease: 'easeOut' }}
             preload="auto"
+            poster={fallbackImage}
           >
             <source src={videoSrc} type="video/mp4" />
             <Image 
               src={fallbackImage} 
-              alt="Hero" 
+              alt="Arty Stone Clinic Welcome"
               fill
               priority
               className="object-cover"
@@ -181,7 +188,7 @@ export function HeroImage() {
         ) : (
           <Image 
             src={fallbackImage} 
-            alt="Hero" 
+            alt="Arty Stone Clinic Welcome"
             fill
             priority
             className="object-cover"
