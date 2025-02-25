@@ -5,6 +5,7 @@ import { tokens } from '@/design-system/foundations/tokens';
 
 export type BackgroundPattern = 'dots' | 'grid' | 'none';
 export type BackgroundGradient = 'primary' | 'secondary' | 'accent' | 'none';
+export type PaddingSize = 'none' | 4 | 8 | 12 | 16 | 20 | 24 | 32 | 40 | 48;
 
 interface SectionContainerProps extends React.HTMLAttributes<HTMLElement> {
   children: React.ReactNode;
@@ -14,7 +15,7 @@ interface SectionContainerProps extends React.HTMLAttributes<HTMLElement> {
   fullHeight?: boolean;
   withContainer?: boolean;
   containerClassName?: string;
-  paddingY?: keyof typeof tokens.spacing | 'none';
+  paddingY?: PaddingSize;
 }
 
 export function SectionContainer({
@@ -26,7 +27,7 @@ export function SectionContainer({
   fullHeight = false,
   withContainer = true,
   containerClassName,
-  paddingY = '16',
+  paddingY = 16,
   ...props
 }: SectionContainerProps) {
   // Background pattern classes

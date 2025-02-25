@@ -64,7 +64,7 @@ export function HeroSection() {
               repeatType: "reverse"
             }}
           >
-            <div className="absolute inset-0 bg-grid-gray-900/[0.02] dark:bg-grid-white/[0.02] opacity-70"></div>
+            <div className="absolute inset-0 bg-grid-gray-900/[0.02] dark:bg-grid-white/[0.02] opacity-70" />
           </motion.div>
         )}
       </AnimatedElement>

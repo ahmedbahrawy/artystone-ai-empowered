@@ -15,7 +15,54 @@ export type AnimationType =
   | 'slide-right'
   | 'none';
 
-interface AnimatedElementProps extends React.HTMLAttributes<HTMLDivElement> {
+const variants: Record<AnimationType, Variants> = {
+  'fade-up': {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
+  },
+  'fade-down': {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0 }
+  },
+  'fade-left': {
+    hidden: { opacity: 0, x: 20 },
+    visible: { opacity: 1, x: 0 }
+  },
+  'fade-right': {
+    hidden: { opacity: 0, x: -20 },
+    visible: { opacity: 1, x: 0 }
+  },
+  'zoom-in': {
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: { opacity: 1, scale: 1 }
+  },
+  'zoom-out': {
+    hidden: { opacity: 0, scale: 1.05 },
+    visible: { opacity: 1, scale: 1 }
+  },
+  'slide-up': {
+    hidden: { y: 20 },
+    visible: { y: 0 }
+  },
+  'slide-down': {
+    hidden: { y: -20 },
+    visible: { y: 0 }
+  },
+  'slide-left': {
+    hidden: { x: 20 },
+    visible: { x: 0 }
+  },
+  'slide-right': {
+    hidden: { x: -20 },
+    visible: { x: 0 }
+  },
+  'none': {
+    hidden: {},
+    visible: {}
+  }
+};
+
+interface AnimatedElementProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
   children: React.ReactNode;
   animation?: AnimationType;
   delay?: number;
@@ -35,105 +82,64 @@ export function AnimatedElement({
   once = true,
   threshold = 0.1,
   className,
-  as: Component = 'div',
+  as: Component = motion.div,
   skipAnimation = false,
   ...props
 }: AnimatedElementProps) {
-  const controls = useAnimation();
-  const [ref, setRef] = useState<HTMLDivElement | null>(null);
-  const inView = useInView(ref, { once, amount: threshold });
   const [isReducedMotion, setIsReducedMotion] = useState(false);
-  
-  // Check for reduced motion preference
+  const controls = useAnimation();
+  const ref = React.useRef(null);
+  const isInView = useInView(ref, { once, threshold });
+
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     setIsReducedMotion(mediaQuery.matches);
-    
-    const handleChange = () => setIsReducedMotion(mediaQuery.matches);
+
+    const handleChange = (e: MediaQueryListEvent) => setIsReducedMotion(e.matches);
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
   useEffect(() => {
-    if (inView && !isReducedMotion && !skipAnimation) {
+    if (isInView && !skipAnimation && !isReducedMotion) {
       controls.start('visible');
     }
-  }, [controls, inView, isReducedMotion, skipAnimation]);
+  }, [isInView, controls, skipAnimation, isReducedMotion]);
 
-  // Animation variants
-  const variants: Record<AnimationType, Variants> = {
-    'fade-up': {
-      hidden: { opacity: 0, y: 20 },
-      visible: { opacity: 1, y: 0 }
-    },
-    'fade-down': {
-      hidden: { opacity: 0, y: -20 },
-      visible: { opacity: 1, y: 0 }
-    },
-    'fade-left': {
-      hidden: { opacity: 0, x: -20 },
-      visible: { opacity: 1, x: 0 }
-    },
-    'fade-right': {
-      hidden: { opacity: 0, x: 20 },
-      visible: { opacity: 1, x: 0 }
-    },
-    'zoom-in': {
-      hidden: { opacity: 0, scale: 0.9 },
-      visible: { opacity: 1, scale: 1 }
-    },
-    'zoom-out': {
-      hidden: { opacity: 0, scale: 1.1 },
-      visible: { opacity: 1, scale: 1 }
-    },
-    'slide-up': {
-      hidden: { y: 50 },
-      visible: { y: 0 }
-    },
-    'slide-down': {
-      hidden: { y: -50 },
-      visible: { y: 0 }
-    },
-    'slide-left': {
-      hidden: { x: -50 },
-      visible: { x: 0 }
-    },
-    'slide-right': {
-      hidden: { x: 50 },
-      visible: { x: 0 }
-    },
-    'none': {
-      hidden: {},
-      visible: {}
-    }
-  };
-
-  // If reduced motion is preferred or animation is skipped, render without animation
-  if (isReducedMotion || skipAnimation) {
+  if (skipAnimation || isReducedMotion) {
     return (
-      <Component className={className} {...props}>
+      <Component
+        ref={ref}
+        className={className}
+        {...props}
+      >
         {children}
       </Component>
     );
   }
 
   return (
-    <motion.div
-      ref={setRef}
+    <Component
+      ref={ref}
       initial="hidden"
       animate={controls}
       variants={variants[animation]}
-      transition={{ 
-        duration, 
-        delay, 
-        ease: "easeOut" 
+      transition={{
+        duration,
+        delay,
+        ease: 'easeOut'
       }}
       className={cn(className)}
       {...props}
     >
       {children}
-    </motion.div>
+    </Component>
   );
+}
+
+interface AnimatedGroupProps extends Omit<AnimatedElementProps, 'delay' | 'duration'> {
+  staggerChildren?: number;
+  delayChildren?: number;
 }
 
 export function AnimatedGroup({
@@ -146,120 +152,57 @@ export function AnimatedGroup({
   className,
   skipAnimation = false,
   ...props
-}: Omit<AnimatedElementProps, 'delay' | 'duration'> & {
-  staggerChildren?: number;
-  delayChildren?: number;
-}) {
-  const controls = useAnimation();
-  const [ref, setRef] = useState<HTMLDivElement | null>(null);
-  const inView = useInView(ref, { once, amount: threshold });
+}: AnimatedGroupProps) {
   const [isReducedMotion, setIsReducedMotion] = useState(false);
-  
-  // Check for reduced motion preference
+  const controls = useAnimation();
+  const ref = React.useRef(null);
+  const isInView = useInView(ref, { once, threshold });
+
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     setIsReducedMotion(mediaQuery.matches);
-    
-    const handleChange = () => setIsReducedMotion(mediaQuery.matches);
+
+    const handleChange = (e: MediaQueryListEvent) => setIsReducedMotion(e.matches);
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
   useEffect(() => {
-    if (inView && !isReducedMotion && !skipAnimation) {
+    if (isInView && !skipAnimation && !isReducedMotion) {
       controls.start('visible');
     }
-  }, [controls, inView, isReducedMotion, skipAnimation]);
+  }, [isInView, controls, skipAnimation, isReducedMotion]);
 
-  // Animation variants
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren,
-        delayChildren
-      }
-    }
-  };
-
-  // Child variants based on animation type
-  const childVariants: Record<AnimationType, Variants> = {
-    'fade-up': {
-      hidden: { opacity: 0, y: 20 },
-      visible: { opacity: 1, y: 0 }
-    },
-    'fade-down': {
-      hidden: { opacity: 0, y: -20 },
-      visible: { opacity: 1, y: 0 }
-    },
-    'fade-left': {
-      hidden: { opacity: 0, x: -20 },
-      visible: { opacity: 1, x: 0 }
-    },
-    'fade-right': {
-      hidden: { opacity: 0, x: 20 },
-      visible: { opacity: 1, x: 0 }
-    },
-    'zoom-in': {
-      hidden: { opacity: 0, scale: 0.9 },
-      visible: { opacity: 1, scale: 1 }
-    },
-    'zoom-out': {
-      hidden: { opacity: 0, scale: 1.1 },
-      visible: { opacity: 1, scale: 1 }
-    },
-    'slide-up': {
-      hidden: { y: 50 },
-      visible: { y: 0 }
-    },
-    'slide-down': {
-      hidden: { y: -50 },
-      visible: { y: 0 }
-    },
-    'slide-left': {
-      hidden: { x: -50 },
-      visible: { x: 0 }
-    },
-    'slide-right': {
-      hidden: { x: 50 },
-      visible: { x: 0 }
-    },
-    'none': {
-      hidden: {},
-      visible: {}
-    }
-  };
-
-  // If reduced motion is preferred or animation is skipped, render without animation
-  if (isReducedMotion || skipAnimation) {
+  if (skipAnimation || isReducedMotion) {
     return (
-      <div className={className} {...props}>
+      <motion.div
+        ref={ref}
+        className={className}
+        {...props}
+      >
         {children}
-      </div>
+      </motion.div>
     );
   }
 
   return (
     <motion.div
-      ref={setRef}
+      ref={ref}
       initial="hidden"
       animate={controls}
-      variants={containerVariants}
+      variants={{
+        hidden: {},
+        visible: {
+          transition: {
+            staggerChildren,
+            delayChildren
+          }
+        }
+      }}
       className={cn(className)}
       {...props}
     >
-      {React.Children.map(children, (child) => {
-        if (!React.isValidElement(child)) return child;
-        
-        return React.cloneElement(child as React.ReactElement<any>, {
-          variants: childVariants[animation],
-          transition: { 
-            duration: 0.5, 
-            ease: "easeOut" 
-          }
-        });
-      })}
+      {children}
     </motion.div>
   );
 } 

@@ -212,7 +212,7 @@ export function HomePageClient() {
         backgroundGradient="primary"
         backgroundPattern="grid"
         fullHeight
-        paddingY="12"
+        paddingY={12}
       >
         <HeroSection />
         <div className="mt-12 md:mt-16">
@@ -224,7 +224,7 @@ export function HomePageClient() {
       <SectionContainer 
         id="doctor"
         backgroundPattern="dots"
-        paddingY="24"
+        paddingY={24}
       >
         <Suspense fallback={<SectionLoading />}>
           {visibleSections.includes('doctor') && <DoctorMessage />}
@@ -236,7 +236,7 @@ export function HomePageClient() {
         id="features"
         backgroundGradient="secondary"
         backgroundPattern="grid"
-        paddingY="24"
+        paddingY={24}
       >
         <Suspense fallback={<SectionLoading />}>
           {visibleSections.includes('features') && <FeaturesSection />}
@@ -247,7 +247,7 @@ export function HomePageClient() {
       <SectionContainer 
         id="services"
         backgroundPattern="dots"
-        paddingY="24"
+        paddingY={24}
       >
         <Suspense fallback={<SectionLoading />}>
           {visibleSections.includes('services') && <ServicesSection />}
@@ -259,7 +259,7 @@ export function HomePageClient() {
         id="gallery"
         backgroundGradient="accent"
         backgroundPattern="grid"
-        paddingY="24"
+        paddingY={24}
       >
         <Suspense fallback={<SectionLoading />}>
           {visibleSections.includes('gallery') && <ClinicGallery />}
@@ -270,7 +270,7 @@ export function HomePageClient() {
       <SectionContainer 
         id="cta"
         backgroundGradient="primary"
-        paddingY="24"
+        paddingY={24}
       >
         <Suspense fallback={<SectionLoading />}>
           {visibleSections.includes('cta') && <CTASection />}
