@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Image, { ImageProps } from 'next/image'
 import { cn } from '@/lib/utils'
 
-interface OptimizedImageProps extends Omit<ImageProps, 'onLoad'> {
+interface OptimizedImageProps extends Omit<ImageProps, 'onLoad' | 'onLoadingComplete'> {
   fallbackSrc?: string
   loadingClassName?: string
   onLoadingComplete?: (img: HTMLImageElement) => void
@@ -51,10 +51,10 @@ export function OptimizedImage({
     }
   }, [])
 
-  const handleLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
+  const handleLoad = (img: HTMLImageElement) => {
     setIsLoading(false)
     if (onLoadingComplete) {
-      onLoadingComplete(event.currentTarget)
+      onLoadingComplete(img)
     }
   }
 

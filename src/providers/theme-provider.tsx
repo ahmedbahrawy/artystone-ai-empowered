@@ -6,6 +6,15 @@ import { ThemeProvider as NextThemesProvider } from 'next-themes';
 type Theme = 'light' | 'dark' | 'semi-light' | 'system';
 type ThemePreference = 'system' | 'light' | 'dark' | 'semi-light';
 
+interface ThemeProviderProps {
+  children: React.ReactNode;
+  defaultTheme?: ThemePreference;
+  enableSystem?: boolean;
+  attribute?: string;
+  themes?: string[];
+  storageKey?: string;
+}
+
 interface ThemeContextType {
   theme: Theme;
   resolvedTheme: Theme;
@@ -23,11 +32,12 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export function ThemeProvider({
   children,
   defaultTheme = 'system',
+  enableSystem = true,
+  attribute = 'class',
+  themes = ['light', 'dark', 'semi-light', 'system'],
+  storageKey = 'theme-preference',
   ...props
-}: {
-  children: React.ReactNode;
-  defaultTheme?: ThemePreference;
-}) {
+}: ThemeProviderProps) {
   const [isReducedMotion, setIsReducedMotion] = useState(false);
   const [isHighContrast, setIsHighContrast] = useState(false);
   const [prefersDarkScheme, setPrefersDarkScheme] = useState(false);
@@ -90,12 +100,12 @@ export function ThemeProvider({
     setThemePreference(newTheme as ThemePreference);
     
     // Store preference in localStorage
-    localStorage.setItem('theme-preference', newTheme);
-  }, [prefersDarkScheme]);
+    localStorage.setItem(storageKey, newTheme);
+  }, [prefersDarkScheme, storageKey]);
 
   // Initialize theme from localStorage or default
   useEffect(() => {
-    const storedPreference = localStorage.getItem('theme-preference') as ThemePreference | null;
+    const storedPreference = localStorage.getItem(storageKey) as ThemePreference | null;
     
     if (storedPreference) {
       setThemePreference(storedPreference);
@@ -103,7 +113,7 @@ export function ThemeProvider({
     } else {
       handleThemeChange(defaultTheme as Theme);
     }
-  }, [defaultTheme, handleThemeChange]);
+  }, [defaultTheme, handleThemeChange, storageKey]);
 
   // Update resolved theme when system preference changes
   useEffect(() => {
@@ -127,9 +137,11 @@ export function ThemeProvider({
   return (
     <ThemeContext.Provider value={value}>
       <NextThemesProvider
-        attribute="class"
+        attribute={attribute}
         defaultTheme={themePreference}
-        enableSystem
+        enableSystem={enableSystem}
+        themes={themes}
+        storageKey={storageKey}
         {...props}
       >
         {children}
