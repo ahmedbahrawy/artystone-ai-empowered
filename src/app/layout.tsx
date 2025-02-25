@@ -121,15 +121,6 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@graph': [locationSchema, faqSchema]
-            })
-          }}
-        />
         {/* Google Fonts Preconnect - Must be first */}
         <link
           rel="preconnect"
@@ -151,13 +142,22 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-
+      </head>
+      <body className="font-sans antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@graph': [locationSchema, faqSchema]
+            })
+          }}
+        />
+        
         {/* Analytics Scripts */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
           strategy="afterInteractive"
-          async
-          defer
         />
         <Script
           id="google-analytics"
@@ -171,8 +171,7 @@ export default function RootLayout({
             `,
           }}
         />
-      </head>
-      <body className="font-sans antialiased">
+        
         <ErrorBoundary>
           <ThemeProvider
             attribute="class"
