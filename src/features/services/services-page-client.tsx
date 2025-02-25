@@ -22,7 +22,7 @@ const SectionLoading = () => (
 
 export function ServicesPageClient() {
   return (
-    <PageLayout variant="transparent">
+    <PageLayout>
       {/* Hero Section */}
       <SectionContainer
         backgroundGradient="primary"
