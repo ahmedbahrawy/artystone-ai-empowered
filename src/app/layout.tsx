@@ -63,15 +63,40 @@ export const metadata: Metadata = {
         url: 'https://artystoneclinic.com.au/images/clinic-exterior.jpg',
         width: 1200,
         height: 630,
-        alt: `${CLINIC_NAME} ${CLINIC_LOCATION}`
+        alt: `${CLINIC_NAME} ${CLINIC_LOCATION}`,
+        secureUrl: 'https://artystoneclinic.com.au/images/clinic-exterior.jpg',
+        type: 'image/jpeg'
+      },
+      {
+        url: 'https://artystoneclinic.com.au/images/clinic-logo.png',
+        width: 500,
+        height: 500,
+        alt: `${CLINIC_NAME} Logo`,
+        secureUrl: 'https://artystoneclinic.com.au/images/clinic-logo.png',
+        type: 'image/png'
       }
-    ]
+    ],
+    countryName: 'Australia',
+    emails: ['contact@artystoneclinic.com.au'],
+    phoneNumbers: ['+61 3 9781 5190'],
+    streetAddress: '1/55 Cranbourne Road',
+    locality: 'Frankston',
+    region: 'Victoria',
+    postalCode: '3199',
+    availability: '24/7'
   },
   twitter: {
     card: 'summary_large_image',
     title: `${CLINIC_NAME} | ${CLINIC_LOCATION}`,
     description: `Expert healthcare services in ${CLINIC_LOCATION}. Family medicine, women's health, and bulk billing available.`,
-    images: ['https://artystoneclinic.com.au/images/clinic-exterior.jpg'],
+    images: [
+      {
+        url: 'https://artystoneclinic.com.au/images/clinic-exterior.jpg',
+        alt: `${CLINIC_NAME} - Expert Healthcare in ${CLINIC_LOCATION}`,
+        width: 1200,
+        height: 630
+      }
+    ],
     site: '@Web',
     creator: '@ArtystoneC5190',
   },
