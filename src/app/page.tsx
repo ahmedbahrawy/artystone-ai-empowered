@@ -3,6 +3,10 @@ import {
   HeroSection,
   StatsSection,
   DoctorMessage,
+  FeaturesSection,
+  ServicesSection,
+  ClinicGallery,
+  CTASection,
 } from '@/features/home'
 import { Container } from '@/components/ui/container'
 import { Separator } from '@/components/ui/separator'
@@ -30,6 +34,32 @@ export default function HomePage() {
         <Container className="py-16 md:py-24">
           <DoctorMessage />
         </Container>
+      </section>
+
+      {/* Features Section */}
+      <section className="bg-gray-50 dark:bg-gray-800/50">
+        <Container>
+          <FeaturesSection />
+        </Container>
+      </section>
+
+      {/* Services Section */}
+      <section className="bg-white dark:bg-gray-900">
+        <Container>
+          <ServicesSection />
+        </Container>
+      </section>
+
+      {/* Gallery Section */}
+      <section className="bg-gray-50 dark:bg-gray-800/50">
+        <Container>
+          <ClinicGallery />
+        </Container>
+      </section>
+
+      {/* CTA Section */}
+      <section>
+        <CTASection />
       </section>
     </>
   )
