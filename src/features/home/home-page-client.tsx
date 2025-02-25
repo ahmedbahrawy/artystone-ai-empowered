@@ -17,14 +17,51 @@ const ServicesSection = lazy(() => import('@/features/home').then(mod => ({ defa
 const ClinicGallery = lazy(() => import('@/features/home').then(mod => ({ default: mod.ClinicGallery })));
 const CTASection = lazy(() => import('@/features/home').then(mod => ({ default: mod.CTASection })));
 
-// Loading fallback component
+// Loading fallback component with enhanced animation
 const SectionLoading = () => (
   <div className="w-full py-16 flex items-center justify-center">
-    <div className="animate-pulse flex flex-col items-center gap-4">
-      <div className="h-8 w-48 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
-      <div className="h-4 w-64 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
-      <div className="h-4 w-56 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
-    </div>
+    <motion.div 
+      className="flex flex-col items-center gap-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
+      <motion.div 
+        className="h-8 w-48 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700 rounded-md"
+        animate={{
+          backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+        }}
+        transition={{
+          duration: 2,
+          ease: "linear",
+          repeat: Infinity,
+        }}
+      />
+      <motion.div 
+        className="h-4 w-64 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700 rounded-md"
+        animate={{
+          backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+        }}
+        transition={{
+          duration: 2,
+          ease: "linear",
+          repeat: Infinity,
+          delay: 0.2,
+        }}
+      />
+      <motion.div 
+        className="h-4 w-56 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700 rounded-md"
+        animate={{
+          backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+        }}
+        transition={{
+          duration: 2,
+          ease: "linear",
+          repeat: Infinity,
+          delay: 0.4,
+        }}
+      />
+    </motion.div>
   </div>
 );
 
@@ -42,6 +79,7 @@ export function HomePageClient() {
   const [activeSection, setActiveSection] = useState('hero');
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [visibleSections, setVisibleSections] = useState<string[]>(['hero']);
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -52,6 +90,16 @@ export function HomePageClient() {
   // Get theme context
   const { isReducedMotion } = useThemeContext();
 
+  // Handle scroll events for back to top button
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > window.innerHeight);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   // Smooth scroll to section
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -60,6 +108,14 @@ export function HomePageClient() {
       setActiveSection(sectionId);
       setMobileNavOpen(false);
     }
+  };
+
+  // Scroll to top function
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: isReducedMotion ? 'auto' : 'smooth'
+    });
   };
 
   // Add scroll-behavior: smooth to html element
@@ -103,32 +159,63 @@ export function HomePageClient() {
 
   return (
     <main className="relative">
-      {/* Progress Bar */}
+      {/* Back to Top Button */}
+      <AnimatePresence>
+        {showBackToTop && (
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.2 }}
+            onClick={scrollToTop}
+            className="fixed bottom-8 right-8 z-50 p-3 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl transition-shadow group"
+            aria-label="Scroll to top"
+          >
+            <ChevronUp className="w-6 h-6 transition-transform group-hover:-translate-y-1" />
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Progress Bar with enhanced styling */}
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-primary origin-left z-50"
+        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-primary/80 to-primary origin-left z-50"
         style={{ scaleX }}
       />
 
-      {/* Theme Switcher */}
-      <ThemeSwitcher position="bottom-left" />
+      {/* Theme Switcher with enhanced positioning */}
+      <div className="fixed bottom-8 left-8 z-50">
+        <ThemeSwitcher position="bottom-left" />
+      </div>
 
-      {/* Mobile Navigation Toggle */}
+      {/* Mobile Navigation Toggle with enhanced styling */}
       <AnimatedElement
         animation="fade-left"
         delay={0.5}
         className="fixed top-20 right-4 z-50 lg:hidden"
       >
-        <button
+        <motion.button
           onClick={() => setMobileNavOpen(!mobileNavOpen)}
-          className="p-3 rounded-full bg-white/90 dark:bg-gray-800/90 shadow-lg hover:shadow-xl transition-shadow"
+          className="p-3 rounded-full bg-white/90 dark:bg-gray-800/90 shadow-lg hover:shadow-xl transition-all hover:scale-105"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           aria-label={mobileNavOpen ? "Close navigation menu" : "Open navigation menu"}
         >
-          {mobileNavOpen ? (
-            <X className="w-6 h-6 text-gray-600 dark:text-gray-300" />
-          ) : (
-            <Menu className="w-6 h-6 text-gray-600 dark:text-gray-300" />
-          )}
-        </button>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={mobileNavOpen ? 'close' : 'menu'}
+              initial={{ opacity: 0, rotate: -90 }}
+              animate={{ opacity: 1, rotate: 0 }}
+              exit={{ opacity: 0, rotate: 90 }}
+              transition={{ duration: 0.2 }}
+            >
+              {mobileNavOpen ? (
+                <X className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+              ) : (
+                <Menu className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </motion.button>
       </AnimatedElement>
 
       {/* Mobile Navigation Menu */}
@@ -213,11 +300,23 @@ export function HomePageClient() {
         backgroundPattern="grid"
         fullHeight
         paddingY={12}
+        className="relative overflow-hidden"
       >
-        <HeroSection />
-        <div className="mt-12 md:mt-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <HeroSection />
+        </motion.div>
+        <motion.div 
+          className="mt-12 md:mt-16"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+        >
           <StatsSection />
-        </div>
+        </motion.div>
       </SectionContainer>
 
       {/* Doctor Profile Section - Lazy loaded */}
@@ -225,9 +324,18 @@ export function HomePageClient() {
         id="doctor"
         backgroundPattern="dots"
         paddingY={24}
+        className="relative overflow-hidden"
       >
         <Suspense fallback={<SectionLoading />}>
-          {visibleSections.includes('doctor') && <DoctorMessage />}
+          {visibleSections.includes('doctor') && (
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <DoctorMessage />
+            </motion.div>
+          )}
         </Suspense>
       </SectionContainer>
 
@@ -237,9 +345,18 @@ export function HomePageClient() {
         backgroundGradient="secondary"
         backgroundPattern="grid"
         paddingY={24}
+        className="relative overflow-hidden"
       >
         <Suspense fallback={<SectionLoading />}>
-          {visibleSections.includes('features') && <FeaturesSection />}
+          {visibleSections.includes('features') && (
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <FeaturesSection />
+            </motion.div>
+          )}
         </Suspense>
       </SectionContainer>
 
@@ -248,56 +365,61 @@ export function HomePageClient() {
         id="services"
         backgroundPattern="dots"
         paddingY={24}
+        className="relative overflow-hidden"
       >
         <Suspense fallback={<SectionLoading />}>
-          {visibleSections.includes('services') && <ServicesSection />}
+          {visibleSections.includes('services') && (
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <ServicesSection />
+            </motion.div>
+          )}
         </Suspense>
       </SectionContainer>
 
       {/* Gallery Section - Lazy loaded */}
       <SectionContainer 
         id="gallery"
-        backgroundGradient="accent"
+        backgroundGradient="primary"
         backgroundPattern="grid"
         paddingY={24}
+        className="relative overflow-hidden"
       >
         <Suspense fallback={<SectionLoading />}>
-          {visibleSections.includes('gallery') && <ClinicGallery />}
+          {visibleSections.includes('gallery') && (
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <ClinicGallery />
+            </motion.div>
+          )}
         </Suspense>
       </SectionContainer>
 
       {/* CTA Section - Lazy loaded */}
       <SectionContainer 
         id="cta"
-        backgroundGradient="primary"
+        backgroundPattern="dots"
         paddingY={24}
+        className="relative overflow-hidden"
       >
         <Suspense fallback={<SectionLoading />}>
-          {visibleSections.includes('cta') && <CTASection />}
+          {visibleSections.includes('cta') && (
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <CTASection />
+            </motion.div>
+          )}
         </Suspense>
       </SectionContainer>
-
-      {/* Scroll to Top Button */}
-      <AnimatedElement
-        animation="fade-up"
-        delay={0.5}
-        className="fixed bottom-4 right-4 z-40"
-      >
-        <motion.button
-          onClick={() => scrollToSection('hero')}
-          className="p-3 rounded-full bg-white/90 dark:bg-gray-800/90 shadow-lg hover:shadow-xl transition-shadow"
-          aria-label="Scroll to top"
-          whileHover={isReducedMotion ? {} : { scale: 1.1 }}
-          whileTap={isReducedMotion ? {} : { scale: 0.95 }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ 
-            opacity: scrollYProgress.get() > 0.1 ? 1 : 0, 
-            y: scrollYProgress.get() > 0.1 ? 0 : 20 
-          }}
-        >
-          <ChevronUp className="h-5 w-5" />
-        </motion.button>
-      </AnimatedElement>
     </main>
   );
 } 
