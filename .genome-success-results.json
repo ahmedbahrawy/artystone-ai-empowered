@@ -3,7 +3,7 @@
   "geneExpressionResults": [],
   "otherIssues": [
     {
-      "message": "Cannot find module 'next-themes/dist/types' or its corresponding type declarations.",
+      "message": "[object Object]",
       "file": "/home/ubuntu/workspace/internals/au-arty-stone-clinic-v-1-b/src/components/theme-provider.tsx"
     }
   ],
