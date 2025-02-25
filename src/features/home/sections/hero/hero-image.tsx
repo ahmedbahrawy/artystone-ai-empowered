@@ -103,9 +103,9 @@ export function HeroImage() {
     handleLoadedData,
     handleError
   } = useThemeVideo({
-    lightVideo: '/home-hero.mp4',
-    darkVideo: '/home-hero.mp4',
-    semiLightVideo: '/home-hero.mp4',
+    lightVideo: '/videos/home-hero.mp4',
+    darkVideo: '/videos/home-hero.mp4',
+    semiLightVideo: '/videos/home-hero.mp4',
     poster: '/images/clinic-welcome.webp',
   });
 
