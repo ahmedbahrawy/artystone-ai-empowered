@@ -122,18 +122,21 @@ export function SectionHeader({
   );
 }
 
-export function SectionGrid({
+export const SectionGrid = React.forwardRef<
+  HTMLDivElement,
+  {
+    children: React.ReactNode;
+    columns?: 1 | 2 | 3 | 4;
+    gap?: 4 | 6 | 8 | 10 | 12;
+    className?: string;
+  } & React.HTMLAttributes<HTMLDivElement>
+>(function SectionGrid({
   children,
   columns = 3,
   gap = 8,
   className,
   ...props
-}: {
-  children: React.ReactNode;
-  columns?: 1 | 2 | 3 | 4;
-  gap?: 4 | 6 | 8 | 10 | 12;
-  className?: string;
-} & React.HTMLAttributes<HTMLDivElement>) {
+}, ref) {
   const columnsClasses = {
     1: "grid-cols-1",
     2: "grid-cols-1 md:grid-cols-2",
@@ -151,6 +154,7 @@ export function SectionGrid({
 
   return (
     <div 
+      ref={ref}
       className={cn(
         "grid",
         columnsClasses[columns],
@@ -162,4 +166,6 @@ export function SectionGrid({
       {children}
     </div>
   );
-} 
+});
+
+SectionGrid.displayName = 'SectionGrid'; 

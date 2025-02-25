@@ -187,7 +187,11 @@ export function LocationProvider({ children }: LocationProviderProps) {
     >
       {children}
       {state.hasConsent === null && (
-        <LocationConsentBanner onResponse={handleLocationConsent} />
+        <LocationConsentBanner 
+          onAccept={() => handleLocationConsent(true)}
+          onDecline={() => handleLocationConsent(false)}
+          isVisible={true}
+        />
       )}
     </LocationContext.Provider>
   );

@@ -8,6 +8,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Clock, Users, Award } from 'lucide-react';
 import { AnimatedElement } from '@/components/ui/animated-element';
+import Image from 'next/image';
 
 // Lazy load the stats card component
 const StatsCard = memo(function StatsCard() {
@@ -193,15 +194,24 @@ export function HeroImage() {
           preload="auto"
         >
           <source src={videoSrc} type="video/mp4" />
-          <img src={fallbackImage} alt="Hero" className="w-full h-full object-cover" loading="eager" />
+          <Image 
+            src={fallbackImage} 
+            alt="Hero" 
+            fill
+            priority
+            className="object-cover"
+            sizes="100vw"
+          />
         </motion.video>
       ) : (
-        <img 
+        <Image 
           src={fallbackImage} 
           alt="Hero" 
-          className="w-full h-full object-cover" 
-          loading="eager"
-          onLoad={() => setIsVideoLoaded(true)}
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
+          onLoadingComplete={() => setIsVideoLoaded(true)}
         />
       )}
 
