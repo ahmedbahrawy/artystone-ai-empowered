@@ -1,69 +1,111 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useTheme } from 'next-themes';
 
 interface ThemeVideoOptions {
   lightVideo: string;
   semiLightVideo?: string;
   darkVideo: string;
-  poster: string;
+  fallbackImage: string;
   fallbackVideo?: string;
+  poster?: string;
 }
 
 export function useThemeVideo({ 
   lightVideo, 
   semiLightVideo,
   darkVideo, 
-  poster,
-  fallbackVideo = '/home-hero.mp4' 
+  fallbackImage,
+  fallbackVideo,
+  poster
 }: ThemeVideoOptions) {
-  const { theme, systemTheme } = useTheme();
-  const [videoSrc, setVideoSrc] = useState(lightVideo);
+  const { theme, systemTheme, resolvedTheme } = useTheme();
+  const [videoSrc, setVideoSrc] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [fallbackUsed, setFallbackUsed] = useState(false);
+  const currentTheme = theme === 'system' ? systemTheme : theme;
+
+  // Memoize video selection to prevent unnecessary re-renders
+  const selectVideoForTheme = useCallback(() => {
+    if (currentTheme === 'dark') {
+      return darkVideo;
+    } else if (currentTheme === 'semi-light' && semiLightVideo) {
+      return semiLightVideo;
+    } else {
+      return lightVideo;
+    }
+  }, [currentTheme, lightVideo, semiLightVideo, darkVideo]);
+
+  // Preload videos for better performance
+  useEffect(() => {
+    const preloadVideos = () => {
+      const videos = [lightVideo, darkVideo];
+      if (semiLightVideo) videos.push(semiLightVideo);
+      if (fallbackVideo) videos.push(fallbackVideo);
+      
+      videos.forEach(videoUrl => {
+        const link = document.createElement('link');
+        link.rel = 'preload';
+        link.href = videoUrl;
+        link.as = 'video';
+        link.type = 'video/mp4';
+        document.head.appendChild(link);
+      });
+    };
+    
+    // Only preload videos if the user's connection is fast enough
+    if (navigator.connection) {
+      const connection = navigator.connection as any;
+      if (connection.effectiveType === '4g' && !connection.saveData) {
+        preloadVideos();
+      }
+    } else {
+      // If Network Information API is not available, preload anyway
+      preloadVideos();
+    }
+  }, [lightVideo, semiLightVideo, darkVideo, fallbackVideo]);
 
   useEffect(() => {
-    const currentTheme = theme === 'system' ? systemTheme : theme;
-    let selectedVideo;
-    
-    if (currentTheme === 'dark') {
-      selectedVideo = darkVideo;
-    } else if (currentTheme === 'semi-light' && semiLightVideo) {
-      selectedVideo = semiLightVideo;
-    } else {
-      selectedVideo = lightVideo;
-    }
+    let selectedVideo = selectVideoForTheme();
     
     // Check if we need to use fallback
-    if (fallbackUsed) {
-      setVideoSrc(fallbackVideo);
-    } else {
-      setVideoSrc(selectedVideo);
+    if (fallbackUsed && fallbackVideo) {
+      selectedVideo = fallbackVideo;
     }
     
-    setIsLoading(true);
-  }, [theme, systemTheme, lightVideo, semiLightVideo, darkVideo, fallbackVideo, fallbackUsed]);
+    // Only update if the source has changed to prevent unnecessary re-renders
+    if (selectedVideo !== videoSrc) {
+      setVideoSrc(selectedVideo);
+      setIsLoading(true);
+    }
+  }, [currentTheme, selectVideoForTheme, fallbackVideo, fallbackUsed, videoSrc]);
 
-  const handleVideoLoad = () => {
+  const handleVideoLoad = useCallback(() => {
     setIsLoading(false);
-  };
+  }, []);
 
-  const handleVideoError = () => {
-    if (!fallbackUsed) {
+  const handleVideoError = useCallback(() => {
+    if (!fallbackUsed && fallbackVideo) {
       console.warn('Primary video failed to load, using fallback');
       setFallbackUsed(true);
       setVideoSrc(fallbackVideo);
+    } else if (!fallbackVideo || (fallbackUsed && fallbackVideo)) {
+      // If no fallback video or fallback also failed, set videoSrc to null
+      // to trigger fallback image display
+      console.warn('Video failed to load, using fallback image');
+      setVideoSrc(null);
     }
-  };
+  }, [fallbackUsed, fallbackVideo]);
 
   return {
     videoSrc,
     isLoading,
-    poster,
+    poster: poster || fallbackImage,
+    fallbackImage,
     handleVideoLoad,
     handleVideoError,
     fallbackUsed,
-    currentTheme: theme === 'system' ? systemTheme : theme
+    currentTheme: resolvedTheme
   };
 } 
